@@ -10,7 +10,7 @@ Can you relate to this situation?
 >
 > Your password should be complex 🎇
 >
-> Your should not reuse your passwords
+> Your should not reuse your passwords 🔁
 > 
 > Your password should take the hobbits to Isengard 💍
 > 
