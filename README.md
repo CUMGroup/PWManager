@@ -20,7 +20,7 @@ How could anyone be able to handle that?!<br>
 This is why you need a **Password Manager** where you can securely store your passwords in an encrypted format.
 
 ## How it works
-You can find further documentation in the [Wiki](/wiki) tab.
+You can find further documentation in the [Wiki](https://github.com/CUMGroup/PWManager/wiki) tab.
 
 ## Envrionment Setup
 You will need a version of [**.NET 7**](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) installed on your computer.
