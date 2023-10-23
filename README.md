@@ -20,6 +20,7 @@ How could anyone be able to handle that?!<br>
 This is why you need a **Password Manager** where you can securely store your passwords in an encrypted format.
 
 ## How it works
+You can find further documentation in the [Wiki](/wiki) tab.
 
 ## Envrionment Setup
 You will need a version of [**.NET 7**](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) installed on your computer.
@@ -27,7 +28,6 @@ You will need a version of [**.NET 7**](https://dotnet.microsoft.com/en-us/downl
 After cloning the repository run the `build.sh` (Linux) or the `build.bat` (Windows) script. You will find your executable in `./PWManager.CLI/bin/Release/net7.0/`
 
 (To run via the dotnet cli you can run `dotnet run` in the `./PWManager.CLI/` directory)
-
 
 <br><br>
 Yours truly,<br>
