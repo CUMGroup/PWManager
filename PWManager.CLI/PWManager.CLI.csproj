@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PWManager.Application\PWManager.Application.csproj" />
+    <ProjectReference Include="..\PWManager.Data\PWManager.Data.csproj" />
+  </ItemGroup>
+
 </Project>
