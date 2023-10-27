@@ -2,7 +2,7 @@
 using PWManager.Domain.Common;
 
 namespace PWManager.Domain.ValueObjects {
-    internal class MainGroupSetting : ValueObject {
+    public class MainGroupSetting : ValueObject {
         public string MainGroupIdentifier { get; }
 
         public MainGroupSetting(string mainGroupIdentifier) {
