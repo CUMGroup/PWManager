@@ -1,8 +1,10 @@
-﻿namespace PWManager.Domain.Entities {
-    public abstract class Entity {
+﻿namespace PWManager.Domain.Common
+{
+    public abstract class Entity
+    {
         public string Id { get; init; }
-        DateTimeOffset Created { get; init; }
-        DateTimeOffset Updated { get; set; }
-        
+        public DateTimeOffset Created { get; init; }
+        public DateTimeOffset Updated { get; set; }
+
     }
 }
