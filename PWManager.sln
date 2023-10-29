@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PWManager.Data", "PWManager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PWManager.Application", "PWManager.Application\PWManager.Application.csproj", "{1F100963-8E1B-4EED-A67A-B5FB6286D605}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PWManager.UnitTests", "PWManager.UnitTests\PWManager.UnitTests.csproj", "{D2978924-C79C-4AD5-AEB5-B77DC782275D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PWManager.UnitTests", "PWManager.UnitTests\PWManager.UnitTests.csproj", "{9E35B4B8-DB70-4C9C-A827-4D535CDF54CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{1F100963-8E1B-4EED-A67A-B5FB6286D605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F100963-8E1B-4EED-A67A-B5FB6286D605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F100963-8E1B-4EED-A67A-B5FB6286D605}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2978924-C79C-4AD5-AEB5-B77DC782275D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2978924-C79C-4AD5-AEB5-B77DC782275D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2978924-C79C-4AD5-AEB5-B77DC782275D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2978924-C79C-4AD5-AEB5-B77DC782275D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E35B4B8-DB70-4C9C-A827-4D535CDF54CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E35B4B8-DB70-4C9C-A827-4D535CDF54CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E35B4B8-DB70-4C9C-A827-4D535CDF54CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E35B4B8-DB70-4C9C-A827-4D535CDF54CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

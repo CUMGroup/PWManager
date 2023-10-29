@@ -10,8 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
-        <PackageReference Include="xunit" Version="2.4.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+        <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -24,6 +24,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PWManager.Application\PWManager.Application.csproj" />
+      <ProjectReference Include="..\PWManager.CLI\PWManager.CLI.csproj" />
+      <ProjectReference Include="..\PWManager.Data\PWManager.Data.csproj" />
+      <ProjectReference Include="..\PWManager.Domain\PWManager.Domain.csproj" />
     </ItemGroup>
 
 </Project>

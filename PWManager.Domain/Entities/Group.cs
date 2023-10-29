@@ -28,16 +28,12 @@ namespace PWManager.Domain.Entities {
 
         public bool RemoveAccount(string accId) {
             var acc = GetAccount(accId);
-            return acc is not null && Accounts.Remove(acc);
+            return acc is not null && RemoveAccount(acc);
         }
 
-        public bool UpdateAccount(Account acc) {
-            var index = Accounts.FindIndex(e => e.Id.Equals(acc.Id));
-            if (index < 0) {
-                return false;
-            }
-            Accounts[index] = acc;
-            return true;
+        public bool RemoveAccount(Account acc) {
+            return Accounts.Remove(acc);
         }
+
     }
 }
