@@ -13,7 +13,7 @@ namespace PWManager.Domain.ValueObjects {
         public int MinLength { get; }
         public int MaxLength { get; }
 
-        public PasswordGeneratorCriteria(bool includeLowerCase, bool includeUppercase, bool includeNumeric, bool includeSpecial, bool includeBrackets, bool includeSpaces, int minLength, int maxLength) {
+        public PasswordGeneratorCriteria(bool includeLowerCase, bool includeUpperCase, bool includeNumeric, bool includeSpecial, bool includeBrackets, bool includeSpaces, int minLength, int maxLength) {
             if (MinLength <= 0) {
                 throw new ArgumentException("MinLength cannot be less than or equal to 0");
             }
@@ -23,13 +23,17 @@ namespace PWManager.Domain.ValueObjects {
             }
             
             IncludeLowerCase = includeLowerCase;
-            IncludeUpperCase = includeUppercase;
+            IncludeUpperCase = includeUpperCase;
             IncludeNumeric = includeNumeric;
             IncludeSpecial = includeSpecial;
             IncludeBrackets = includeBrackets;
             IncludeSpaces = includeSpaces;
             MinLength = minLength;
             MaxLength = maxLength;
+            
+            if (NoCharactersIncluded()) {
+                throw new ArgumentException("Password Generator must have some characters enabled!");
+            }
         }
 
         protected override IEnumerable<object> GetEqualityComponents() {
@@ -41,6 +45,10 @@ namespace PWManager.Domain.ValueObjects {
             yield return IncludeSpaces;
             yield return MinLength;
             yield return MaxLength;
+        }
+        
+        private bool NoCharactersIncluded() {
+            return !IncludeLowerCase && !IncludeUpperCase && !IncludeNumeric && !IncludeSpecial && !IncludeBrackets;
         }
     }
 }
