@@ -14,11 +14,11 @@ namespace PWManager.Domain.ValueObjects {
         public int MaxLength { get; }
 
         public PasswordGeneratorCriteria(bool includeLowerCase, bool includeUpperCase, bool includeNumeric, bool includeSpecial, bool includeBrackets, bool includeSpaces, int minLength, int maxLength) {
-            if (MinLength <= 0) {
+            if (minLength <= 0) {
                 throw new ArgumentException("MinLength cannot be less than or equal to 0");
             }
 
-            if (MaxLength < MinLength) {
+            if (maxLength < minLength) {
                 throw new ArgumentException("MaxLength cannot be less than MinLength");
             }
             
