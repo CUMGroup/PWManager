@@ -10,11 +10,18 @@ namespace PWManager.Domain.ValueObjects {
         public bool IncludeSpecial { get; }
         public bool IncludeSpaces { get; }
         public bool IncludeBrackets { get; }
-        public uint MinLength { get; }
-        public uint MaxLength { get; }
+        public int MinLength { get; }
+        public int MaxLength { get; }
 
-        public PasswordGeneratorCriteria(bool includeLowerCase, bool includeUppercase, bool includeNumeric, bool includeSpecial, bool includeBrackets, bool includeSpaces, uint minLength, uint maxLength)
-        {
+        public PasswordGeneratorCriteria(bool includeLowerCase, bool includeUppercase, bool includeNumeric, bool includeSpecial, bool includeBrackets, bool includeSpaces, int minLength, int maxLength) {
+            if (MinLength <= 0) {
+                throw new ArgumentException("MinLength cannot be less than or equal to 0");
+            }
+
+            if (MaxLength < MinLength) {
+                throw new ArgumentException("MaxLength cannot be less than MinLength");
+            }
+            
             IncludeLowerCase = includeLowerCase;
             IncludeUpperCase = includeUppercase;
             IncludeNumeric = includeNumeric;
