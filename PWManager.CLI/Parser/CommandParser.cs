@@ -6,7 +6,7 @@ namespace PWManager.CLI.Parser;
 public class CommandParser {
 
     public IEnumerable<string> ParseCommandWithArguments(string cmd) {
-        cmd = Regex.Replace(cmd, @"\s*", " ").Trim();
+        cmd = Regex.Replace(cmd, @"\s+", " ").Trim();
         var cursor = 0;
         while (cursor < cmd.Length) {
             
@@ -15,13 +15,15 @@ public class CommandParser {
                 '\'' => LookaheadTo(cmd, '\'', cursor),
                 _ => LookaheadTo(cmd, ' ', cursor)
             };
-            yield return cmd[cursor..cursorEnd].Trim().Replace("\"", "").Replace("'","");
+            yield return cmd[cursor..++cursorEnd].Trim().Replace("\"", "").Replace("'","");
             cursor = cursorEnd;
         }
     }
 
     private int LookaheadTo(string cmd, char c, int cursorStart) {
-        while (cmd[cursorStart] != c && cursorStart < cmd.Length - 1) {
+        if (cursorStart < cmd.Length && cmd[cursorStart] == c)
+            ++cursorStart;
+        while (cursorStart < cmd.Length - 1 && cmd[cursorStart] != c) {
             ++cursorStart;
         }
 
