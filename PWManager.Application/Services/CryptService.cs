@@ -46,7 +46,7 @@ namespace PWManager.Application.Services {
             var inputBytes = Encoding.ASCII.GetBytes(input);
             var saltBytes = Encoding.ASCII.GetBytes(salt);
 
-            var hashBytes = Rfc2898DeriveBytes.Pbkdf2(inputBytes, saltBytes, 210000, HashAlgorithmName.SHA512, 256);
+            var hashBytes = Rfc2898DeriveBytes.Pbkdf2(inputBytes, saltBytes, 210000, HashAlgorithmName.SHA512, 32);
             
             return Encoding.ASCII.GetString(hashBytes);
         }
