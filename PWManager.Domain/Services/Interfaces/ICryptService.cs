@@ -1,8 +1,8 @@
 ﻿namespace PWManager.Domain.Services.Interfaces {
     public interface ICryptService {
-        public string Encrypt(byte[] input, byte[] key);
-        public string Decrypt(byte[] input, byte[] key);
-        public string HashForLogin(byte[] input);
-        public string HashKey(byte[] input, byte[] salt);
+        public string Encrypt(string input, string key);
+        public string Decrypt(string input, string key);
+        public string HashForLogin(string input, string salt);
+        public string DeriveKeyFrom(string input, string salt);
     }
 }
