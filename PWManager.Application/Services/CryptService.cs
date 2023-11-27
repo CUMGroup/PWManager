@@ -4,31 +4,51 @@ using System.Text;
 
 namespace PWManager.Application.Services {
     public class CryptService : ICryptService {
-        private byte[] InitializationVector { get; set; }
+        private byte[] _iv { get; set; }
 
         public CryptService(byte[] initializationVector) {
-            this.InitializationVector = initializationVector;
+            this._iv = initializationVector;
         }
 
-        public string Decrypt(byte[] input, byte[] key) {
-            var aes = AesCng.Create();
-            var plain = aes.DecryptCfb(input, this.InitializationVector);
-            return plain.ToString();
+        public string Decrypt(string input, string key) {
+            var inputBytes = Convert.FromBase64String(input);
+            var keyBytes = Encoding.ASCII.GetBytes(key);
+
+            using var aes = Aes.Create();
+            aes.Key = keyBytes;
+            var plain = aes.DecryptCfb(inputBytes, _iv);
+
+            return Encoding.ASCII.GetString(plain);
         }
 
-        public string Encrypt(byte[] input, byte[] key) {
-            var aes = AesCng.Create();
-            var cipher = aes.EncryptCfb(input, this.InitializationVector);
-            return cipher.ToString();
+        public string Encrypt(string input, string key) {
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var keyBytes = Encoding.ASCII.GetBytes(key);
+
+            using var aes = Aes.Create();
+            aes.Key = keyBytes;
+            var cipher = aes.EncryptCfb(inputBytes, _iv);
+
+            return Convert.ToBase64String(cipher);
         }
 
-        public string HashForLogin(byte[] input) { 
-            return SHA512.HashData(input).ToString();
+        public string HashForLogin(string input, string salt) {
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var saltBytes = Encoding.ASCII.GetBytes(salt);
+
+            var saltedInput = inputBytes.Concat(saltBytes).ToArray();
+            var hashed = SHA512.HashData(saltedInput);
+
+            return Convert.ToBase64String(hashed);
         }
 
-        public string HashKey(byte[] input, byte[] salt) { 
-            var hashBytes = Rfc2898DeriveBytes.Pbkdf2(input, salt, 210000, HashAlgorithmName.SHA512, 256);
-            return hashBytes.ToString();
+        public string DeriveKeyFrom(string input, string salt) {
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var saltBytes = Encoding.ASCII.GetBytes(salt);
+
+            var hashBytes = Rfc2898DeriveBytes.Pbkdf2(inputBytes, saltBytes, 210000, HashAlgorithmName.SHA512, 256);
+            
+            return Encoding.ASCII.GetString(hashBytes);
         }
     }
 }
