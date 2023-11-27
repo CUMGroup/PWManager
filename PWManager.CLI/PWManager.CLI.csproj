@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Sharprompt" Version="3.0.0-preview4" />
   </ItemGroup>
 
   <ItemGroup>
