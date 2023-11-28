@@ -15,11 +15,11 @@ namespace PWManager.Application.Services {
             var iv = inputBytes[0..16];
             var plainBytes = aes.DecryptCfb(inputBytes[16..], iv);
 
-            return Encoding.ASCII.GetString(plainBytes);
+            return GetStringFrom(plainBytes);
         }
 
         public string Encrypt(string input, string key) {
-            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var inputBytes = GetBytesFrom(input);
 
             using var aes = CreateAesWith(key);
             aes.GenerateIV();
@@ -32,8 +32,8 @@ namespace PWManager.Application.Services {
         }
 
         public string Hash(string input, string salt) {
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-            var saltBytes = Encoding.ASCII.GetBytes(salt);
+            var inputBytes = GetBytesFrom(input);
+            var saltBytes = GetBytesFrom(salt);
 
             var saltedInput = inputBytes.Concat(saltBytes).ToArray();
             var hashBytes = SHA512.HashData(saltedInput);
@@ -42,22 +42,24 @@ namespace PWManager.Application.Services {
         }
 
         public string DeriveKeyFrom(string input, string salt) {
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-            var saltBytes = Encoding.ASCII.GetBytes(salt);
+            var inputBytes = GetBytesFrom(input);
+            var saltBytes = GetBytesFrom(salt);
 
             var hashBytes = Rfc2898DeriveBytes.Pbkdf2(inputBytes, saltBytes, 600_000, HashAlgorithmName.SHA256, 32);
             
-            return Encoding.ASCII.GetString(hashBytes);
+            return GetStringFrom(hashBytes);
         }
 
         private static Aes CreateAesWith(string key) {
-            var keyBytes = Encoding.ASCII.GetBytes(key);
+            var keyBytes = GetBytesFrom(key);
 
             var aes = Aes.Create();
             aes.Key = keyBytes;
 
             return aes;
         }
+        private static byte[] GetBytesFrom(string input) => Encoding.ASCII.GetBytes(input);
+        private static string GetStringFrom(byte[] bytes) => Encoding.ASCII.GetString(bytes);
     }
 }
 
