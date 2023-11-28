@@ -1,5 +1,4 @@
 ﻿using PWManager.Domain.Services.Interfaces;
-using System.Data.SqlTypes;
 using System.Security.Cryptography;
 using System.Text;
 
