@@ -32,7 +32,7 @@ namespace PWManager.Application.Services {
             return Convert.ToBase64String(cipherWithIvHeading);
         }
 
-        public string HashForLogin(string input, string salt) {
+        public string Hash(string input, string salt) {
             var inputBytes = Encoding.ASCII.GetBytes(input);
             var saltBytes = Encoding.ASCII.GetBytes(salt);
 

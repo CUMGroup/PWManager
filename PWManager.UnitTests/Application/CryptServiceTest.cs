@@ -12,8 +12,8 @@ namespace PWManager.UnitTests.Application {
 
             var sut = new CryptService();
 
-            var hash1 = sut.HashForLogin(testPassword, testSalt);
-            var hash2 = sut.HashForLogin(testPassword, testSalt);
+            var hash1 = sut.Hash(testPassword, testSalt);
+            var hash2 = sut.Hash(testPassword, testSalt);
 
             Assert.Equal(hash1, hash2);
         }
@@ -32,13 +32,13 @@ namespace PWManager.UnitTests.Application {
         }
 
         [Fact]
-        public void HashForLogin_ShouldNot_ReturnTheSameAs_DeriveKeyFrom() {
+        public void Hash_ShouldNot_ReturnTheSameAs_DeriveKeyFrom() {
             var testPassword = "password";
             var testSalt = "salt";
 
             var sut = new CryptService();
 
-            var hash1 = sut.HashForLogin(testPassword, testSalt);
+            var hash1 = sut.Hash(testPassword, testSalt);
             var key = sut.DeriveKeyFrom(testPassword, testSalt);
 
             Assert.NotEqual(hash1, key);
