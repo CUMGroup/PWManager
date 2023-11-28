@@ -10,9 +10,7 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
 
-            var aes = Aes.Create();
-            aes.GenerateIV();
-            var sut = new CryptService(aes.IV);
+            var sut = new CryptService();
 
             var hash1 = sut.HashForLogin(testPassword, testSalt);
             var hash2 = sut.HashForLogin(testPassword, testSalt);
@@ -25,9 +23,7 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
 
-            var aes = Aes.Create();
-            aes.GenerateIV();
-            var sut = new CryptService(aes.IV);
+            var sut = new CryptService();
 
             var key1 = sut.DeriveKeyFrom(testPassword, testSalt);
             var key2 = sut.DeriveKeyFrom(testPassword, testSalt);
@@ -40,9 +36,7 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
 
-            var aes = Aes.Create();
-            aes.GenerateIV();
-            var sut = new CryptService(aes.IV);
+            var sut = new CryptService();
 
             var hash1 = sut.HashForLogin(testPassword, testSalt);
             var key = sut.DeriveKeyFrom(testPassword, testSalt);
@@ -56,9 +50,7 @@ namespace PWManager.UnitTests.Application {
             var testSalt = "salt";
             var testPlain = "Secret Message";
 
-            var aes = Aes.Create();
-            aes.GenerateIV();
-            var sut = new CryptService(aes.IV);
+            var sut = new CryptService();
 
             var key = sut.DeriveKeyFrom(testPassword, testSalt);
             var cipher = sut.Encrypt(testPlain, key);

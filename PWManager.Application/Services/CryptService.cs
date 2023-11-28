@@ -1,31 +1,35 @@
 ﻿using PWManager.Domain.Services.Interfaces;
+using System.Data.SqlTypes;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace PWManager.Application.Services {
     public class CryptService : ICryptService {
-        private byte[] _iv { get; set; }
 
-        public CryptService(byte[] initializationVector) {
-            this._iv = initializationVector;
+        public CryptService() {
         }
 
         public string Decrypt(string input, string key) {
             var inputBytes = Convert.FromBase64String(input);
 
             using var aes = CreateAesWith(key);
-            var plain = aes.DecryptCfb(inputBytes, _iv);
+            var iv = inputBytes[0..16];
+            var plainBytes = aes.DecryptCfb(inputBytes[16..], iv);
 
-            return Encoding.ASCII.GetString(plain);
+            return Encoding.ASCII.GetString(plainBytes);
         }
 
         public string Encrypt(string input, string key) {
             var inputBytes = Encoding.ASCII.GetBytes(input);
 
             using var aes = CreateAesWith(key);
-            var cipher = aes.EncryptCfb(inputBytes, _iv);
+            aes.GenerateIV();
+            var iv = aes.IV;
 
-            return Convert.ToBase64String(cipher);
+            var cipherBytes = aes.EncryptCfb(inputBytes, iv);
+            var cipherWithIvHeading = iv.Concat(cipherBytes).ToArray();
+
+            return Convert.ToBase64String(cipherWithIvHeading);
         }
 
         public string HashForLogin(string input, string salt) {
@@ -33,9 +37,9 @@ namespace PWManager.Application.Services {
             var saltBytes = Encoding.ASCII.GetBytes(salt);
 
             var saltedInput = inputBytes.Concat(saltBytes).ToArray();
-            var hashed = SHA512.HashData(saltedInput);
+            var hashBytes = SHA512.HashData(saltedInput);
 
-            return Convert.ToBase64String(hashed);
+            return Convert.ToBase64String(hashBytes);
         }
 
         public string DeriveKeyFrom(string input, string salt) {
