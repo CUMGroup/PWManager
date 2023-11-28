@@ -21,6 +21,21 @@ namespace PWManager.UnitTests.Application {
         }
 
         [Fact]
+        public void DeriveKeyFrom_Should_ReturnTheSame_ForTheSameInput() {
+            var testPassword = "password";
+            var testSalt = "salt";
+
+            var aes = Aes.Create();
+            aes.GenerateIV();
+            var sut = new CryptService(aes.IV);
+
+            var key1 = sut.DeriveKeyFrom(testPassword, testSalt);
+            var key2 = sut.DeriveKeyFrom(testPassword, testSalt);
+
+            Assert.Equal(key1, key2);
+        }
+
+        [Fact]
         public void HashForLogin_ShouldNot_ReturnTheSameAs_DeriveKeyFrom() {
             var testPassword = "password";
             var testSalt = "salt";
