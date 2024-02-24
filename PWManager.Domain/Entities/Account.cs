@@ -1,4 +1,6 @@
 ﻿using PWManager.Domain.Common;
+using PWManager.Domain.Exceptions;
+using PWManager.Domain.Services.Interfaces;
 
 namespace PWManager.Domain.Entities {
     public class Account : Entity {

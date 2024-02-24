@@ -12,6 +12,20 @@ namespace PWManager.Application.Services {
             _env = env;
         }
 
+        public void Encrypt(ISecureProperties input, string key) {
+            foreach ((var getter, var setter) in input.SecurableProperties()) {
+                var val = Encrypt(getter(), key);
+                setter(val);
+            }
+        }
+
+        public void Decrypt(ISecureProperties input, string key) {
+            foreach ((var getter, var setter) in input.SecurableProperties()) {
+                var val = Decrypt(getter(), key);
+                setter(val);
+            }
+        }
+
         public string Decrypt(string input) {
             if (_env.EncryptionKey is null) {
                 throw new InvalidOperationException("Encryption Key is null! Are you in a session?");
