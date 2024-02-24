@@ -4,6 +4,7 @@ using PWManager.CLI;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
+using PWManager.Data;
 
 var services = new ServiceCollection();
 
@@ -12,6 +13,7 @@ services.AddSingleton<CliEnvironment>();
 services.AddSingleton<IRunner, ConsoleRunner>();
 // Add Layers
 services.AddApplicationServices();
+services.AddDataServices();
 
 // Add Controllers
 services.AddControllers();
