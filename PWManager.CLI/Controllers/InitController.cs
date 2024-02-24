@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
+using PWManager.CLI.Abstractions;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
@@ -39,6 +40,7 @@ public class InitController : IController {
         }
         
         _dbInit.InitDatabase(path, name, password);
+        ConfigFileHandler.WriteDefaultFile(name, path);
         Console.WriteLine("Created your database! Enjoy");
 
         return ExitCondition.EXIT;
