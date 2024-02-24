@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using PWManager.Application.Interfaces;
 using PWManager.Domain.Exceptions;
+using PWManager.Domain.Repositories;
 using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
 
@@ -8,7 +8,7 @@ namespace PWManager.Application.Services;
 
 public class PasswordGeneratorService : IPasswordGeneratorService {
 
-    private readonly IUserSettings _userSettings;
+    private readonly PasswordGeneratorCriteria _userSettings;
 
     private const string Lowercase = "abcdefghijklmnopqrstuvwxyz";
     private const string Uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -19,11 +19,11 @@ public class PasswordGeneratorService : IPasswordGeneratorService {
 
     private readonly Random _rng;
     
-    public PasswordGeneratorService(IUserSettings userSettings) : this(userSettings, new Random()) {
+    public PasswordGeneratorService(ISettingsRepository settingsRepository) : this(settingsRepository, new Random()) {
     }
 
-    public PasswordGeneratorService(IUserSettings userSettings, Random rng) {
-        _userSettings = userSettings;
+    public PasswordGeneratorService(ISettingsRepository settingsRepository, Random rng) {
+        _userSettings = settingsRepository.GetSettings().PwGenCriteria;
         _rng = rng;
     }
 
@@ -44,7 +44,7 @@ public class PasswordGeneratorService : IPasswordGeneratorService {
     }
 
     public string GeneratePassword() {
-        return GeneratePasswordWith(_userSettings.GetPasswordGeneratorCriteria());
+        return GeneratePasswordWith(_userSettings);
     }
 
     private static char[] BuildPossibleChars(PasswordGeneratorCriteria criteria) {
