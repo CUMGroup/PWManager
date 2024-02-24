@@ -37,11 +37,11 @@ public class UserRepository : IUserRepository {
         return UserModelToEntity(userModel);
     }
 
-    public User CheckPasswordAttempt(string username, string password) {
+    public User? CheckPasswordAttempt(string username, string password) {
         var user = _dbContext.Users.First(e => e.UserName == username);
         var hash = _cryptService.Hash(password, user.Salt);
 
-        if(hash == user.MasterHash) {
+        if(hash.Equals(user.MasterHash)) {
             return UserModelToEntity(user);
         }
         return null;
