@@ -2,7 +2,7 @@
 
 namespace PWManager.Domain.Repositories {
     public interface ISettingsRepository {
-        public Settings GetSettingsFor(string userId);
+        public Settings GetSettings();
         public bool UpdateSettings(Settings settings);
     }
 }

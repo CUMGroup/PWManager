@@ -13,13 +13,10 @@ public class GroupRepository : IGroupRepository {
     private readonly ICryptService _cryptService;
     private readonly IApplicationEnvironment _environment;
     
-    internal GroupRepository(ApplicationDbContext dbContext, ICryptService cryptService, IApplicationEnvironment environment) {
+    internal GroupRepository(ICryptService cryptService, IApplicationEnvironment environment) {
         _cryptService = cryptService;
-        _dbContext = dbContext;
+        _dbContext = DataContext.GetDbContext();
         _environment = environment;
-    }
-    
-    public GroupRepository(ICryptService cryptService, IApplicationEnvironment environment) : this(DataContext.GetDbContext(), cryptService, environment){
     }
     
     public Group GetGroup(string groupName) {
