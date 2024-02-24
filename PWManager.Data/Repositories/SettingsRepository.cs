@@ -21,10 +21,10 @@ internal class SettingsRepository : ISettingsRepository {
     }
     
     public Settings GetSettings() {
-        var settingsModel = _dbContext.Settings.First(e => e.UserId == _environment.UserId);
+        var settingsModel = _dbContext.Settings.First(e => e.UserId == _environment.CurrentUser.Id);
         if (settingsModel is null) {
             settingsModel = new SettingsModel {
-                UserId = _environment.UserId,
+                UserId = _environment.CurrentUser.Id,
                 Id = Guid.NewGuid().ToString(),
                 MainGroupIdentifier = _cryptService.Encrypt("main")
             };
@@ -61,7 +61,7 @@ internal class SettingsRepository : ISettingsRepository {
             Id = e.Id,
             Created = e.Created,
             Updated = e.Updated,
-            UserId = _environment.UserId,
+            UserId = _environment.CurrentUser.Id,
             IncludeLowerCase = e.PwGenCriteria.IncludeLowerCase,
             IncludeUpperCase = e.PwGenCriteria.IncludeUpperCase,
             IncludeSpaces = e.PwGenCriteria.IncludeSpaces,

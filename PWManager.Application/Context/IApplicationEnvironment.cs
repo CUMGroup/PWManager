@@ -1,13 +1,14 @@
-﻿namespace PWManager.Application.Context; 
+﻿using PWManager.Domain.Entities;
+
+namespace PWManager.Application.Context; 
 
 public interface IApplicationEnvironment {
 
     public bool IsDevelopmentMode { get; init; }
     
     public bool RunningSession { get; set; }
-    
-    public string? UserName { get; init; }
-    public string? UserId { get; init; }
+
+    public User? CurrentUser { get; set; }
     
     public string? CurrentGroup { get; set; }
     

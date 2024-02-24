@@ -20,7 +20,7 @@ public class GroupRepository : IGroupRepository {
     }
     
     public Group GetGroup(string groupName) {
-        var groups = _dbContext.Groups.Where(e => e.UserId == _environment.UserId).ToList();
+        var groups = _dbContext.Groups.Where(e => e.UserId == _environment.CurrentUser.Id).ToList();
         
         var group = groups.First(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
 
@@ -40,7 +40,7 @@ public class GroupRepository : IGroupRepository {
 
     public List<string> GetAllGroupNames() {
         var groupNames = _dbContext.Groups
-            .Where(e => e.UserId == _environment.UserId)
+            .Where(e => e.UserId == _environment.CurrentUser.Id)
             .Select(e => e.IdentifierCrypt)
             .ToList();
 
@@ -75,7 +75,7 @@ public class GroupRepository : IGroupRepository {
             Id = e.Id,
             Created = e.Created,
             Updated = e.Updated,
-            UserId = _environment.UserId,
+            UserId = _environment.CurrentUser.Id,
             IdentifierCrypt = _cryptService.Encrypt(e.Identifier),
             Accounts = e.Accounts.Select(acc => AccountEntityToModel(acc, e.Id)).ToList()
         };

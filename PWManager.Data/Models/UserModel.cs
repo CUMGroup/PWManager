@@ -15,6 +15,9 @@ internal class UserModel {
     public DateTimeOffset Updated { get; set; }
     
     [Required]
+    public string UserName { get; set; }
+    
+    [Required]
     public string MasterHash { get; set; }
     
     [Required]
