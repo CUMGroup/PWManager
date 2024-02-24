@@ -34,11 +34,14 @@ public class UserRepository : IUserRepository {
         return UserModelToEntity(userModel);
     }
 
-    public bool CheckPasswordAttempt(string username, string password) {
+    public User CheckPasswordAttempt(string username, string password) {
         var user = _dbContext.Users.First(e => e.UserName == username);
         var hash = _cryptService.Hash(password, user.Salt);
 
-        return hash == user.MasterHash;
+        if(hash == user.MasterHash) {
+            return UserModelToEntity(user);
+        }
+        return null;
     }
 
     private User UserModelToEntity(UserModel e) {
