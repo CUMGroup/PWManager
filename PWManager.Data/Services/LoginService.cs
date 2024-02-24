@@ -26,7 +26,7 @@ namespace PWManager.Data.Services {
 
             var user = _userRepository.CheckPasswordAttempt(username, password);
             if(user is null) {
-                throw new LoginException("No such user found.");
+                throw new LoginException("No such user found."); // TODO: Change with UserFeedbackException
             }
 
             _env.CurrentUser = user;

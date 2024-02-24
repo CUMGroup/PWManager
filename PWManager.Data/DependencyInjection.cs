@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PWManager.Application.Services.Interfaces;
 using PWManager.Data.Repositories;
+using PWManager.Data.Services;
 using PWManager.Domain.Repositories;
 
 namespace PWManager.Data; 
@@ -11,6 +13,7 @@ public static class DependencyInjection {
         services.AddTransient<IGroupRepository, GroupRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ISettingsRepository, SettingsRepository>();
+        services.AddTransient<ILoginService, LoginService>();
         return services;
     }
 }
