@@ -22,6 +22,8 @@ internal class AccountModel : ISecureProperties {
     public string LoginNameCrypt { get; set; }
     [Required]
     public string PasswordCrypt { get; set; }
+    
+    public string GroupId { get; set; }
 
     public List<(Func<string>, Action<string>)> SecurableProperties() {
         return new List<(Func<string>, Action<string>)> { 

@@ -24,7 +24,8 @@ internal class ApplicationDbContext : DbContext {
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<AccountModel>()
             .HasOne<GroupModel>()
-            .WithMany(e => e.Accounts);
+            .WithMany(e => e.Accounts)
+            .HasForeignKey(e => e.GroupId);
 
         modelBuilder.Entity<GroupModel>()
             .HasOne(e => e.User)

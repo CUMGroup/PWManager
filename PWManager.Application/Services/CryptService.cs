@@ -14,14 +14,14 @@ namespace PWManager.Application.Services {
 
         public void Encrypt(ISecureProperties input, string key) {
             foreach ((var getter, var setter) in input.SecurableProperties()) {
-                var val = Encrypt(getter(), key);
+                var val = Encrypt(getter());
                 setter(val);
             }
         }
 
         public void Decrypt(ISecureProperties input, string key) {
             foreach ((var getter, var setter) in input.SecurableProperties()) {
-                var val = Decrypt(getter(), key);
+                var val = Decrypt(getter());
                 setter(val);
             }
         }
