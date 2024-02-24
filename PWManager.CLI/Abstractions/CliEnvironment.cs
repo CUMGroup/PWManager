@@ -1,14 +1,18 @@
-﻿namespace PWManager.CLI.Abstractions; 
+﻿using PWManager.Application.Context;
+using PWManager.Domain.Entities;
 
-public class CliEnvironment {
+namespace PWManager.CLI.Abstractions; 
 
-    public bool IsDevelopmentMode { get; } = true;
+public class CliEnvironment : IApplicationEnvironment {
+
+    public bool IsDevelopmentMode { get; init; } = true;
 
     public bool RunningSession { get; set; } = false;
-    public string Prompt => $"{UserName} ({CurrentGroup}) $";
+    public string Prompt => $"{CurrentUser.UserName} ({CurrentGroup}) $";
 
-    public string UserName { get; set; }
-    public string UserId { get; set; }
+    public User? CurrentUser { get; set; }
     
-    public string CurrentGroup { get; set; }
+    public string? CurrentGroup { get; set; }
+    
+    public string? EncryptionKey { get; init; }
 }

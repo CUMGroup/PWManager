@@ -2,7 +2,7 @@
 
 namespace PWManager.Domain.Repositories {
     public interface IUserRepository {
-        public bool AddUser(User user);
-        public bool CheckPasswordAttempt(string passwordHash);
+        public User AddUser(string username, string password);
+        public bool CheckPasswordAttempt(string username, string password);
     }
 }

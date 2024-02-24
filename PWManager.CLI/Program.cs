@@ -1,17 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PWManager.Application;
+using PWManager.Application.Context;
 using PWManager.CLI;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
+using PWManager.Data;
 
 var services = new ServiceCollection();
 
-services.AddSingleton<CliEnvironment>();
+services.AddSingleton<IApplicationEnvironment,CliEnvironment>();
 // Add all services to DI
 services.AddSingleton<IRunner, ConsoleRunner>();
 // Add Layers
 services.AddApplicationServices();
+services.AddDataServices();
 
 // Add Controllers
 services.AddControllers();
