@@ -14,5 +14,5 @@ public class CliEnvironment : IApplicationEnvironment {
     
     public string? CurrentGroup { get; set; }
     
-    public string? EncryptionKey { get; init; }
+    public string? EncryptionKey { get; set; }
 }

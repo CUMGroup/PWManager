@@ -7,7 +7,7 @@ public class GroupTests {
     private Group _sut;
 
     public GroupTests() {
-        _sut = new Group("test-userId");
+        _sut = new Group("main","test-userId");
     }
 
     #region AddAccount

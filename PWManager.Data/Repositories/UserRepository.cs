@@ -1,4 +1,5 @@
-﻿using PWManager.Data.Models;
+﻿using PWManager.Application.Exceptions;
+using PWManager.Data.Models;
 using PWManager.Data.Persistance;
 using PWManager.Domain.Entities;
 using PWManager.Domain.Repositories;
@@ -23,12 +24,14 @@ public class UserRepository : IUserRepository {
             Id = Guid.NewGuid().ToString(),
             UserName = username,
             MasterHash = passwordHash,
-            Salt = salt
+            Salt = salt,
+            Created = DateTimeOffset.Now,
+            Updated = DateTimeOffset.Now
         };
         _dbContext.Users.Add(userModel);
         var res = _dbContext.SaveChanges();
         if (res == 0) {
-            throw new ApplicationException("Failed creating the user");
+            throw new UserFeedbackException("Failed creating the user");
         }
 
         return UserModelToEntity(userModel);
