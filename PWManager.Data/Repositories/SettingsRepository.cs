@@ -5,6 +5,7 @@ using PWManager.Domain.Entities;
 using PWManager.Domain.Repositories;
 using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
+using System;
 
 namespace PWManager.Data.Repositories; 
 
@@ -20,14 +21,17 @@ internal class SettingsRepository : ISettingsRepository {
     }
     
     public Settings GetSettings() {
-        var settingsModel = _dbContext.Settings.First(e => e.UserId == _environment.CurrentUser.Id);
+        var userId = _environment.CurrentUser.Id;
+        var settingsList = _dbContext.Settings.Where(e => e.UserId == userId).ToList();
+        var settingsModel = settingsList.Any() ? settingsList.First() : null;
         if (settingsModel is null) {
             settingsModel = new SettingsModel {
                 UserId = _environment.CurrentUser.Id,
                 Id = Guid.NewGuid().ToString(),
                 MainGroupIdentifier = _cryptService.Encrypt("main")
             };
-            UpdateSettings(settingsModel);
+            _dbContext.Settings.Add(settingsModel);
+            _dbContext.SaveChanges();
         }
 
         return SettingsModelToEntity(settingsModel);

@@ -8,11 +8,11 @@ public class CliEnvironment : IApplicationEnvironment {
     public bool IsDevelopmentMode { get; init; } = true;
 
     public bool RunningSession { get; set; } = false;
-    public string Prompt => $"{CurrentUser.UserName} ({CurrentGroup}) $";
+    public string Prompt => $"{CurrentUser.UserName} ({CurrentGroup.Identifier}) $";
 
     public User? CurrentUser { get; set; }
     
-    public string? CurrentGroup { get; set; }
+    public Group? CurrentGroup { get; set; }
     
     public string? EncryptionKey { get; set; }
 }

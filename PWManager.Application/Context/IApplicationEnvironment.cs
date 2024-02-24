@@ -10,7 +10,7 @@ public interface IApplicationEnvironment {
 
     public User? CurrentUser { get; set; }
     
-    public string? CurrentGroup { get; set; }
+    public Group? CurrentGroup { get; set; }
     
     public string? EncryptionKey { get; set; }
 }
