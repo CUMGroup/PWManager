@@ -1,4 +1,5 @@
 ﻿using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.Domain.Exceptions;
 using PWManager.Domain.Repositories;
@@ -21,12 +22,15 @@ namespace PWManager.Data.Services {
             _env = env;
         }
         public void Login(string username, string password, string dbPath) {
-            // TODO: Check if DB exists
+            if(!DataContext.DatabaseExists(dbPath)) {
+                throw new UserFeedbackException("Database not found.");
+            }
+
             DataContext.InitDataContext(dbPath);
 
             var user = _userRepository.CheckPasswordAttempt(username, password);
             if(user is null) {
-                throw new LoginException("No such user found."); // TODO: Change with UserFeedbackException
+                throw new UserFeedbackException("No such user found.");
             }
 
             _env.CurrentUser = user;

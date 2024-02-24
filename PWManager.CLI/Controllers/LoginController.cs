@@ -1,4 +1,5 @@
 ﻿using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Enums;
@@ -15,8 +16,7 @@ namespace PWManager.CLI.Controllers {
         }
         public ExitCondition Handle(string[] args) {
             if (_env.RunningSession) {
-                throw new Exception("Command not available in a session!");
-                // TODO: change to UserFeedbackException
+                throw new UserFeedbackException("Command not available in a session!");
             }
 
             string username = "";
@@ -66,8 +66,7 @@ namespace PWManager.CLI.Controllers {
             try {
                 return File.ReadAllText(Path.Combine(defaultFilePath, "last.txt"));
             } catch (IOException e) {
-                throw new Exception("The file could not be read");
-                // TODO: throw new UserFeedbackException
+                throw new UserFeedbackException("The file could not be read");
             }
         }
         private void WriteDefaultFile(string username, string path) {
@@ -76,8 +75,7 @@ namespace PWManager.CLI.Controllers {
             try {
                 File.WriteAllText(Path.Combine(defaultFilePath, "last.txt"), username + '\n' + path);
             } catch (IOException e) {
-                throw new Exception("The file could not be written");
-                // TODO: change to UserFeedbackException
+                throw new UserFeedbackException("The file could not be written");
             }
         }
 
