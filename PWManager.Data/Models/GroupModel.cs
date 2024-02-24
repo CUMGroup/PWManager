@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PWManager.Domain.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PWManager.Data.Models; 
 
-internal class GroupModel {
+internal class GroupModel : ISecureProperties{
     [Key]
     public string Id { get; set; }
     
@@ -20,4 +21,10 @@ internal class GroupModel {
 
     public string UserId { get; set; }
     public UserModel User { get; set; }
+
+    public List<(Func<string>, Action<string>)> SecurableProperties() {
+        return new List<(Func<string>, Action<string>)> {
+            ( () => IdentifierCrypt, (val) => IdentifierCrypt = val)
+        };
+    }
 }
