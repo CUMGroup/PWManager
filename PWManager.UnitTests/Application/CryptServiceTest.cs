@@ -1,6 +1,8 @@
 ﻿using PWManager.Application.Services;
 using System.Security.Cryptography;
 using System.Text;
+using NSubstitute;
+using PWManager.Application.Context;
 
 namespace PWManager.UnitTests.Application {
     public class CryptServiceTest {
@@ -10,7 +12,7 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
 
-            var sut = new CryptService();
+            var sut = new CryptService(null);
 
             var hash1 = sut.Hash(testPassword, testSalt);
             var hash2 = sut.Hash(testPassword, testSalt);
@@ -23,7 +25,7 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
 
-            var sut = new CryptService();
+            var sut = new CryptService(null);
 
             var key1 = sut.DeriveKeyFrom(testPassword, testSalt);
             var key2 = sut.DeriveKeyFrom(testPassword, testSalt);
@@ -36,7 +38,7 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
 
-            var sut = new CryptService();
+            var sut = new CryptService(null);
 
             var hash1 = sut.Hash(testPassword, testSalt);
             var key = sut.DeriveKeyFrom(testPassword, testSalt);
@@ -49,12 +51,14 @@ namespace PWManager.UnitTests.Application {
             var testPassword = "password";
             var testSalt = "salt";
             var testPlain = "Secret Message";
-
-            var sut = new CryptService();
+            
+            var env = Substitute.For<IApplicationEnvironment>();
+            env.EncryptionKey.Returns("f??RH!\u0016???,?@?/V??V7R???n??\u0014? Qx");
+            var sut = new CryptService(env);
 
             var key = sut.DeriveKeyFrom(testPassword, testSalt);
-            var cipher = sut.Encrypt(testPlain, key);
-            var plain = sut.Decrypt(cipher, key);
+            var cipher = sut.Encrypt(testPlain);
+            var plain = sut.Decrypt(cipher);
 
             Assert.Equal(testPlain, plain);
         }
