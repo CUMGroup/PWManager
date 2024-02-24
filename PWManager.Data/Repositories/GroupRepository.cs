@@ -9,13 +9,12 @@ namespace PWManager.Data.Repositories;
 
 public class GroupRepository : IGroupRepository {
 
-    private readonly ApplicationDbContext _dbContext;
+    private ApplicationDbContext _dbContext => DataContext.GetDbContext();
     private readonly ICryptService _cryptService;
     private readonly IApplicationEnvironment _environment;
     
     internal GroupRepository(ICryptService cryptService, IApplicationEnvironment environment) {
         _cryptService = cryptService;
-        _dbContext = DataContext.GetDbContext();
         _environment = environment;
     }
     

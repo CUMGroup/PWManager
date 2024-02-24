@@ -8,11 +8,10 @@ namespace PWManager.Data.Repositories;
 
 public class UserRepository : IUserRepository {
 
-    private readonly ApplicationDbContext _dbContext;
+    private ApplicationDbContext _dbContext => DataContext.GetDbContext();
     private readonly ICryptService _cryptService;
 
     public UserRepository(ICryptService cryptService) {
-        _dbContext = DataContext.GetDbContext();
         _cryptService = cryptService;
     }
 
