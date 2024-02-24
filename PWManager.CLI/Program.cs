@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PWManager.Application;
 using PWManager.Application.Context;
+using PWManager.Application.Services.Interfaces;
 using PWManager.CLI;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.ExtensionMethods;
@@ -12,6 +13,7 @@ var services = new ServiceCollection();
 services.AddSingleton<IApplicationEnvironment,CliEnvironment>();
 // Add all services to DI
 services.AddSingleton<IRunner, ConsoleRunner>();
+services.AddTransient<IClipboard, Clipboard>();
 // Add Layers
 services.AddApplicationServices();
 services.AddDataServices();
