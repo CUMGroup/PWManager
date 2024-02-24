@@ -8,6 +8,20 @@ namespace PWManager.Application.Services {
         public CryptService() {
         }
 
+        public void Encrypt(ISecureProperties input, string key) {
+            foreach ((var getter, var setter) in input.SecurableProperties()) {
+                var val = Encrypt(getter(), key);
+                setter(val);
+            }
+        }
+
+        public void Decrypt(ISecureProperties input, string key) {
+            foreach ((var getter, var setter) in input.SecurableProperties()) {
+                var val = Decrypt(getter(), key);
+                setter(val);
+            }
+        }
+
         public string Decrypt(string input, string key) {
             var inputBytes = Convert.FromBase64String(input);
 
