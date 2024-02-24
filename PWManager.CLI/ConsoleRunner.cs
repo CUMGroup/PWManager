@@ -33,11 +33,18 @@ namespace PWManager.CLI {
                         continue;
                     }
 
-                    exitCondition = ExecuteCommand(input);
+                    try {
+                        exitCondition = ExecuteCommand(input);
+                    }catch (UserFeedbackException ex) {
+                        Console.WriteLine(ex.Message);
+                        if (_environment.RunningSession) {
+                            exitCondition = ExitCondition.CONTINUE;
+                            continue;
+                        }
+
+                        return;
+                    }
                 }
-            }
-            catch (UserFeedbackException ex) {
-                Console.WriteLine(ex.Message);
             }
             catch (Exception ex) {
                 Console.WriteLine("An Error occured!");
