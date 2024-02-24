@@ -5,6 +5,7 @@ using PWManager.CLI.Abstractions;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
+using System.IO;
 
 namespace PWManager.CLI.Controllers {
     public class LoginController : IController {
@@ -19,29 +20,7 @@ namespace PWManager.CLI.Controllers {
                 throw new UserFeedbackException("Command not available in a session!");
             }
 
-            string username = "";
-            string path = "";
-
-            int basepointer = 0;
-            while(basepointer < args.Length) {
-                if ((args[basepointer].Equals("-u") || args[basepointer].Equals("--username"))) {
-                    if ((args.Length - basepointer <= 1) || args[basepointer + 1].StartsWith('-')) {
-                        username = Prompt.Input<string>("Please enter your username");
-                    } else {
-                        username = args[basepointer + 1];
-                        basepointer++;
-                    }
-                }
-                else if ((args[basepointer].Equals("-d") || args[basepointer].Equals("--directory"))) {
-                    if ((args.Length - basepointer <= 1) || args[basepointer + 1].StartsWith('-')) {
-                        path = Prompt.Input<string>("Please enter the location of your databasefile");
-                    } else {
-                        path = args[basepointer + 1];
-                        basepointer++;
-                    }
-                }
-                basepointer++;
-            }
+            (var username, var path) = ParseArgs(args);
 
             var lastUser = ConfigFileHandler.ReadDefaultFile();
             if (String.IsNullOrWhiteSpace(username)) {
@@ -59,6 +38,37 @@ namespace PWManager.CLI.Controllers {
 
             _env.RunningSession = true;
             return ExitCondition.CONTINUE;
+        }
+
+        public (string, string) ParseArgs(string[] args) {
+            string username = "";
+            string path = "";
+
+            int basepointer = 0;
+            while (basepointer < args.Length) {
+                if ((args[basepointer].Equals("-u") || args[basepointer].Equals("--username"))) {
+                    if ((args.Length - basepointer <= 1) || args[basepointer + 1].StartsWith('-')) {
+                        username = AskForInput("Please enter your username");
+                    } else {
+                        username = args[basepointer + 1];
+                        basepointer++;
+                    }
+                } else if ((args[basepointer].Equals("-d") || args[basepointer].Equals("--directory"))) {
+                    if ((args.Length - basepointer <= 1) || args[basepointer + 1].StartsWith('-')) {
+                        path = AskForInput("Please enter the location of your databasefile");
+                    } else {
+                        path = args[basepointer + 1];
+                        basepointer++;
+                    }
+                }
+                basepointer++;
+            }
+
+            return (username, path);
+        }
+
+        public virtual string AskForInput(string prompt) {
+            return Prompt.Input<string>(prompt);
         }
     }
 }
