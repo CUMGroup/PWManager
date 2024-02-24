@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.RegularExpressions;
 using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
@@ -24,7 +25,12 @@ public class InitController : IController {
         }
 
         var path = Prompt.Input<string>("Where do you want to create your database file?");
+        
         var name = Prompt.Input<string>("What's your desired user name?");
+        while (name.Length <= 1 || !Regex.IsMatch(name, @"^[a-zA-Z]+$")) {
+            Console.WriteLine("Invalid name! It mus be longer than 1 character and must include only letters!");
+            name = Prompt.Input<string>("What's your desired user name?");
+        }
 
         var password = InputPassword();
         while (password is null) {
