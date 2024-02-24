@@ -13,7 +13,7 @@ public class GroupTests {
     #region AddAccount
     [Fact]
     public void Group_Should_AddNewAccount() {
-        var acc = new Account("Hello", "Password");
+        var acc = new Account("Hello", "name","Password");
         _sut.AddAccount(acc);
         
         Assert.True(_sut.Accounts.Count == 1);
@@ -90,7 +90,7 @@ public class GroupTests {
     
     private static void AddAccountsToGroup(Group g, int numAccounts) {
         for (int i = 0; i < numAccounts; ++i) {
-            g.Accounts.Add(new Account($"Cool Account Name {i}", "This is a very secure password"));
+            g.Accounts.Add(new Account($"Cool Account Name {i}", "loginname", "very secure password"));
         }
     }
 }

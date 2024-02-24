@@ -3,18 +3,22 @@
 namespace PWManager.Domain.Entities {
     public class Group : Entity {
         public string UserId { get; set; }
+        
+        public string Identifier { get; set; }
+        
         public List<Account> Accounts { get; set; }
 
         public Group(string userId) : this(userId, new List<Account>()) {}
-        public Group(string id, DateTimeOffset created, DateTimeOffset updated, string userId) : this(id, created, updated, userId, new List<Account>()) {}
+        public Group(string id, DateTimeOffset created, DateTimeOffset updated, string userId, string identifier) : this(id, created, updated, userId, identifier,new List<Account>()) {}
 
         public Group(string userId, List<Account> accounts) : base() {
             UserId = userId;
             Accounts = accounts;
         }
 
-        public Group(string id, DateTimeOffset created, DateTimeOffset updated, string userId, List<Account> accounts) : base(id, created, updated) {
+        public Group(string id, DateTimeOffset created, DateTimeOffset updated, string userId, string identifier, List<Account> accounts) : base(id, created, updated) {
             UserId = userId;
+            Identifier = identifier;
             Accounts = accounts;
         }
 
