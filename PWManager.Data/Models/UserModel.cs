@@ -8,11 +8,9 @@ internal class UserModel {
     [Key]
     public string Id { get; set; }
     
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTimeOffset Created { get; set; }
+    public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
     
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTimeOffset Updated { get; set; }
+    public DateTimeOffset Updated { get; set; } = DateTimeOffset.Now;
     
     [Required]
     public string UserName { get; set; }

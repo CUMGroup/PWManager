@@ -8,7 +8,9 @@ namespace PWManager.Domain.Entities {
         
         public List<Account> Accounts { get; set; }
 
-        public Group(string userId) : this(userId, new List<Account>()) {}
+        public Group(string identifier, string userId) : this(Guid.NewGuid().ToString(),DateTimeOffset.Now, DateTimeOffset.Now, userId, identifier) {
+            
+        }
         public Group(string id, DateTimeOffset created, DateTimeOffset updated, string userId, string identifier) : this(id, created, updated, userId, identifier,new List<Account>()) {}
 
         public Group(string userId, List<Account> accounts) : base() {

@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
@@ -14,9 +16,9 @@ namespace PWManager.CLI {
         private readonly CliEnvironment _environment;
         private readonly CommandParser _commandParser;
 
-        public ConsoleRunner(IServiceProvider provider, CliEnvironment environment) {
+        public ConsoleRunner(IServiceProvider provider, IApplicationEnvironment environment) {
             _provider = provider;
-            _environment = environment;
+            _environment = (CliEnvironment)environment;
             _commandParser = new CommandParser();
         }
 
@@ -30,8 +32,12 @@ namespace PWManager.CLI {
                     if (input is null) {
                         continue;
                     }
+
                     exitCondition = ExecuteCommand(input);
                 }
+            }
+            catch (UserFeedbackException ex) {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex) {
                 Console.WriteLine("An Error occured!");

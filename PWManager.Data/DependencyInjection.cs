@@ -13,7 +13,9 @@ public static class DependencyInjection {
         services.AddTransient<IGroupRepository, GroupRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ISettingsRepository, SettingsRepository>();
+
         services.AddTransient<ILoginService, LoginService>();
+        services.AddTransient<IDatabaseInitializerService, DatabaseInitializerService>();
         return services;
     }
 }

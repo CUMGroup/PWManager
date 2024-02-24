@@ -1,4 +1,5 @@
 ﻿using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 using PWManager.Data.Models;
 using PWManager.Data.Persistance;
 using PWManager.Domain.Entities;
@@ -13,7 +14,7 @@ public class GroupRepository : IGroupRepository {
     private readonly ICryptService _cryptService;
     private readonly IApplicationEnvironment _environment;
     
-    internal GroupRepository(ICryptService cryptService, IApplicationEnvironment environment) {
+    public GroupRepository(ICryptService cryptService, IApplicationEnvironment environment) {
         _cryptService = cryptService;
         _environment = environment;
     }
@@ -24,7 +25,7 @@ public class GroupRepository : IGroupRepository {
         var group = groups.First(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
 
         if (group is null) {
-            throw new ArgumentException("Could not find group with name " + groupName);
+            throw new UserFeedbackException("Could not find group with name " + groupName);
         }
 
         var groupEntity = GroupModelToEntity(group);

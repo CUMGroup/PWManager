@@ -1,4 +1,4 @@
-﻿using PWManager.CLI.Abstractions;
+﻿using PWManager.Application.Context;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 
@@ -6,8 +6,8 @@ namespace PWManager.CLI.Controllers;
 
 public class HelpController : IController {
 
-    private readonly CliEnvironment _env;
-    public HelpController(CliEnvironment env) {
+    private readonly IApplicationEnvironment _env;
+    public HelpController(IApplicationEnvironment env) {
         _env = env;
     }
 
