@@ -1,11 +1,15 @@
 ﻿using PWManager.Domain.Services.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
+using PWManager.Application.Context;
 
 namespace PWManager.Application.Services {
     public class CryptService : ICryptService {
 
-        public CryptService() {
+        private readonly IApplicationEnvironment _env;
+        
+        public CryptService(IApplicationEnvironment env) {
+            _env = env;
         }
 
         public void Encrypt(ISecureProperties input, string key) {
@@ -22,20 +26,28 @@ namespace PWManager.Application.Services {
             }
         }
 
-        public string Decrypt(string input, string key) {
+        public string Decrypt(string input) {
+            if (_env.EncryptionKey is null) {
+                throw new InvalidOperationException("Encryption Key is null! Are you in a session?");
+            }
+            
             var inputBytes = Convert.FromBase64String(input);
 
-            using var aes = CreateAesWith(key);
+            using var aes = CreateAesWith(_env.EncryptionKey);
             var iv = inputBytes[0..16];
             var plainBytes = aes.DecryptCfb(inputBytes[16..], iv);
 
             return GetStringFrom(plainBytes);
         }
 
-        public string Encrypt(string input, string key) {
+        public string Encrypt(string input) {
+            if (_env.EncryptionKey is null) {
+                throw new InvalidOperationException("Encryption Key is null! Are you in a session?");
+            }
+            
             var inputBytes = GetBytesFrom(input);
 
-            using var aes = CreateAesWith(key);
+            using var aes = CreateAesWith(_env.EncryptionKey);
             aes.GenerateIV();
             var iv = aes.IV;
 
@@ -72,6 +84,11 @@ namespace PWManager.Application.Services {
 
             return aes;
         }
+
+        public string GenerateSalt() {
+            return Guid.NewGuid().ToString();
+        }
+        
         private static byte[] GetBytesFrom(string input) => Encoding.ASCII.GetBytes(input);
         private static string GetStringFrom(byte[] bytes) => Encoding.ASCII.GetString(bytes);
     }
