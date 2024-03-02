@@ -9,9 +9,9 @@ using System.IO;
 
 namespace PWManager.CLI.Controllers {
     public class LoginController : IController {
-        private readonly IApplicationEnvironment _env;
+        private readonly ICliEnvironment _env;
         private readonly ILoginService _loginService;
-        public LoginController(IApplicationEnvironment env, ILoginService loginService) {
+        public LoginController(ICliEnvironment env, ILoginService loginService) {
             _env = env;
             _loginService = loginService;
         }

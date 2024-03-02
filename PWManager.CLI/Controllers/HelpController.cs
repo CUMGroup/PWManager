@@ -6,8 +6,8 @@ namespace PWManager.CLI.Controllers;
 
 public class HelpController : IController {
 
-    private readonly IApplicationEnvironment _env;
-    public HelpController(IApplicationEnvironment env) {
+    private readonly ICliEnvironment _env;
+    public HelpController(ICliEnvironment env) {
         _env = env;
     }
 
