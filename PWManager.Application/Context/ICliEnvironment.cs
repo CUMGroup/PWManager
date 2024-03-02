@@ -2,5 +2,5 @@
 
 public interface ICliEnvironment {
     public bool RunningSession { get; set; }
-    public string Prompt { get; }
+    public void WritePrompt();
 }

@@ -25,11 +25,10 @@ namespace PWManager.CLI {
         }
 
         public void Run(string[] args) {
-            Console.WriteLine("Hello World");
             try {
                 var exitCondition = ExecuteCommand(args);
                 while (exitCondition is ExitCondition.CONTINUE) {
-                    Console.Write(_environment.Prompt);
+                    _environment.WritePrompt();
                     var input = Console.ReadLine();
                     if (input is null) {
                         continue;
