@@ -42,6 +42,10 @@ public class UserRepository : IUserRepository {
         var user = _dbContext.Users.AsNoTracking().First(e => e.UserName == username);
         var hash = _cryptService.Hash(password, user.Salt);
 
+        if(user is null) {
+            throw new UserFeedbackException("No such User found.");
+        }
+
         if(hash.Equals(user.MasterHash)) {
             return UserModelToEntity(user);
         }
