@@ -1,10 +1,10 @@
 ﻿using PWManager.Application.Context;
 using PWManager.Domain.Entities;
 
-namespace PWManager.CLI.Abstractions; 
+namespace PWManager.CLI.Environment; 
 
-public class CliEnvironment : IApplicationEnvironment {
-
+public class CliEnvironment : ICliEnvironment, IDebugEnvironment, IUserEnvironment, ICryptEnvironment {
+    
     public bool IsDevelopmentMode { get; init; } = true;
 
     public bool RunningSession { get; set; } = false;
