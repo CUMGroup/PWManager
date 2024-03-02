@@ -11,11 +11,13 @@ internal static class RunnerExtensions {
         services.AddTransient<HelpController>();
         services.AddTransient<LoginController>();
         services.AddTransient<InitController>();
+        services.AddTransient<ListController>();
     }
     public static void MapControllers(this ConsoleRunner runner) {
         
         runner.MapCommand<HelpController>(AvailableCommands.HELP);
         runner.MapCommand<LoginController>(AvailableCommands.LOGIN);
         runner.MapCommand<InitController>(AvailableCommands.INIT);
+        runner.MapCommand<ListController>(AvailableCommands.LIST);
     }
 }
