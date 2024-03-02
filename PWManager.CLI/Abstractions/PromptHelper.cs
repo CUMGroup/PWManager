@@ -1,10 +1,27 @@
 ﻿using Sharprompt;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace PWManager.CLI.Abstractions; 
 
 public static class PromptHelper {
 
-    public static string InputPassword() {
+    public static bool InputPassword(Func<string, bool> passwordValidator) {
+        var tryCount = 0;
+        var pass = Prompt.Password("Enter your password");
+        var succ = passwordValidator(pass);
+
+        while (!succ && tryCount < 3) {
+            ++tryCount;
+            Console.WriteLine($"Password incorrect! Please try again. ({tryCount}/3)");
+            pass = Prompt.Password("Enter your password");
+            succ = passwordValidator(pass);
+        }
+
+        return succ;
+    }
+
+    public static string InputNewPassword() {
         var password = TryPasswordInput();
         while (password is null) {
             Console.WriteLine("You failed to repeat your password 3 times in a row! Please try again!");

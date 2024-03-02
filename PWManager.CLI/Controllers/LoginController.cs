@@ -30,16 +30,7 @@ namespace PWManager.CLI.Controllers {
                 path = lastUser.Split('\n')[1];
             }
 
-            var tryCount = 0;
-            var pass = Prompt.Password("Enter your password");
-            var succ = _loginService.Login(username, pass, path);
-            
-            while (!succ && tryCount < 3) {
-                ++tryCount;
-                Console.WriteLine($" Password incorrect! Please try again. ({tryCount}/3)");
-                pass = Prompt.Password("Enter your password");
-                succ = _loginService.Login(username, pass, path);
-            }
+            var succ = PromptHelper.InputPassword((p) => _loginService.Login(username, p, path));
 
             if(!succ) {
                 return ExitCondition.EXIT;
