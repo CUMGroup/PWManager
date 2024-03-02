@@ -6,6 +6,7 @@ using PWManager.Domain.Repositories;
 using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace PWManager.Data.Repositories; 
 
@@ -22,7 +23,7 @@ internal class SettingsRepository : ISettingsRepository {
     
     public Settings GetSettings() {
         var userId = _environment.CurrentUser.Id;
-        var settingsList = _dbContext.Settings.Where(e => e.UserId == userId).ToList();
+        var settingsList = _dbContext.Settings.Where(e => e.UserId == userId).AsNoTracking().ToList();
         var settingsModel = settingsList.Any() ? settingsList.First() : null;
         if (settingsModel is null) {
             settingsModel = new SettingsModel {

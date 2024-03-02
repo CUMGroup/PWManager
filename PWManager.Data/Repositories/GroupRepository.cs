@@ -1,4 +1,5 @@
-﻿using PWManager.Application.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Data.Models;
 using PWManager.Data.Persistance;
@@ -20,7 +21,7 @@ public class GroupRepository : IGroupRepository {
     }
     
     public Group GetGroup(string groupName) {
-        var groups = _dbContext.Groups.Where(e => e.UserId == _environment.CurrentUser.Id).ToList();
+        var groups = _dbContext.Groups.Where(e => e.UserId == _environment.CurrentUser.Id).AsNoTracking().ToList();
         
         var group = groups.First(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
 
@@ -29,11 +30,11 @@ public class GroupRepository : IGroupRepository {
         }
 
         var groupEntity = GroupModelToEntity(group);
-        var accounts = _dbContext.Accounts.Where(e => e.GroupId == group.Id).ToList();
+        var accounts = _dbContext.Accounts.Where(e => e.GroupId == group.Id).AsNoTracking().ToList();
 
         var accountEntities = accounts.Select(AccountModelToEntity).ToList();
 
-        groupEntity.Accounts = accountEntities;
+        accountEntities.ForEach(e => groupEntity.AddAccount(e));
 
         return groupEntity;
     }
@@ -42,6 +43,7 @@ public class GroupRepository : IGroupRepository {
         var groupNames = _dbContext.Groups
             .Where(e => e.UserId == _environment.CurrentUser.Id)
             .Select(e => e.IdentifierCrypt)
+            .AsNoTracking()
             .ToList();
 
         return groupNames.Select(_cryptService.Decrypt).ToList();
@@ -58,6 +60,12 @@ public class GroupRepository : IGroupRepository {
         var groupModel = GroupEntityToModel(group);
 
         _dbContext.Groups.Update(groupModel);
+        return _dbContext.SaveChanges() > 0;
+    }
+
+    public bool AddAccountToGroup(Account account, Group group) {
+        var accountModel = AccountEntityToModel(account, group.Id);
+        _dbContext.Accounts.Add(accountModel);
         return _dbContext.SaveChanges() > 0;
     }
 
