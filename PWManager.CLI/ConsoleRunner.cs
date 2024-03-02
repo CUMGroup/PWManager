@@ -76,8 +76,13 @@ namespace PWManager.CLI {
         }
 
         private bool IsSessionLocked(MemberInfo controllerType) {
-            return Attribute.GetCustomAttribute(controllerType, typeof(SessionOnlyAttribute)) is not null 
+            var sessionOnly = Attribute.GetCustomAttribute(controllerType, typeof(SessionOnlyAttribute)) is not null 
                    && !_environment.RunningSession;
+            
+            var noSessionOnly = Attribute.GetCustomAttribute(controllerType, typeof(NoSessionAttribute)) is not null 
+                    && _environment.RunningSession;
+
+            return sessionOnly || noSessionOnly;
         }
     }
 }

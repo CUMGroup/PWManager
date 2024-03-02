@@ -4,12 +4,14 @@ using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
+using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
 
+[NoSession]
 public class InitController : IController {
 
     private readonly IDatabaseInitializerService _dbInit;

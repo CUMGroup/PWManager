@@ -2,12 +2,14 @@
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
+using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
-using System.IO;
 
 namespace PWManager.CLI.Controllers {
+    
+    [NoSession]
     public class LoginController : IController {
         private readonly IApplicationEnvironment _env;
         private readonly ILoginService _loginService;
