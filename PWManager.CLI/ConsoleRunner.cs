@@ -60,6 +60,11 @@ namespace PWManager.CLI {
             return ExecuteCommand(_commandParser.ParseCommandWithArguments(input).ToArray());
         }
         private ExitCondition ExecuteCommand(string[] args) {
+            if (args.Length <= 0) {
+                var helpController = (IController)_provider.GetRequiredService(_controller[(int)AvailableCommands.HELP]!);
+                return helpController.Handle(Array.Empty<string>());
+            }
+
             var cmd = _commandParser.ParseCommand(args[0]);
             var controllerType = _controller[(int) cmd];
             if (controllerType is null || IsSessionLocked(controllerType)) {
