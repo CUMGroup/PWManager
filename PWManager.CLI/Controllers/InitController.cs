@@ -13,9 +13,9 @@ namespace PWManager.CLI.Controllers;
 public class InitController : IController {
 
     private readonly IDatabaseInitializerService _dbInit;
-    private readonly IApplicationEnvironment _environment;
+    private readonly ICliEnvironment _environment;
     
-    public InitController(IDatabaseInitializerService dbInit, IApplicationEnvironment environment) {
+    public InitController(IDatabaseInitializerService dbInit, ICliEnvironment environment) {
         _dbInit = dbInit;
         _environment = environment;
     }

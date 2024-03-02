@@ -17,7 +17,8 @@ namespace PWManager.UnitTests.Services {
         private ICryptService _cryptService = Substitute.For<ICryptService>();
         private ISettingsRepository _settingsRepository = Substitute.For<ISettingsRepository>();
         private DataContextWrapper _wrapper = Substitute.For<DataContextWrapper>();
-        private IApplicationEnvironment _env = Substitute.For<IApplicationEnvironment>();
+        private IUserEnvironment _userEnv = Substitute.For<IUserEnvironment>();
+        private ICryptEnvironment _cryptEnv = Substitute.For<ICryptEnvironment>();
         private IUserRepository _userRepo = Substitute.For<IUserRepository>();
 
         [Fact]
@@ -31,12 +32,12 @@ namespace PWManager.UnitTests.Services {
                 );
             _groupRepo.GetGroup(Arg.Any<string>()).Returns(group);
 
-            _sut = new LoginService(_wrapper, _userRepo, _groupRepo, _cryptService, _settingsRepository, _env);
+            _sut = new LoginService(_wrapper, _userRepo, _groupRepo, _cryptService, _settingsRepository, _userEnv, _cryptEnv);
             _sut.Login("TestUserName", "WhatAPasswort", ".");
 
-            Assert.Equal(user, _env.CurrentUser);
-            Assert.NotNull(_env.EncryptionKey);
-            Assert.NotNull(_env.CurrentGroup);
+            Assert.Equal(user, _userEnv.CurrentUser);
+            Assert.NotNull(_cryptEnv.EncryptionKey);
+            Assert.NotNull(_userEnv.CurrentGroup);
         }
 
         [Fact]
@@ -46,7 +47,7 @@ namespace PWManager.UnitTests.Services {
             _userRepo.CheckPasswordAttempt(Arg.Any<string>(), Arg.Any<string>()).Returns(user);
 
 
-            _sut = new LoginService(_wrapper, _userRepo, _groupRepo, _cryptService, _settingsRepository, _env);
+            _sut = new LoginService(_wrapper, _userRepo, _groupRepo, _cryptService, _settingsRepository, _userEnv, _cryptEnv);
 
             var ex = Assert.Throws<UserFeedbackException>(() => _sut.Login("TestUserName", "WhatAPassword", "."));
             Assert.Equal("Database not found.", ex.Message);
@@ -59,7 +60,7 @@ namespace PWManager.UnitTests.Services {
             _userRepo.CheckPasswordAttempt(Arg.Any<string>(), Arg.Any<string>()).ReturnsNull();
 
 
-            _sut = new LoginService(_wrapper, _userRepo, _groupRepo, _cryptService, _settingsRepository, _env);
+            _sut = new LoginService(_wrapper, _userRepo, _groupRepo, _cryptService, _settingsRepository, _userEnv, _cryptEnv);
 
             var ex = Assert.Throws<UserFeedbackException>(() => _sut.Login("TestUserName", "WhatAPassword", "."));
             Assert.Equal("No such user found.", ex.Message);

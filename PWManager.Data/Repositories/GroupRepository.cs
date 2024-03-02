@@ -12,9 +12,9 @@ public class GroupRepository : IGroupRepository {
 
     private ApplicationDbContext _dbContext => DataContext.GetDbContext();
     private readonly ICryptService _cryptService;
-    private readonly IApplicationEnvironment _environment;
+    private readonly IUserEnvironment _environment;
     
-    public GroupRepository(ICryptService cryptService, IApplicationEnvironment environment) {
+    public GroupRepository(ICryptService cryptService, IUserEnvironment environment) {
         _cryptService = cryptService;
         _environment = environment;
     }
