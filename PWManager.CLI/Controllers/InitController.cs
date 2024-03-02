@@ -34,7 +34,7 @@ public class InitController : IController {
             name = Prompt.Input<string>("What's your desired user name?");
         }
 
-        var password = PromptHelper.InputPassword();
+        var password = PromptHelper.InputNewPassword();
         
         _dbInit.InitDatabase(path, name, password);
         ConfigFileHandler.WriteDefaultFile(name, path);
