@@ -15,7 +15,8 @@ public class DatabaseInitServiceTest {
     private DatabaseInitializerService _sut;
     private IGroupRepository _groupRepo = Substitute.For<IGroupRepository>();
     private ICryptService _cryptService = Substitute.For<ICryptService>();
-    private IApplicationEnvironment _env = Substitute.For<IApplicationEnvironment>();
+    private IUserEnvironment _userEnv = Substitute.For<IUserEnvironment>();
+    private ICryptEnvironment _cryptEnv = Substitute.For<ICryptEnvironment>();
     private DataContextWrapper _wrapper = Substitute.For<DataContextWrapper>();
     private IUserRepository _userRepo = Substitute.For<IUserRepository>();
     
@@ -26,18 +27,18 @@ public class DatabaseInitServiceTest {
         _userRepo.AddUser(Arg.Any<string>(), Arg.Any<string>()).Returns(user);
         
         
-        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_env, _cryptService);
+        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv);
         
         _sut.InitDatabase(".", "TestUserName", "WhatAPassword");
         
-        Assert.Equal(user,_env.CurrentUser);
-        Assert.NotNull(_env.EncryptionKey);
+        Assert.Equal(user,_userEnv.CurrentUser);
+        Assert.NotNull(_cryptEnv.EncryptionKey);
     }
 
     [Fact]
     public void Init_ShouldNot_AcceptInvalidName() {
         _wrapper.DatabaseExists(Arg.Any<string>()).Returns(false);
-        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_env, _cryptService);
+        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv);
 
         var ex = Assert.Throws<UserFeedbackException>(() => _sut.InitDatabase(".","asd$", "WhatAPassword"));
         
@@ -47,7 +48,7 @@ public class DatabaseInitServiceTest {
     [Fact]
     public void Init_ShouldNot_InitExistingDb() {
         _wrapper.DatabaseExists(Arg.Any<string>()).Returns(true);
-        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_env, _cryptService);
+        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv);
 
         var ex = Assert.Throws<UserFeedbackException>(() => _sut.InitDatabase(".","TestUserName", "WhatAPassword"));
         

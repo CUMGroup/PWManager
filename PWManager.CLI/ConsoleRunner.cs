@@ -13,12 +13,14 @@ namespace PWManager.CLI {
 
         private readonly Type?[] _controller = new Type[Enum.GetNames<AvailableCommands>().Length];
         private readonly IServiceProvider _provider;
-        private readonly CliEnvironment _environment;
+        private readonly ICliEnvironment _environment;
+        private readonly IDebugEnvironment _debugInfo;
         private readonly CommandParser _commandParser;
 
-        public ConsoleRunner(IServiceProvider provider, IApplicationEnvironment environment) {
+        public ConsoleRunner(IServiceProvider provider, ICliEnvironment environment, IDebugEnvironment debugInfo) {
             _provider = provider;
-            _environment = (CliEnvironment)environment;
+            _environment = environment;
+            _debugInfo = debugInfo;
             _commandParser = new CommandParser();
         }
 
@@ -48,7 +50,7 @@ namespace PWManager.CLI {
             }
             catch (Exception ex) {
                 Console.WriteLine("An Error occured!");
-                if (_environment.IsDevelopmentMode) {
+                if (_debugInfo.IsDevelopmentMode) {
                     Console.WriteLine(ex);
                 }
             }
@@ -76,8 +78,13 @@ namespace PWManager.CLI {
         }
 
         private bool IsSessionLocked(MemberInfo controllerType) {
-            return Attribute.GetCustomAttribute(controllerType, typeof(SessionOnlyAttribute)) is not null 
+            var sessionOnly = Attribute.GetCustomAttribute(controllerType, typeof(SessionOnlyAttribute)) is not null 
                    && !_environment.RunningSession;
+            
+            var noSessionOnly = Attribute.GetCustomAttribute(controllerType, typeof(NoSessionAttribute)) is not null 
+                    && _environment.RunningSession;
+
+            return sessionOnly || noSessionOnly;
         }
     }
 }

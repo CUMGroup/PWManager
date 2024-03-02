@@ -4,13 +4,20 @@ using PWManager.Application.Context;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI;
 using PWManager.CLI.Abstractions;
+using PWManager.CLI.Environment;
 using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
 using PWManager.Data;
 
 var services = new ServiceCollection();
 
-services.AddSingleton<IApplicationEnvironment,CliEnvironment>();
+// Configure Environment
+var environment = new CliEnvironment();
+services.AddSingleton<ICliEnvironment>(environment);
+services.AddSingleton<ICryptEnvironment>(environment);
+services.AddSingleton<IDebugEnvironment>(environment);
+services.AddSingleton<IUserEnvironment>(environment);
+
 // Add all services to DI
 services.AddSingleton<IRunner, ConsoleRunner>();
 services.AddTransient<IClipboard, Clipboard>();

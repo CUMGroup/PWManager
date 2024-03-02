@@ -6,9 +6,9 @@ using PWManager.Application.Context;
 namespace PWManager.Application.Services {
     public class CryptService : ICryptService {
 
-        private readonly IApplicationEnvironment _env;
+        private readonly ICryptEnvironment _env;
         
-        public CryptService(IApplicationEnvironment env) {
+        public CryptService(ICryptEnvironment env) {
             _env = env;
         }
 
