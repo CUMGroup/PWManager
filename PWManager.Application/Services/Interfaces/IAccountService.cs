@@ -2,6 +2,6 @@
 
 public interface IAccountService {
 
-    public List<string> GetCurrentAccounts();
+    public List<string> GetCurrentAccountNames();
 
 }
