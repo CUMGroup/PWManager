@@ -59,14 +59,15 @@ namespace PWManager.CLI {
             return ExecuteCommand(_commandParser.ParseCommandWithArguments(input).ToArray());
         }
         private ExitCondition ExecuteCommand(string[] args) {
-            var cmd = _commandParser.ParseCommand(args[0]);
+            var cmd = args.Length <= 0 ? AvailableCommands.HELP : _commandParser.ParseCommand(args[0]);
             var controllerType = _controller[(int) cmd];
             if (controllerType is null || IsSessionLocked(controllerType)) {
                 controllerType = _controller[(int)AvailableCommands.HELP]!;
             }
 
             var controller = (IController) _provider.GetRequiredService(controllerType);
-            return controller.Handle(args[1..]);
+            var commandArgs = args.Length <= 1 ? Array.Empty<string>() : args[1..];
+            return controller.Handle(commandArgs);
         }
 
         public void MapCommand<TCommand>(AvailableCommands command) {
