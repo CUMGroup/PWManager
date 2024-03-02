@@ -13,22 +13,24 @@ namespace PWManager.Data.Services {
         private readonly IGroupRepository _groupRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly ICryptService _cryptService;
+        private readonly ICliEnvironment _cliEnv;
         private readonly IUserEnvironment _userEnv;
         private readonly ICryptEnvironment _cryptEnv;
 
         private readonly DataContextWrapper _dataContext;
 
-        internal LoginService(DataContextWrapper wrapper, IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, IUserEnvironment userEnv, ICryptEnvironment cryptEnv) : this(
-        userRepository, groupRepository, cryptService, settingsRepository, userEnv, cryptEnv) {
+        internal LoginService(DataContextWrapper wrapper, IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, ICliEnvironment cliEnv, IUserEnvironment userEnv, ICryptEnvironment cryptEnv) : this(
+        userRepository, groupRepository, cryptService, settingsRepository, cliEnv, userEnv, cryptEnv) {
             _dataContext = wrapper;
         }
-        public LoginService(IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, IUserEnvironment userEnv, ICryptEnvironment cryptEnv) { 
+        public LoginService(IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, ICliEnvironment cliEnv, IUserEnvironment userEnv, ICryptEnvironment cryptEnv) { 
             _userRepository = userRepository;
             _groupRepository = groupRepository;
             _settingsRepository = settingsRepository;
             _cryptEnv = cryptEnv;
             _cryptService = cryptService;
             _userEnv = userEnv;
+            _cliEnv = cliEnv;
             _dataContext = new DataContextWrapper();
         }
         public void Login(string username, string password, string dbPath) {
@@ -47,6 +49,8 @@ namespace PWManager.Data.Services {
             _cryptEnv.EncryptionKey = _cryptService.DeriveKeyFrom(password, username);
 
             var mainGroup = _settingsRepository.GetSettings().MainGroup;
+
+            _cliEnv.RunningSession = true;
             _userEnv.CurrentGroup = _groupRepository.GetGroup(mainGroup.MainGroupIdentifier);
         }
     }

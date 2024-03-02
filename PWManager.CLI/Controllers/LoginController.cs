@@ -2,24 +2,24 @@
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
+using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
-using System.IO;
 
 namespace PWManager.CLI.Controllers {
+    
+    [NoSession]
     public class LoginController : IController {
-        private readonly ICliEnvironment _env;
+
         private readonly ILoginService _loginService;
-        public LoginController(ICliEnvironment env, ILoginService loginService) {
-            _env = env;
+        public LoginController(ILoginService loginService) {
+
             _loginService = loginService;
         }
-        public ExitCondition Handle(string[] args) {
-            if (_env.RunningSession) {
-                throw new UserFeedbackException("Command not available in a session!");
-            }
 
+        
+        public ExitCondition Handle(string[] args) {
             (var username, var path) = ParseArgs(args);
 
             var lastUser = ConfigFileHandler.ReadDefaultFile();
@@ -35,8 +35,6 @@ namespace PWManager.CLI.Controllers {
 
             ConfigFileHandler.WriteDefaultFile(username, path);
             Console.WriteLine($"Welcome {username} :)");
-
-            _env.RunningSession = true;
             return ExitCondition.CONTINUE;
         }
 

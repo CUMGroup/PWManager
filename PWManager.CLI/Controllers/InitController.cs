@@ -4,27 +4,24 @@ using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
+using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
 
+[NoSession]
 public class InitController : IController {
 
     private readonly IDatabaseInitializerService _dbInit;
-    private readonly ICliEnvironment _environment;
-    
-    public InitController(IDatabaseInitializerService dbInit, ICliEnvironment environment) {
+
+    public InitController(IDatabaseInitializerService dbInit) {
+
         _dbInit = dbInit;
-        _environment = environment;
     }
 
     public ExitCondition Handle(string[] args) {
-        if (_environment.RunningSession) {
-            throw new UserFeedbackException("Command not available in a session!");
-        }
-
         var path = Prompt.Input<string>("Where do you want to create your database file?");
         while(!Path.Exists(path)) {
             Console.WriteLine("The given path does not exist.");
