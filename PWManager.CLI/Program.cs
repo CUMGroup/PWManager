@@ -9,6 +9,12 @@ using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
 using PWManager.Data;
 
+// Clean up hooks
+var defaultColor = Console.ForegroundColor;
+Console.CancelKeyPress += delegate {
+    Console.ForegroundColor = defaultColor;
+};
+
 var services = new ServiceCollection();
 
 // Configure Environment

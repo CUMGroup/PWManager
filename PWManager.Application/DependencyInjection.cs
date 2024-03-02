@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PWManager.Application.Services;
+using PWManager.Application.Services.Interfaces;
 using PWManager.Domain.Services.Interfaces;
 
 namespace PWManager.Application; 
@@ -10,6 +11,8 @@ public static class DependencyInjection {
 
         services.AddTransient<ICryptService, CryptService>();
         services.AddTransient<IPasswordGeneratorService, PasswordGeneratorService>();
+
+        services.AddTransient<IAccountService, AccountService>();
         
         return services;
     }
