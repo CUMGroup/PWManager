@@ -33,7 +33,7 @@ namespace PWManager.Data.Services {
             _cliEnv = cliEnv;
             _dataContext = new DataContextWrapper();
         }
-        public void Login(string username, string password, string dbPath) {
+        public bool Login(string username, string password, string dbPath) {
             if(!_dataContext.DatabaseExists(dbPath)) {
                 throw new UserFeedbackException("Database not found.");
             }
@@ -42,7 +42,7 @@ namespace PWManager.Data.Services {
 
             var user = _userRepository.CheckPasswordAttempt(username, password);
             if(user is null) {
-                throw new UserFeedbackException("No such user found.");
+                throw new LoginException("Password Incorrect! Please Try again.");
             }
 
             _userEnv.CurrentUser = user;
@@ -52,6 +52,8 @@ namespace PWManager.Data.Services {
 
             _cliEnv.RunningSession = true;
             _userEnv.CurrentGroup = _groupRepository.GetGroup(mainGroup.MainGroupIdentifier);
+
+            return true;
         }
     }
 }

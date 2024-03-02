@@ -30,8 +30,20 @@ namespace PWManager.CLI.Controllers {
                 path = lastUser.Split('\n')[1];
             }
 
-            var pass = Prompt.Password("Enter your password");
-            _loginService.Login(username, pass, path);
+            var succ = false;
+            var tryCount = 0;
+            while (!succ && tryCount < 3) {
+                ++tryCount;
+                var pass = Prompt.Password("Enter your password");
+                try {
+                    succ = _loginService.Login(username, pass, path);
+                } catch (LoginException ex) {
+                    Console.WriteLine(ex.Message + $" ({tryCount}/3)");
+                }
+            }
+            if(!succ) {
+                return ExitCondition.EXIT;
+            }
 
             ConfigFileHandler.WriteDefaultFile(username, path);
             Console.WriteLine($"Welcome {username} :)");
