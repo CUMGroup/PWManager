@@ -13,6 +13,7 @@ namespace PWManager.Data.Services {
         private readonly IGroupRepository _groupRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly ICryptService _cryptService;
+        private readonly ICliEnvironment _cliEnv;
         private readonly IUserEnvironment _userEnv;
         private readonly ICryptEnvironment _cryptEnv;
 

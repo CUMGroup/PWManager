@@ -39,7 +39,7 @@ namespace PWManager.UnitTests.Services {
             Assert.Equal(user, _userEnv.CurrentUser);
             Assert.NotNull(_cryptEnv.EncryptionKey);
             Assert.NotNull(_userEnv.CurrentGroup);
-            Assert.True(_env.RunningSession);
+            Assert.True(_cliEnv.RunningSession);
         }
 
         [Fact]
