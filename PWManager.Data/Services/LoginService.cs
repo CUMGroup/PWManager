@@ -42,7 +42,7 @@ namespace PWManager.Data.Services {
 
             var user = _userRepository.CheckPasswordAttempt(username, password);
             if(user is null) {
-                throw new LoginException("Password Incorrect! Please Try again.");
+                return false;
             }
 
             _userEnv.CurrentUser = user;
