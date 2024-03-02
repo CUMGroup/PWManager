@@ -15,18 +15,12 @@ namespace PWManager.CLI.Controllers;
 public class InitController : IController {
 
     private readonly IDatabaseInitializerService _dbInit;
-    private readonly IApplicationEnvironment _environment;
     
-    public InitController(IDatabaseInitializerService dbInit, IApplicationEnvironment environment) {
+    public InitController(IDatabaseInitializerService dbInit) {
         _dbInit = dbInit;
-        _environment = environment;
     }
 
     public ExitCondition Handle(string[] args) {
-        if (_environment.RunningSession) {
-            throw new UserFeedbackException("Command not available in a session!");
-        }
-
         var path = Prompt.Input<string>("Where do you want to create your database file?");
         while(!Path.Exists(path)) {
             Console.WriteLine("The given path does not exist.");

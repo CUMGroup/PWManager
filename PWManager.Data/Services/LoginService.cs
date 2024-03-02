@@ -46,6 +46,8 @@ namespace PWManager.Data.Services {
 
             var mainGroup = _settingsRepository.GetSettings().MainGroup;
             _env.CurrentGroup = _groupRepository.GetGroup(mainGroup.MainGroupIdentifier);
+
+            _env.RunningSession = true;
         }
     }
 }

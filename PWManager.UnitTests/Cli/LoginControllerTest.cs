@@ -1,17 +1,5 @@
 ﻿using NSubstitute;
-using PWManager.Application.Context;
-using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Controllers;
-using PWManager.Data.Repositories;
-using PWManager.Data.Services;
-using PWManager.Domain.Entities;
-using PWManager.Domain.Repositories;
-using PWManager.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWManager.UnitTests.Cli {
     public class LoginControllerTest {
@@ -20,7 +8,7 @@ namespace PWManager.UnitTests.Cli {
 
         public LoginControllerTest()
         {
-            _sut = Substitute.ForPartsOf<LoginController>(null, null);
+            _sut = Substitute.ForPartsOf<LoginController>(new object[] {null});
             _sut.AskForInput(Arg.Any<string>()).Returns("Test");
         }
 
