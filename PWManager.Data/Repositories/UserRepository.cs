@@ -1,4 +1,5 @@
-﻿using PWManager.Application.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using PWManager.Application.Exceptions;
 using PWManager.Data.Models;
 using PWManager.Data.Persistance;
 using PWManager.Domain.Entities;
@@ -38,7 +39,7 @@ public class UserRepository : IUserRepository {
     }
 
     public User? CheckPasswordAttempt(string username, string password) {
-        var user = _dbContext.Users.First(e => e.UserName == username);
+        var user = _dbContext.Users.AsNoTracking().First(e => e.UserName == username);
         var hash = _cryptService.Hash(password, user.Salt);
 
         if(user is null) {

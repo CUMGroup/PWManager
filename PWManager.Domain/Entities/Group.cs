@@ -6,7 +6,7 @@ namespace PWManager.Domain.Entities {
         
         public string Identifier { get; set; }
         
-        public List<Account> Accounts { get; set; }
+        public List<Account> Accounts { get; private set; }
 
         public Group(string identifier, string userId) : this(Guid.NewGuid().ToString(),DateTimeOffset.Now, DateTimeOffset.Now, userId, identifier) {
             
@@ -30,6 +30,10 @@ namespace PWManager.Domain.Entities {
 
         public Account? GetAccount(string accId) {
             return Accounts.Find(e => e.Id.Equals(accId));
+        }
+
+        public Account? FindByIdentifier(string identifier) {
+            return Accounts.Find(e => e.Identifier.Equals(identifier));
         }
 
         public bool RemoveAccount(string accId) {
