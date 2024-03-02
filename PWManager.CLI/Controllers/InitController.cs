@@ -26,6 +26,10 @@ public class InitController : IController {
         }
 
         var path = Prompt.Input<string>("Where do you want to create your database file?");
+        while(!Path.Exists(path)) {
+            Console.WriteLine("The given path does not exist.");
+            path = Prompt.Input<string>("Where do you want to create your database file?");
+        }
         
         var name = Prompt.Input<string>("What's your desired user name?");
         while (name.Length <= 1 || !Regex.IsMatch(name, @"^[a-zA-Z]+$")) {
