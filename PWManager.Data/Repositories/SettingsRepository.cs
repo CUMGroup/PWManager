@@ -11,11 +11,11 @@ namespace PWManager.Data.Repositories;
 
 internal class SettingsRepository : ISettingsRepository {
 
-    private readonly IApplicationEnvironment _environment;
+    private readonly IUserEnvironment _environment;
     private ApplicationDbContext _dbContext => DataContext.GetDbContext();
     private readonly ICryptService _cryptService;
     
-    public SettingsRepository(IApplicationEnvironment env, ICryptService cryptService) {
+    public SettingsRepository(IUserEnvironment env, ICryptService cryptService) {
         _environment = env;
         _cryptService = cryptService;
     }

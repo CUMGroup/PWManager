@@ -13,20 +13,22 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
 
     private readonly IUserRepository _userRepo;
     private readonly IGroupRepository _groupRepository;
-    private readonly IApplicationEnvironment _environment;
+    private readonly IUserEnvironment _userEnvironment;
+    private readonly ICryptEnvironment _cryptEnvironment;
     private readonly ICryptService _cryptService;
     private readonly DataContextWrapper _dataContext;
 
     internal DatabaseInitializerService(DataContextWrapper wrapper, IUserRepository userRepo,
-        IGroupRepository groupRepository, IApplicationEnvironment environment, ICryptService cryptService) : this(
-        userRepo, groupRepository, environment, cryptService) {
+        IGroupRepository groupRepository, IUserEnvironment environment, ICryptService cryptService, ICryptEnvironment cryptEnvironment) : this(
+        userRepo, groupRepository, environment, cryptService, cryptEnvironment) {
         _dataContext = wrapper;
     }
-    public DatabaseInitializerService(IUserRepository userRepo, IGroupRepository groupRepository, IApplicationEnvironment environment, ICryptService cryptService) {
+    public DatabaseInitializerService(IUserRepository userRepo, IGroupRepository groupRepository, IUserEnvironment environment, ICryptService cryptService, ICryptEnvironment cryptEnvironment) {
         _userRepo = userRepo;
         _groupRepository = groupRepository;
-        _environment = environment;
+        _userEnvironment = environment;
         _cryptService = cryptService;
+        _cryptEnvironment = cryptEnvironment;
         _dataContext = new DataContextWrapper();
     }
     
@@ -43,8 +45,8 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
         _dataContext.InitDataContext(path);
         
         var user = _userRepo.AddUser(username, password);
-        _environment.CurrentUser = user;
-        _environment.EncryptionKey = _cryptService.DeriveKeyFrom(password, username);
+        _userEnvironment.CurrentUser = user;
+        _cryptEnvironment.EncryptionKey = _cryptService.DeriveKeyFrom(password, username);
         
         _groupRepository.AddGroup(new Group("main", user.Id));
     }
