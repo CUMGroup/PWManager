@@ -11,8 +11,10 @@ namespace PWManager.CLI.Controllers {
     
     [NoSession]
     public class LoginController : IController {
+
         private readonly ILoginService _loginService;
         public LoginController(ILoginService loginService) {
+
             _loginService = loginService;
         }
 

@@ -52,7 +52,7 @@ namespace PWManager.UnitTests.Application {
             var testSalt = "salt";
             var testPlain = "Secret Message";
             
-            var env = Substitute.For<IApplicationEnvironment>();
+            var env = Substitute.For<ICryptEnvironment>();
             env.EncryptionKey.Returns("f??RH!\u0016???,?@?/V??V7R???n??\u0014? Qx");
             var sut = new CryptService(env);
 

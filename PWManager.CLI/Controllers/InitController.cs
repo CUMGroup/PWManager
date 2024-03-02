@@ -15,8 +15,9 @@ namespace PWManager.CLI.Controllers;
 public class InitController : IController {
 
     private readonly IDatabaseInitializerService _dbInit;
-    
+
     public InitController(IDatabaseInitializerService dbInit) {
+
         _dbInit = dbInit;
     }
 
