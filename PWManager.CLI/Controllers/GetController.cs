@@ -38,37 +38,45 @@ public class GetController : IController {
     }
 
     private bool ExecuteAction(string accountIdentifier, AccountAction action) {
-        if (action == AccountAction.COPY_PASSWORD) {
-            _accountService.CopyPasswordToClipboard(accountIdentifier);
-            PromptHelper.PrintColoredText(ConsoleColor.Green, "Copied the password to your clipboard!");
+        return action switch {
+            AccountAction.COPY_PASSWORD => HandleCopyPassword(accountIdentifier),
+            AccountAction.COPY_LOGINNAME => HandleCopyLoginName(accountIdentifier),
+            AccountAction.REGENERATE_PASSWORD => HandleRegeneration(accountIdentifier),
+            AccountAction.DELETE => HandleDeletion(accountIdentifier),
+            AccountAction.RETURN => true,
+            _ => false
+        };
+    }
 
-        } else if (action == AccountAction.COPY_LOGINNAME) {
-            _accountService.CopyLoginnameToClipboard(accountIdentifier);
-            PromptHelper.PrintColoredText(ConsoleColor.Green, "Copied the login-name to your clipboard!");
-            
-        } else if (action == AccountAction.REGENERATE_PASSWORD) {
-            if (!ConfirmRegeneration(accountIdentifier)) {
-                PromptHelper.PrintColoredText(ConsoleColor.Red, "Regeneration aborted!");
-                return false;
-            }
-            _accountService.RegeneratePassword(accountIdentifier);
-            PromptHelper.PrintColoredText(ConsoleColor.Green, "Regenerated your password!");
-            
-        }else if (action == AccountAction.DELETE) {
-            if (!ConfirmDeletion(accountIdentifier)) {
-                PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
-                return false;
-            }
-            _accountService.DeleteAccount(accountIdentifier);
-            PromptHelper.PrintColoredText(ConsoleColor.Green, "Account deleted!");
-            
-        }else if (action == AccountAction.RETURN) {
-            return true;
-        }
-        else {
+    private bool HandleCopyPassword(string identifier) {
+        _accountService.CopyPasswordToClipboard(identifier);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, "Copied the password to your clipboard!");
+        return true;
+    }
+
+    private bool HandleCopyLoginName(string identifier) {
+        _accountService.CopyLoginnameToClipboard(identifier);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, "Copied the login-name to your clipboard!");
+        return true;
+    }
+
+    private bool HandleRegeneration(string identifier) {
+        if (!ConfirmRegeneration(identifier)) {
+            PromptHelper.PrintColoredText(ConsoleColor.Red, "Regeneration aborted!");
             return false;
         }
+        _accountService.RegeneratePassword(identifier);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, "Regenerated your password!");
+        return true;
+    }
 
+    private bool HandleDeletion(string identifier) {
+        if (!ConfirmDeletion(identifier)) {
+            PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
+            return false;
+        }
+        _accountService.DeleteAccount(identifier);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, "Account deleted!");
         return true;
     }
     
