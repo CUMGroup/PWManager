@@ -52,13 +52,11 @@ public class GroupController : IController {
         if (option.Equals(deleteGroup)) {
             var currentgroup = _userEnv.CurrentGroup!.Identifier;
 
-            var confirm = Prompt.Confirm($"Are you sure you want to delete the group '{currentgroup}'");
-            
-            if(!confirm) {
+            var confirm = HandleDeletion(currentgroup);
+
+            if (!confirm) {
                 return ExitCondition.CONTINUE;
             }
-
-            HandleDeletion(currentgroup);
 
             if (_groupService.GetAllGroupNames().Count > 0) {
                 SwitchGroup();
