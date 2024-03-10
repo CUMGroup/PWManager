@@ -1,24 +1,38 @@
-﻿using PWManager.Application.Exceptions;
+﻿using System.Reflection;
+using PWManager.Application.Exceptions;
 
 namespace PWManager.CLI.Abstractions {
-    public class ConfigFileHandler {
+    public static class ConfigFileHandler {
         public static string ReadDefaultFile() {
-            var defaultFilePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            var defaultFilePath = GetPath();
 
             try {
                 return File.ReadAllText(Path.Combine(defaultFilePath, "last.txt"));
-            } catch (IOException e) {
-                throw new UserFeedbackException("The file could not be read");
+            } catch (IOException) {
+                throw new UserFeedbackException("The config file could not be read");
             }
         }
         public static void WriteDefaultFile(string username, string path) {
-            var defaultFilePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            var defaultFilePath = GetPath();
 
             try {
                 File.WriteAllText(Path.Combine(defaultFilePath, "last.txt"), username + '\n' + path);
-            } catch (IOException e) {
-                throw new UserFeedbackException("The file could not be written");
+            } catch (IOException) {
+                throw new UserFeedbackException("The config file could not be written");
             }
+        }
+
+        private static string GetPath() {
+            var assembly = Assembly.GetEntryAssembly();
+            if (assembly is null) {
+                throw new ApplicationException("An unknown error occured! Could not determine execution path!");
+            }
+            var path = Path.GetDirectoryName(assembly.Location);
+            if (path is null) {
+                throw new ApplicationException("An unknown error occured! Execution path is not a directory!");
+            }
+
+            return path;
         }
     }
 }

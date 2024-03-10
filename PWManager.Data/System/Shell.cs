@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace PWManager.CLI.Abstractions; 
+namespace PWManager.Data.System; 
 
 public static class Shell {
     

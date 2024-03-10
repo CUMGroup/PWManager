@@ -7,6 +7,7 @@ using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
 using System;
 using Microsoft.EntityFrameworkCore;
+using PWManager.Application.Exceptions;
 
 namespace PWManager.Data.Repositories; 
 
@@ -22,6 +23,9 @@ internal class SettingsRepository : ISettingsRepository {
     }
     
     public Settings GetSettings() {
+        if (_environment.CurrentUser is null) {
+            throw new UserFeedbackException("No user found! Are you in a session?");
+        }
         var userId = _environment.CurrentUser.Id;
         var settingsList = _dbContext.Settings.Where(e => e.UserId == userId).AsNoTracking().ToList();
         var settingsModel = settingsList.Any() ? settingsList.First() : null;
@@ -39,6 +43,9 @@ internal class SettingsRepository : ISettingsRepository {
     }
 
     public bool UpdateSettings(Settings settings) {
+        if (_environment.CurrentUser is null) {
+            throw new UserFeedbackException("No user found! Are you in a session?");
+        }
         return UpdateSettings(SettingsEntityToModel(settings));
     }
 
@@ -65,7 +72,7 @@ internal class SettingsRepository : ISettingsRepository {
             Id = e.Id,
             Created = e.Created,
             Updated = e.Updated,
-            UserId = _environment.CurrentUser.Id,
+            UserId = _environment.CurrentUser!.Id,
             IncludeLowerCase = e.PwGenCriteria.IncludeLowerCase,
             IncludeUpperCase = e.PwGenCriteria.IncludeUpperCase,
             IncludeSpaces = e.PwGenCriteria.IncludeSpaces,
