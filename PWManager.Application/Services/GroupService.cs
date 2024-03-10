@@ -17,20 +17,21 @@ public class GroupService : IGroupService {
     }
 
     public void AddGroup(string userID, string identifier) {
+        var group = _groupRepo.GetGroup(identifier);
 
-        try {
-            var group = _groupRepo.GetGroup(identifier);
-            if (group is not null) {
-                throw new UserFeedbackException($"A group with the name '{identifier}' already exists!");
-            }
-        } catch (UserFeedbackException) {
-           var  group = new Group(identifier, userID);
-            _groupRepo.AddGroup(group);
+        if (group is not null) {
+            throw new UserFeedbackException($"A group with the name '{identifier}' already exists!");
         }
+
+        group = new Group(identifier, userID);
+        _groupRepo.AddGroup(group);
     }
 
-    public void DeleteGroup(Group group) {
-        throw new NotImplementedException();
+    public void DeleteGroup(string identifier) {
+        var succ = _groupRepo.RemoveGroup(identifier);
+        if(!succ) {
+            throw new UserFeedbackException($"Could not delete group '{identifier}'");
+        }
     }
 
     public List<string> GetAllGroupNames() {

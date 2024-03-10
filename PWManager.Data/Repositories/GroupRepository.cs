@@ -29,7 +29,7 @@ public class GroupRepository : IGroupRepository {
         var group = groups.FirstOrDefault(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
 
         if (group is null) {
-            throw new UserFeedbackException("Could not find group with name " + groupName);
+            return null!;
         }
 
         var groupEntity = GroupModelToEntity(group);
