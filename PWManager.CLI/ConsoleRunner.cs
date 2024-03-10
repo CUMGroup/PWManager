@@ -48,6 +48,8 @@ namespace PWManager.CLI {
                     }catch (PromptCanceledException) {/*Prompt cancelling with ctrl+C*/}
                 }
             }
+            catch(UserFeedbackException ex) {Console.WriteLine(ex.Message);}
+            catch (PromptCanceledException) { /* SIGINT handling */ }
             catch (Exception ex) {
                 Console.WriteLine("An Error occured!");
                 if (_debugInfo.IsDevelopmentMode) {
