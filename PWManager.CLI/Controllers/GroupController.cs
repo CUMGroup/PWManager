@@ -17,20 +17,20 @@ public class GroupController : IController {
 
     private readonly ILoginService _loginService;
 
-    private readonly string newGroup = "New Group";
-    private readonly string switchGroup = "Switch Group";
-    private readonly string listAllGroups = "List all Groups";
+    private readonly string newGroup = "New group";
+    private readonly string switchGroup = "Switch group";
+    private readonly string listAllGroups = "List all groups";
     private readonly string deleteGroup;
 
     public GroupController(IGroupService groupService, IUserEnvironment userEnv, ILoginService loginService) {
         _groupService = groupService;
         _userEnv = userEnv;
         _loginService = loginService;
-        deleteGroup = $"Delete Group '{_userEnv.CurrentGroup!.Identifier}'";
+        deleteGroup = $"Delete group '{_userEnv.CurrentGroup!.Identifier}'";
     }
 
     public ExitCondition Handle(string[] args) {
-        var option = Prompt.Select("What do you wanna do", new[] { newGroup, switchGroup, listAllGroups, deleteGroup });
+        var option = Prompt.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup });
         
         if(option.Equals(newGroup)) {
             CreateNewGroupAndSwitchToIt();
@@ -76,10 +76,11 @@ public class GroupController : IController {
     }
 
     private void CreateNewGroupAndSwitchToIt() {
-        var groupIdentifier = PromptHelper.GetInput("What's the name of the new Group");
+        var groupIdentifier = PromptHelper.GetInput("What's the name of the new group");
 
         _groupService.AddGroup(_userEnv.CurrentUser!.Id, groupIdentifier);
         _groupService.SwitchGroup(groupIdentifier);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, "Switched to new group!");
     }
 
     private bool HandleDeletion(string identifier) {
