@@ -6,19 +6,19 @@ namespace PWManager.Data.Models;
 
 internal class GroupModel : ISecureProperties{
     [Key]
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
     
     public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
     
     public DateTimeOffset Updated { get; set; } = DateTimeOffset.Now;
     
     [Required]
-    public string IdentifierCrypt { get; set; }
+    public string IdentifierCrypt { get; set; } = null!;
     
-    public List<AccountModel> Accounts { get; set; }
+    public List<AccountModel> Accounts { get; set; } = null!;
 
-    public string UserId { get; set; }
-    public UserModel User { get; set; }
+    public string UserId { get; set; } = null!;
+    public UserModel User { get; set; } = null!;
 
     public List<(Func<string>, Action<string>)> SecurableProperties() {
         return new List<(Func<string>, Action<string>)> {

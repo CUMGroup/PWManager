@@ -6,18 +6,18 @@ namespace PWManager.Data.Models;
 internal class UserModel {
     
     [Key]
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
     
     public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
     
     public DateTimeOffset Updated { get; set; } = DateTimeOffset.Now;
     
     [Required]
-    public string UserName { get; set; }
+    public string UserName { get; set; } = null!;
     
     [Required]
-    public string MasterHash { get; set; }
+    public string MasterHash { get; set; } = null!;
     
     [Required]
-    public string Salt { get; set; }
+    public string Salt { get; set; } = null!;
 }

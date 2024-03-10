@@ -1,7 +1,7 @@
 ﻿using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 
-namespace PWManager.CLI.Abstractions; 
+namespace PWManager.Data.System; 
 
 public class Clipboard : IClipboard {
     
@@ -11,7 +11,7 @@ public class Clipboard : IClipboard {
             $"echo \"{escaped}\" | Set-Clipboard"
                 .PowerShell();
         }
-        else if(OperatingSystem.IsMacOS()) {
+        else if(OperatingSystem.IsMacOs()) {
             var escaped = val.Replace("\n", "\\n").Replace("\"", "\\\"");
             $"echo -n \"{escaped}\" | pbcopy"
                 .Bash();
