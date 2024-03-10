@@ -45,7 +45,7 @@ public class GroupController : IController {
         }
 
         if (option.Equals(switchGroup)) {
-            SwitchGroup();
+            SwitchGroup(_groupService.GetAllGroupNames());
             return ExitCondition.CONTINUE;
         }
 
@@ -63,10 +63,8 @@ public class GroupController : IController {
         return ExitCondition.CONTINUE;
     }
 
-    private void SwitchGroup() {
-        var groups = _groupService.GetAllGroupNames();
+    private void SwitchGroup(List<string> groups) {
         var groupidentifier = Prompt.Select("To which group do you want to switch to", groups);
-
         _groupService.SwitchGroup(groupidentifier);
     }
 
@@ -75,6 +73,7 @@ public class GroupController : IController {
 
         _groupService.AddGroup(_userEnv.CurrentUser!.Id, groupIdentifier);
         _groupService.SwitchGroup(groupIdentifier);
+
         PromptHelper.PrintColoredText(ConsoleColor.Green, "Switched to new group!");
     }
 
@@ -82,7 +81,8 @@ public class GroupController : IController {
         var groups = _groupService.GetAllGroupNames();
         groups.Remove(identifier);
 
-        if (!PromptHelper.ConfirmDeletion(identifier, _loginService, _userEnv)) {
+        var username = _userEnv.CurrentUser!.UserName;
+        if (!PromptHelper.ConfirmDeletion(identifier, (pT) => _loginService.CheckPassword(username, pT))) {
             PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
             return false;
         }
@@ -95,7 +95,7 @@ public class GroupController : IController {
         }
 
         if (groups.Count > 0) {
-            SwitchGroup();
+            SwitchGroup(groups);
         } else {
             CreateNewGroupAndSwitchToIt();
         }

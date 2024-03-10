@@ -5,6 +5,7 @@ using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using Sharprompt;
+using System.IO;
 
 namespace PWManager.CLI.Controllers; 
 
@@ -69,7 +70,9 @@ public class GetController : IController {
     }
 
     private bool HandleDeletion(string identifier) {
-        if (!PromptHelper.ConfirmDeletion(identifier, _loginService, _userEnvironment)) {
+        var username = _userEnvironment.CurrentUser!.UserName;
+        
+        if (!PromptHelper.ConfirmDeletion(identifier, (pT) => _loginService.CheckPassword(username, pT))) {
             PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
             return false;
         }

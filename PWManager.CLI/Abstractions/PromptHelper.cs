@@ -1,8 +1,5 @@
-﻿using PWManager.Application.Context;
-using PWManager.Application.Services.Interfaces;
+﻿using PWManager.Application.Services.Interfaces;
 using Sharprompt;
-using System.IO;
-using System.Runtime.InteropServices;
 
 namespace PWManager.CLI.Abstractions; 
 
@@ -97,14 +94,14 @@ public static class PromptHelper {
 
     }
 
-    public static bool ConfirmDeletion(string identifier, ILoginService loginService, IUserEnvironment userEnvironment) {
+    public static bool ConfirmDeletion(string identifier, Func<string, bool> passwordValidator) {
         var areYouSure = Prompt.Confirm($"Are you sure you want to delete {identifier}?");
         if (!areYouSure) {
             return false;
         }
 
         var passwordTest = Prompt.Password("Enter your master password to confirm");
-        var passwordCorrect = loginService.CheckPassword(userEnvironment.CurrentUser!.UserName, passwordTest);
+        var passwordCorrect = passwordValidator(passwordTest);
 
         if (passwordCorrect) {
             return true;
