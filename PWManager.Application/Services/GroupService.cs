@@ -29,11 +29,16 @@ public class GroupService : IGroupService {
         }
     }
 
-    public void DeleteGroup(string identifier) {
+    public void DeleteGroup(Group group) {
         throw new NotImplementedException();
     }
 
     public List<string> GetAllGroupNames() {
-        throw new NotImplementedException();
+        return _groupRepo.GetAllGroupNames();
+    }
+
+    public void SwitchGroup(string identifier) {
+        var group = _groupRepo.GetGroup(identifier);
+        _environment.CurrentGroup = group;
     }
 }
