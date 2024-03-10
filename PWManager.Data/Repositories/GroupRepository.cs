@@ -21,6 +21,9 @@ public class GroupRepository : IGroupRepository {
     }
     
     public Group GetGroup(string groupName) {
+        if (_environment.CurrentUser is null) {
+            throw new UserFeedbackException("No user found! Are you in a session?");
+        }
         var groups = _dbContext.Groups.Where(e => e.UserId == _environment.CurrentUser.Id).AsNoTracking().ToList();
         
         var group = groups.First(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
@@ -32,7 +35,7 @@ public class GroupRepository : IGroupRepository {
         var groupEntity = GroupModelToEntity(group);
         var accounts = _dbContext.Accounts.Where(e => e.GroupId == group.Id).AsNoTracking().ToList();
 
-        var accountEntities = accounts.Select(AccountModelToEntity).ToList();
+        var accountEntities = accounts.Select(AccountModelToEntity).OrderBy(e => e.Identifier).ToList();
 
         accountEntities.ForEach(e => groupEntity.AddAccount(e));
 
@@ -40,6 +43,9 @@ public class GroupRepository : IGroupRepository {
     }
 
     public List<string> GetAllGroupNames() {
+        if (_environment.CurrentUser is null) {
+            throw new UserFeedbackException("No user found! Are you in a session?");
+        }
         var groupNames = _dbContext.Groups
             .Where(e => e.UserId == _environment.CurrentUser.Id)
             .Select(e => e.IdentifierCrypt)
@@ -79,6 +85,9 @@ public class GroupRepository : IGroupRepository {
 
 
     private GroupModel GroupEntityToModel(Group e) {
+        if (_environment.CurrentUser is null) {
+            throw new UserFeedbackException("No user found! Are you in a session?");
+        }
         return new GroupModel {
             Id = e.Id,
             Created = e.Created,

@@ -6,14 +6,14 @@ namespace PWManager.Data.Models;
 internal class SettingsModel {
     
     [Key]
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
     
     public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
     
     public DateTimeOffset Updated { get; set; } = DateTimeOffset.Now;
     
-    public string UserId { get; set; }
-    public UserModel User { get; set; }
+    public string UserId { get; set; } = null!;
+    public UserModel User { get; set; } = null!;
 
     [Required] 
     public bool IncludeLowerCase { get; set; } = true;

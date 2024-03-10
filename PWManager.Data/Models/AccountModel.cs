@@ -7,21 +7,21 @@ namespace PWManager.Data.Models;
 internal class AccountModel : ISecureProperties {
     
     [Key]
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
     
     public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
     
     public DateTimeOffset Updated { get; set; } = DateTimeOffset.Now;
     
     [Required]
-    public string IdentifierCrypt { get; set; }
+    public string IdentifierCrypt { get; set; } = null!;
     
     [Required]
-    public string LoginNameCrypt { get; set; }
+    public string LoginNameCrypt { get; set; } = null!;
     [Required]
-    public string PasswordCrypt { get; set; }
+    public string PasswordCrypt { get; set; } = null!;
     
-    public string GroupId { get; set; }
+    public string GroupId { get; set; } = null!;
 
     public List<(Func<string>, Action<string>)> SecurableProperties() {
         return new List<(Func<string>, Action<string>)> { 
