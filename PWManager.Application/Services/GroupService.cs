@@ -17,14 +17,16 @@ public class GroupService : IGroupService {
     }
 
     public void AddGroup(string userID, string identifier) {
-        var group = _groupRepo.GetGroup(identifier);
 
-        if (group is not null) {
-            throw new UserFeedbackException($"A group with the name '{identifier}' already exists!");
+        try {
+            var group = _groupRepo.GetGroup(identifier);
+            if (group is not null) {
+                throw new UserFeedbackException($"A group with the name '{identifier}' already exists!");
+            }
+        } catch (UserFeedbackException) {
+           var  group = new Group(identifier, userID);
+            _groupRepo.AddGroup(group);
         }
-
-        group = new Group(identifier, userID);
-        _groupRepo.AddGroup(group);
     }
 
     public void DeleteGroup(string identifier) {
