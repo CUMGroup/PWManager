@@ -6,6 +6,8 @@ using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using PWManager.Data.Services;
+using PWManager.Domain.Repositories;
+using PWManager.Domain.ValueObjects;
 using Sharprompt;
 
 namespace PWManager.CLI.Controllers;
@@ -14,25 +16,32 @@ namespace PWManager.CLI.Controllers;
 public class GroupController : IController {
     private readonly IGroupService _groupService;
     private readonly IUserEnvironment _userEnv;
+    private readonly ISettingsRepository _settingsRepository; // TODO
 
     private readonly ILoginService _loginService;
 
     private readonly string newGroup = "New group";
     private readonly string switchGroup = "Switch group";
     private readonly string listAllGroups = "List all groups";
+    private readonly string exit = "Return";
     private readonly string deleteGroup;
 
-    public GroupController(IGroupService groupService, IUserEnvironment userEnv, ILoginService loginService) {
+    public GroupController(IGroupService groupService, IUserEnvironment userEnv, ILoginService loginService, ISettingsRepository settingsRepository) {
         _groupService = groupService;
         _userEnv = userEnv;
         _loginService = loginService;
+        _settingsRepository = settingsRepository; // TODO
         deleteGroup = $"Delete group '{_userEnv.CurrentGroup!.Identifier}'";
     }
 
-    public ExitCondition Handle(string[] args) {
-        var option = Prompt.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup });
+    public ExitCondition Handle(string[] args) { // TODO: eventuell refactoring
+        var option = Prompt.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup, exit });
         
-        if(option.Equals(newGroup)) {
+        if (option.Equals(exit)) {
+            return ExitCondition.CONTINUE;
+        }
+
+        if (option.Equals(newGroup)) {
             CreateNewGroupAndSwitchToIt();
             return ExitCondition.CONTINUE;
         }
@@ -45,24 +54,12 @@ public class GroupController : IController {
         if (option.Equals(listAllGroups)) {
             var groups = _groupService.GetAllGroupNames();
             PromptHelper.PrintPaginated(groups);
-
             return ExitCondition.CONTINUE;
         }
 
         if (option.Equals(deleteGroup)) {
             var currentgroup = _userEnv.CurrentGroup!.Identifier;
-
-            var confirm = HandleDeletion(currentgroup);
-
-            if (!confirm) {
-                return ExitCondition.CONTINUE;
-            }
-
-            if (_groupService.GetAllGroupNames().Count > 0) {
-                SwitchGroup();
-            } else {
-                CreateNewGroupAndSwitchToIt();
-            }
+            HandleDeletion(currentgroup);
         }
 
         return ExitCondition.CONTINUE;
@@ -84,12 +81,34 @@ public class GroupController : IController {
     }
 
     private bool HandleDeletion(string identifier) {
+        var groups = _groupService.GetAllGroupNames();
+        groups.Remove(identifier);
+
         if (!PromptHelper.ConfirmDeletion(identifier, _loginService, _userEnv)) {
             PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
             return false;
         }
+
+        var settings = _settingsRepository.GetSettings(); // TODD in den SettingsService auslagern (?)
+        var isMainGroup = settings.MainGroup.MainGroupIdentifier.Equals(identifier);
+        if (isMainGroup) {
+            PromptHelper.PrintColoredText(ConsoleColor.Yellow, "You are going to delete your standard group.");
+            PromptHelper.PrintColoredText(ConsoleColor.Yellow, "Please provide a new standard group.");
+        }
+
+        if (groups.Count > 0) {
+            SwitchGroup();
+        } else {
+            CreateNewGroupAndSwitchToIt();
+        }
+
+        if (isMainGroup) { // TODD in den SettingsService auslagern (!)
+            settings.MainGroup = new MainGroupSetting(_userEnv.CurrentGroup.Identifier);
+            _settingsRepository.UpdateSettings(settings);
+        }
+
         _groupService.DeleteGroup(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Group deleted!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Group '{identifier}' deleted!");
         return true;
     }
 }
