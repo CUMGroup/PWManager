@@ -21,8 +21,8 @@ public class NewController : IController {
 
     public ExitCondition Handle(string[] args) {
 
-        var identifier = GetInput("What's the name of the website?");
-        var loginName = GetInput("What's your name or email for the login?");
+        var identifier = PromptHelper.GetInput("What's the name of the website?");
+        var loginName = PromptHelper.GetInput("What's your name or email for the login?");
 
         var genPassword = Prompt.Confirm("Do you want to generate a random password?");
         string password;
@@ -44,15 +44,5 @@ public class NewController : IController {
         Console.ForegroundColor = defaultColor;
         
         return ExitCondition.CONTINUE;
-    }
-
-    private string GetInput(string prompt) {
-        var input = Prompt.Input<string>(prompt);
-        while (string.IsNullOrWhiteSpace(input)) {
-            Console.WriteLine("Your input was empty! Try again!");
-            input = Prompt.Input<string>(prompt);
-        }
-
-        return input;
     }
 }

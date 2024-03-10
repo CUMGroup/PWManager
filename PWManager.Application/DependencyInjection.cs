@@ -13,6 +13,7 @@ public static class DependencyInjection {
         services.AddTransient<IPasswordGeneratorService, PasswordGeneratorService>();
 
         services.AddTransient<IAccountService, AccountService>();
+        services.AddTransient<IGroupService, GroupService>();
         
         return services;
     }

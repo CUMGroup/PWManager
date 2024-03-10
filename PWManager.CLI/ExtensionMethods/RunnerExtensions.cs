@@ -13,6 +13,7 @@ internal static class RunnerExtensions {
         services.AddTransient<InitController>();
         services.AddTransient<ListController>();
         services.AddTransient<NewController>();
+        services.AddTransient<GroupController>();
         services.AddTransient<GetController>();
     }
     public static void MapControllers(this ConsoleRunner runner) {
@@ -22,6 +23,7 @@ internal static class RunnerExtensions {
         runner.MapCommand<InitController>(AvailableCommands.INIT);
         runner.MapCommand<ListController>(AvailableCommands.LIST);
         runner.MapCommand<NewController>(AvailableCommands.NEW);
+        runner.MapCommand<GroupController>(AvailableCommands.GROUP);
         runner.MapCommand<GetController>(AvailableCommands.GET);
     }
 }

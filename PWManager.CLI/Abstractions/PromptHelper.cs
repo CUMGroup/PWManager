@@ -1,10 +1,18 @@
-﻿using Sharprompt;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using PWManager.Application.Services.Interfaces;
+using Sharprompt;
 
 namespace PWManager.CLI.Abstractions; 
 
 public static class PromptHelper {
+    public static string GetInput(string prompt) {
+        var input = Prompt.Input<string>(prompt);
+        while (string.IsNullOrWhiteSpace(input)) {
+            Console.WriteLine("Your input was empty! Try again!");
+            input = Prompt.Input<string>(prompt);
+        }
+
+        return input;
+    }
 
     public static bool InputPassword(Func<string, bool> passwordValidator) {
         var tryCount = 0;
@@ -48,11 +56,57 @@ public static class PromptHelper {
 
         return password.Equals(repeat) ? password : null;
     }
+
+    public static void PrintPaginated(List<string> lines) {
+        var index = 0;
+        while (index < lines.Count) {
+            if (index >= Console.BufferHeight - 1) {
+                Console.Write("(Press enter to view more, q to stop)");
+                var input = Console.ReadKey(intercept: true);
+                ClearConsoleLine();
+                if (input.Key == ConsoleKey.Q) {
+                    return;
+                }
+
+                if (input.Key is not (ConsoleKey.Enter or ConsoleKey.DownArrow)) {
+                    continue;
+                }
+            }
+
+            ClearConsoleLine();
+            Console.WriteLine(lines[index]);
+            index++;
+        }
+    }
+
+    public static void ClearConsoleLine() {
+        var currentLine = Console.CursorTop;
+        Console.SetCursorPosition(0, Console.CursorTop);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, currentLine);
+    }
     
     public static void PrintColoredText(ConsoleColor color, string text) {
         var defaultColor = Console.ForegroundColor;
         Console.ForegroundColor = color;
         Console.WriteLine(text);
         Console.ForegroundColor = defaultColor;
+
+    }
+
+    public static bool ConfirmDeletion(string identifier, Func<string, bool> passwordValidator) {
+        var areYouSure = Prompt.Confirm($"Are you sure you want to delete {identifier}?");
+        if (!areYouSure) {
+            return false;
+        }
+
+        var passwordTest = Prompt.Password("Enter your master password to confirm");
+        var passwordCorrect = passwordValidator(passwordTest);
+
+        if (passwordCorrect) {
+            return true;
+        }
+        Console.WriteLine("Invalid password.");
+        return false;
     }
 }

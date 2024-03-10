@@ -82,7 +82,7 @@ internal class SettingsRepository : ISettingsRepository {
             MinLength = e.PwGenCriteria.MinLength,
             MaxLength = e.PwGenCriteria.MaxLength,
             TimeOutDuration = e.ClipboardTimeout.TimeOutDuration,
-            MainGroupIdentifier = e.MainGroup.MainGroupIdentifier,
+            MainGroupIdentifier = _cryptService.Encrypt(e.MainGroup.MainGroupIdentifier),
         };
     }
 }
