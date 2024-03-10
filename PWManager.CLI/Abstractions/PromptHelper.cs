@@ -48,4 +48,11 @@ public static class PromptHelper {
 
         return password.Equals(repeat) ? password : null;
     }
+    
+    public static void PrintColoredText(ConsoleColor color, string text) {
+        var defaultColor = Console.ForegroundColor;
+        Console.ForegroundColor = color;
+        Console.WriteLine(text);
+        Console.ForegroundColor = defaultColor;
+    }
 }

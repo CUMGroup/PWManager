@@ -20,7 +20,7 @@ public readonly struct Result<A> : IEquatable<Result<A>>, IComparable<Result<A>>
     public Result(Exception ex) {
         State = ResultState.Faulted;
         this.exception = ex;
-        Value = default;
+        Value = default!;
     }
 
     public static implicit operator Result<A>(A value) => new(value);

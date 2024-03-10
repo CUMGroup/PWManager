@@ -8,6 +8,9 @@ namespace PWManager.Domain.Repositories {
         public bool UpdateGroup(Group group);
 
         public bool AddAccountToGroup(Account account, Group group);
+        public bool UpdateAccountInGroup(Account account, Group group);
+        public bool DeleteAccountInGroup(Account account, Group group);
+        
         public bool RemoveGroup(string groupName);
     }
 }
