@@ -1,4 +1,6 @@
-﻿using Sharprompt;
+﻿using PWManager.Application.Context;
+using PWManager.Application.Services.Interfaces;
+using Sharprompt;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -93,5 +95,21 @@ public static class PromptHelper {
         Console.WriteLine(text);
         Console.ForegroundColor = defaultColor;
 
+    }
+
+    public static bool ConfirmDeletion(string identifier, ILoginService loginService, IUserEnvironment userEnvironment) {
+        var areYouSure = Prompt.Confirm($"Are you sure you want to delete {identifier}?");
+        if (!areYouSure) {
+            return false;
+        }
+
+        var passwordTest = Prompt.Password("Enter your master password to confirm");
+        var passwordCorrect = loginService.CheckPassword(userEnvironment.CurrentUser!.UserName, passwordTest);
+
+        if (passwordCorrect) {
+            return true;
+        }
+        Console.WriteLine("Invalid password.");
+        return false;
     }
 }

@@ -69,7 +69,7 @@ public class GetController : IController {
     }
 
     private bool HandleDeletion(string identifier) {
-        if (!ConfirmDeletion(identifier)) {
+        if (!PromptHelper.ConfirmDeletion(identifier, _loginService, _userEnvironment)) {
             PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
             return false;
         }
@@ -80,22 +80,6 @@ public class GetController : IController {
     
     private bool ConfirmRegeneration(string identifier) {
         return Prompt.Confirm($"Are you sure you want to update the password of {identifier}?");
-    }
-
-    private bool ConfirmDeletion(string identifier) {
-        var areYouSure = Prompt.Confirm($"Are you sure you want to delete {identifier}?");
-        if (!areYouSure) {
-            return false;
-        }
-
-        var passwordTest = Prompt.Password("Enter your master password to confirm");
-        var passwordCorrect =  _loginService.CheckPassword(_userEnvironment.CurrentUser!.UserName, passwordTest);
-
-        if (passwordCorrect) {
-            return true;
-        }
-        Console.WriteLine("Invalid password.");
-        return false;
     }
     
     private AccountAction GetAccountAction() {
