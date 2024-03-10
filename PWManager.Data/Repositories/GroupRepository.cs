@@ -26,7 +26,7 @@ public class GroupRepository : IGroupRepository {
         }
         var groups = _dbContext.Groups.Where(e => e.UserId == _environment.CurrentUser.Id).AsNoTracking().ToList();
         
-        var group = groups.First(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
+        var group = groups.FirstOrDefault(e => _cryptService.Decrypt(e.IdentifierCrypt).Equals(groupName));
 
         if (group is null) {
             throw new UserFeedbackException("Could not find group with name " + groupName);
