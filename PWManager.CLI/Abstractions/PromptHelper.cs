@@ -86,4 +86,12 @@ public static class PromptHelper {
         Console.Write(new string(' ', Console.WindowWidth));
         Console.SetCursorPosition(0, currentLine);
     }
+    
+    public static void PrintColoredText(ConsoleColor color, string text) {
+        var defaultColor = Console.ForegroundColor;
+        Console.ForegroundColor = color;
+        Console.WriteLine(text);
+        Console.ForegroundColor = defaultColor;
+
+    }
 }

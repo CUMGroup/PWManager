@@ -7,6 +7,7 @@ using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using PWManager.CLI.Parser;
+using Sharprompt;
 
 namespace PWManager.CLI {
     internal class ConsoleRunner : IRunner {
@@ -44,9 +45,11 @@ namespace PWManager.CLI {
                         }
 
                         return;
-                    }
+                    }catch (PromptCanceledException) {/*Prompt cancelling with ctrl+C*/}
                 }
             }
+            catch(UserFeedbackException ex) {Console.WriteLine(ex.Message);}
+            catch (PromptCanceledException) { /* SIGINT handling */ }
             catch (Exception ex) {
                 Console.WriteLine("An Error occured!");
                 if (_debugInfo.IsDevelopmentMode) {

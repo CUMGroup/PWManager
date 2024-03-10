@@ -2,9 +2,9 @@
 
 namespace PWManager.Domain.Entities {
     public class Group : Entity {
-        public string UserId { get; set; }
-        
-        public string Identifier { get; set; }
+        public string UserId { get; set; } = null!;
+
+        public string Identifier { get; set; } = null!;
         
         public List<Account> Accounts { get; private set; }
 

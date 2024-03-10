@@ -55,5 +55,9 @@ namespace PWManager.Data.Services {
 
             return true;
         }
+
+        public bool CheckPassword(string username, string password) {
+            return _userRepository.CheckPasswordAttempt(username, password) is not null;
+        }
     }
 }

@@ -56,14 +56,14 @@ public class GroupRepository : IGroupRepository {
     }
 
     public bool AddGroup(Group group) {
-        var groupModel = GroupEntityToModel(group);
+        var groupModel = GroupEntityToModel(group, false);
 
         _dbContext.Groups.Add(groupModel);
         return _dbContext.SaveChanges() > 0;
     }
 
     public bool UpdateGroup(Group group) {
-        var groupModel = GroupEntityToModel(group);
+        var groupModel = GroupEntityToModel(group, false);
 
         _dbContext.Groups.Update(groupModel);
         return _dbContext.SaveChanges() > 0;
@@ -75,8 +75,21 @@ public class GroupRepository : IGroupRepository {
         return _dbContext.SaveChanges() > 0;
     }
 
+    public bool UpdateAccountInGroup(Account account, Group group) {
+        var accountModel = AccountEntityToModel(account, group.Id);
+        _dbContext.Accounts.Update(accountModel);
+        return _dbContext.SaveChanges() > 0;
+    }
+
+    public bool DeleteAccountInGroup(Account account, Group group) {
+        group.RemoveAccount(account);
+        var accountModel = AccountEntityToModel(account, group.Id);
+        _dbContext.Accounts.Remove(accountModel);
+        return _dbContext.SaveChanges() > 0;
+    }
+
     public bool RemoveGroup(string groupName) {
-        var group = GroupEntityToModel(GetGroup(groupName));
+        var group = GroupEntityToModel(GetGroup(groupName), false);
 
         _dbContext.Groups.Remove(group);
         return _dbContext.SaveChanges() > 0;
@@ -84,30 +97,37 @@ public class GroupRepository : IGroupRepository {
 
 
 
-    private GroupModel GroupEntityToModel(Group e) {
+    private GroupModel GroupEntityToModel(Group e, bool findChildren) {
         if (_environment.CurrentUser is null) {
             throw new UserFeedbackException("No user found! Are you in a session?");
         }
-        return new GroupModel {
+
+        var group = _dbContext.Groups.Find(e.Id) ?? new GroupModel() {
             Id = e.Id,
             Created = e.Created,
             Updated = e.Updated,
             UserId = _environment.CurrentUser.Id,
-            IdentifierCrypt = _cryptService.Encrypt(e.Identifier),
-            Accounts = e.Accounts.Select(acc => AccountEntityToModel(acc, e.Id)).ToList()
         };
+        group.IdentifierCrypt = _cryptService.Encrypt(e.Identifier);
+        if (findChildren) {
+            group.Accounts = e.Accounts.Select(acc => AccountEntityToModel(acc, e.Id)).ToList();
+        }
+        return group;
     }
 
     private AccountModel AccountEntityToModel(Account e, string groupId) {
-        return new AccountModel {
+        var account = _dbContext.Accounts.Find(e.Id) ?? new AccountModel {
             Id = e.Id,
             Created = e.Created,
             Updated = e.Updated,
-            GroupId = groupId,
-            IdentifierCrypt = _cryptService.Encrypt(e.Identifier),
-            PasswordCrypt = _cryptService.Encrypt(e.Password),
-            LoginNameCrypt = _cryptService.Encrypt(e.LoginName)
         };
+
+        account.GroupId = groupId;
+        account.IdentifierCrypt = _cryptService.Encrypt(e.Identifier);
+        account.PasswordCrypt = _cryptService.Encrypt(e.Password);
+        account.LoginNameCrypt = _cryptService.Encrypt(e.LoginName);
+
+        return account;
     }
     
     private Group GroupModelToEntity(GroupModel e) {

@@ -1,20 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PWManager.Application;
 using PWManager.Application.Context;
-using PWManager.Application.Services.Interfaces;
 using PWManager.CLI;
-using PWManager.CLI.Abstractions;
 using PWManager.CLI.Environment;
 using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
 using PWManager.Data;
-using PWManager.Data.System;
+using Sharprompt;
 
 // Clean up hooks
 var defaultColor = Console.ForegroundColor;
 Console.CancelKeyPress += delegate {
     Console.ForegroundColor = defaultColor;
 };
+Prompt.ThrowExceptionOnCancel = true;
 
 var services = new ServiceCollection();
 
