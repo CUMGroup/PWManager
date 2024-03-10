@@ -5,6 +5,15 @@ using System.Runtime.InteropServices;
 namespace PWManager.CLI.Abstractions; 
 
 public static class PromptHelper {
+    public static string GetInput(string prompt) {
+        var input = Prompt.Input<string>(prompt);
+        while (string.IsNullOrWhiteSpace(input)) {
+            Console.WriteLine("Your input was empty! Try again!");
+            input = Prompt.Input<string>(prompt);
+        }
+
+        return input;
+    }
 
     public static bool InputPassword(Func<string, bool> passwordValidator) {
         var tryCount = 0;
