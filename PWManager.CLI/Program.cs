@@ -8,6 +8,7 @@ using PWManager.CLI.Environment;
 using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
 using PWManager.Data;
+using PWManager.Data.System;
 
 // Clean up hooks
 var defaultColor = Console.ForegroundColor;
@@ -26,7 +27,6 @@ services.AddSingleton<IUserEnvironment>(environment);
 
 // Add all services to DI
 services.AddSingleton<IRunner, ConsoleRunner>();
-services.AddTransient<IClipboard, Clipboard>();
 // Add Layers
 services.AddApplicationServices();
 services.AddDataServices();
