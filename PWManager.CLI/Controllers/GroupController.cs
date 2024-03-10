@@ -1,11 +1,9 @@
 ﻿using PWManager.Application.Context;
-using PWManager.Application.Services;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
-using PWManager.Data.Services;
 using PWManager.Domain.Repositories;
 using PWManager.Domain.ValueObjects;
 using Sharprompt;
@@ -103,7 +101,7 @@ public class GroupController : IController {
         }
 
         if (isMainGroup) { // TODD in den SettingsService auslagern (!)
-            settings.MainGroup = new MainGroupSetting(_userEnv.CurrentGroup.Identifier);
+            settings.MainGroup = new MainGroupSetting(_userEnv.CurrentGroup!.Identifier);
             _settingsRepository.UpdateSettings(settings);
         }
 
