@@ -9,12 +9,14 @@ using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
 using PWManager.Data;
 using PWManager.Data.System;
+using Sharprompt;
 
 // Clean up hooks
 var defaultColor = Console.ForegroundColor;
 Console.CancelKeyPress += delegate {
     Console.ForegroundColor = defaultColor;
 };
+Prompt.ThrowExceptionOnCancel = true;
 
 var services = new ServiceCollection();
 
