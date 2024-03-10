@@ -1,11 +1,9 @@
-﻿using System.Transactions;
-using PWManager.Application.Context;
+﻿using PWManager.Application.Context;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
-using PWManager.Domain.Repositories;
 using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
