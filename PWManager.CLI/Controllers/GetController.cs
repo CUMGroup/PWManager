@@ -105,6 +105,6 @@ public class GetController : IController {
     private string GetAccountSelection() {
         var names = _accountService.GetCurrentAccountNames();
 
-        return Prompt.Select("Search an account", names);
+        return Prompt.Select("Search an Account", names);
     }
 }
