@@ -22,6 +22,6 @@ internal static class RunnerExtensions {
         runner.MapCommand<InitController>(AvailableCommands.INIT);
         runner.MapCommand<ListController>(AvailableCommands.LIST);
         runner.MapCommand<NewController>(AvailableCommands.NEW);
-        runner.MapCommand<NewController>(AvailableCommands.GROUP);
+        runner.MapCommand<GroupController>(AvailableCommands.GROUP);
     }
 }

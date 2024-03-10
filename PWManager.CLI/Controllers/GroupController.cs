@@ -13,6 +13,10 @@ public class GroupController : IController {
     private readonly IUserEnvironment _userEnv; 
     private readonly ICliEnvironment _cliEnv;
 
+    private readonly string newGroup = "New Group";
+    private readonly string switchGroup = "Switch Group";
+    private readonly string listAllGroups = "List all Groups";
+
     public GroupController(IGroupService groupService, IUserEnvironment userEnv, ICliEnvironment cliEnv) {
         _groupService = groupService;
         _userEnv = userEnv;
@@ -20,7 +24,13 @@ public class GroupController : IController {
     }
 
     public ExitCondition Handle(string[] args) {
-        Prompt.Select("Please select", );
+        var option = Prompt.Select("Select your city", new[] { newGroup, switchGroup, listAllGroups });
+        
+        if(option.Equals(newGroup)) {
+            var groupIdentifier = Prompt.Input<string>("What's the name of the new Group");
+            _groupService.AddGroup(_userEnv.CurrentUser?.Id, groupIdentifier);
+        }
+
 
         return ExitCondition.CONTINUE;
     }
