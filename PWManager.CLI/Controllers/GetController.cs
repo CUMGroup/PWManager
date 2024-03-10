@@ -79,7 +79,7 @@ public class GetController : IController {
     }
     
     private bool ConfirmRegeneration(string identifier) {
-        return Prompt.Confirm($"Are you sure you want to delete {identifier}?");
+        return Prompt.Confirm($"Are you sure you want to update the password of {identifier}?");
     }
 
     private bool ConfirmDeletion(string identifier) {
