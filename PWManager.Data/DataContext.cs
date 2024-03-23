@@ -1,17 +1,19 @@
-﻿using PWManager.Data.Persistance;
+﻿using PWManager.Application.Abstractions.Interfaces;
+using PWManager.Data.Abstraction.Interfaces;
+using PWManager.Data.Persistance;
 
 namespace PWManager.Data; 
 
-public static class DataContext {
+public class DataContext : IDataContextInitializer, IHaveDataContext {
 
-    private static ApplicationDbContext? _dbContext;
+    private ApplicationDbContext? _dbContext;
     private const string DatabaseFileName = "pwdb.scuml";
     
-    public static bool DatabaseExists(string path) {
+    public bool DatabaseExists(string path) {
         return File.Exists(Path.Combine(path, DatabaseFileName));
     }
     
-    public static void InitDataContext(string path) {
+    public void InitDataContext(string path) {
         if (_dbContext is not null) {
             return;
         }
@@ -20,7 +22,7 @@ public static class DataContext {
         _dbContext.Database.EnsureCreated();
     }
 
-    internal static ApplicationDbContext GetDbContext() {
+    ApplicationDbContext IHaveDataContext.GetDbContext() {
         if (_dbContext is null) {
             throw new ApplicationException("Data Context was not initialized!");
         }
