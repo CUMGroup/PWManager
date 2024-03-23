@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using PWManager.Application.Abstractions.Interfaces;
 using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
@@ -16,24 +17,19 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
     private readonly IUserEnvironment _userEnvironment;
     private readonly ICryptEnvironment _cryptEnvironment;
     private readonly ICryptService _cryptService;
-    private readonly DataContextWrapper _dataContext;
+    private readonly IDataContextInitializer _dataContextInitializer;
 
-    internal DatabaseInitializerService(DataContextWrapper wrapper, IUserRepository userRepo,
-        IGroupRepository groupRepository, IUserEnvironment environment, ICryptService cryptService, ICryptEnvironment cryptEnvironment) : this(
-        userRepo, groupRepository, environment, cryptService, cryptEnvironment) {
-        _dataContext = wrapper;
-    }
-    public DatabaseInitializerService(IUserRepository userRepo, IGroupRepository groupRepository, IUserEnvironment environment, ICryptService cryptService, ICryptEnvironment cryptEnvironment) {
+    public DatabaseInitializerService(IUserRepository userRepo, IGroupRepository groupRepository, IUserEnvironment environment, ICryptService cryptService, ICryptEnvironment cryptEnvironment, IDataContextInitializer dataContextInitializer) {
         _userRepo = userRepo;
         _groupRepository = groupRepository;
         _userEnvironment = environment;
         _cryptService = cryptService;
         _cryptEnvironment = cryptEnvironment;
-        _dataContext = new DataContextWrapper();
+        _dataContextInitializer = dataContextInitializer;
     }
     
     public void InitDatabase(string path, string username, string password) {
-        if (_dataContext.DatabaseExists(path)) {
+        if (_dataContextInitializer.DatabaseExists(path)) {
             throw new UserFeedbackException(
                 "Database initialization failed! The database already exists at the specified path!");
         }
@@ -42,7 +38,7 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
             throw new UserFeedbackException("Invalid Username! Only letters are allowed!");
         }
         
-        _dataContext.InitDataContext(path);
+        _dataContextInitializer.InitDataContext(path);
         
         var user = _userRepo.AddUser(username, password);
         _userEnvironment.CurrentUser = user;

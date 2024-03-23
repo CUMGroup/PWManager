@@ -1,4 +1,5 @@
-﻿using PWManager.Application.Context;
+﻿using PWManager.Application.Abstractions.Interfaces;
+using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.Data.Abstraction;
@@ -17,13 +18,9 @@ namespace PWManager.Data.Services {
         private readonly IUserEnvironment _userEnv;
         private readonly ICryptEnvironment _cryptEnv;
 
-        private readonly DataContextWrapper _dataContext;
+        private readonly IDataContextInitializer _dataContextInitializer;
 
-        internal LoginService(DataContextWrapper wrapper, IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, ICliEnvironment cliEnv, IUserEnvironment userEnv, ICryptEnvironment cryptEnv) : this(
-        userRepository, groupRepository, cryptService, settingsRepository, cliEnv, userEnv, cryptEnv) {
-            _dataContext = wrapper;
-        }
-        public LoginService(IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, ICliEnvironment cliEnv, IUserEnvironment userEnv, ICryptEnvironment cryptEnv) { 
+        public LoginService(IUserRepository userRepository, IGroupRepository groupRepository, ICryptService cryptService, ISettingsRepository settingsRepository, ICliEnvironment cliEnv, IUserEnvironment userEnv, ICryptEnvironment cryptEnv, IDataContextInitializer dataContextInitializer) { 
             _userRepository = userRepository;
             _groupRepository = groupRepository;
             _settingsRepository = settingsRepository;
@@ -31,14 +28,14 @@ namespace PWManager.Data.Services {
             _cryptService = cryptService;
             _userEnv = userEnv;
             _cliEnv = cliEnv;
-            _dataContext = new DataContextWrapper();
+            _dataContextInitializer = dataContextInitializer;
         }
         public bool Login(string username, string password, string dbPath) {
-            if(!_dataContext.DatabaseExists(dbPath)) {
+            if(!_dataContextInitializer.DatabaseExists(dbPath)) {
                 throw new UserFeedbackException("Database not found.");
             }
 
-            _dataContext.InitDataContext(dbPath);
+            _dataContextInitializer.InitDataContext(dbPath);
 
             var user = _userRepository.CheckPasswordAttempt(username, password);
             if(user is null) {

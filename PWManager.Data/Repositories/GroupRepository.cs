@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
+using PWManager.Data.Abstraction;
+using PWManager.Data.Abstraction.Interfaces;
 using PWManager.Data.Models;
 using PWManager.Data.Persistance;
 using PWManager.Domain.Entities;
@@ -11,13 +13,17 @@ namespace PWManager.Data.Repositories;
 
 public class GroupRepository : IGroupRepository {
 
-    private ApplicationDbContext _dbContext => DataContext.GetDbContext();
+    private readonly IHaveDataContext _dataContext;
+    private ApplicationDbContext _dbContext => _dataContext.GetDbContext();
     private readonly ICryptService _cryptService;
     private readonly IUserEnvironment _environment;
-    
-    public GroupRepository(ICryptService cryptService, IUserEnvironment environment) {
+
+    public GroupRepository(ICryptService cryptService, IUserEnvironment environment) : this(cryptService, environment, HaveDataContextFactory.Create()) { }
+
+    internal GroupRepository(ICryptService cryptService, IUserEnvironment environment, IHaveDataContext dataContext) {
         _cryptService = cryptService;
         _environment = environment;
+        _dataContext = dataContext;
     }
     
     public Group GetGroup(string groupName) {

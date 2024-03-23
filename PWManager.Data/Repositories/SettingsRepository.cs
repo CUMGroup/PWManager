@@ -8,18 +8,25 @@ using PWManager.Domain.ValueObjects;
 using System;
 using Microsoft.EntityFrameworkCore;
 using PWManager.Application.Exceptions;
+using PWManager.Data.Abstraction;
+using PWManager.Data.Abstraction.Interfaces;
 
 namespace PWManager.Data.Repositories; 
 
 internal class SettingsRepository : ISettingsRepository {
 
+    private readonly IHaveDataContext _dataContext;
+    
+    private ApplicationDbContext _dbContext => _dataContext.GetDbContext();
     private readonly IUserEnvironment _environment;
-    private ApplicationDbContext _dbContext => DataContext.GetDbContext();
     private readonly ICryptService _cryptService;
     
-    public SettingsRepository(IUserEnvironment env, ICryptService cryptService) {
+    public SettingsRepository(IUserEnvironment env, ICryptService cryptService) : this(env, cryptService, HaveDataContextFactory.Create()) {}
+    
+    internal SettingsRepository(IUserEnvironment env, ICryptService cryptService, IHaveDataContext dataContext) {
         _environment = env;
         _cryptService = cryptService;
+        _dataContext = dataContext;
     }
     
     public Settings GetSettings() {
