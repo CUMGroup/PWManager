@@ -11,10 +11,12 @@ namespace PWManager.CLI.Controllers;
 internal class SettingsController : IController {
 
     private ISettingsService _settingsService;
+    private IGroupService _groupService;
 
-    public SettingsController(ISettingsService settingsService)
+    public SettingsController(ISettingsService settingsService, IGroupService groupService)
     {
         _settingsService = settingsService;
+        _groupService = groupService;
     }
 
     public ExitCondition Handle(string[] args) {
@@ -43,14 +45,23 @@ internal class SettingsController : IController {
         };
     }
 
+    private bool HandleChangeMainGroup() {
+        var selectedgroup = Prompt.Select<string>("Which group will be your new main group?", _groupService.GetAllGroupNames());
+        var newMainGroup = new MainGroupSetting(selectedgroup);
+        _settingsService.ChangeMainGroupSetting(newMainGroup);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Main group set to '{selectedgroup}'");
+        return true;
+    }
+
     private bool HandleChangeClipboardTimeout() {
         var seconds = Prompt.Input<int>("After how many seconds shoud your Clipboard be cleared?");
         while(seconds <= 0) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, "Timeout cannot be less or equal than 0.");
+            PromptHelper.PrintColoredText(ConsoleColor.Red, "Timeout cannot be less or equal than 0");
             seconds = Prompt.Input<int>("After how many seconds shoud your Clipboard be cleared?");
         }
-        var timeout = new TimeSpan(TimeSpan.TicksPerSecond*seconds);
+        var timeout = new TimeSpan(TimeSpan.TicksPerSecond * seconds);
         _settingsService.ChangeClipboardTimeoutSetting(new ClipboardTimeoutSetting(timeout));
+        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Timeout is now set to {seconds} seconds");
         return true;
     }
 
@@ -60,18 +71,20 @@ internal class SettingsController : IController {
             return false;
         }
         _settingsService.ChangePasswordGenerationCriteria(pwGenCriteria);
+        PromptHelper.PrintColoredText(ConsoleColor.Green, "New password generation criteria set!");
         return true;
     }
 
     private PasswordGeneratorCriteria? CreatePwGenerationCriteria() {
         Console.WriteLine("Please select your desired configurations:");
+        var selects = Prompt.MultiSelect("Include", defaultValues: new PasswordCriteriaOptions[] { PasswordCriteriaOptions.LOWER_CASE, PasswordCriteriaOptions.UPPER_CASE, PasswordCriteriaOptions.NUMERIC });
 
-        var includeLowerCase = Prompt.Confirm("Include lower case characters: a-z?"); 
-        var includeUpperCase = Prompt.Confirm("Include upper case characters: A-Z?"); 
-        var includeNumeric = Prompt.Confirm("Include numeric characters: 0-9?");
-        var includeSpecial = Prompt.Confirm("Include Special characters: !#$%&*+,-.:;<=>?^_~?");
-        var includeBrackets = Prompt.Confirm("Include brackets: ()[]{}?");
-        var includeSpaces = Prompt.Confirm("Include spaces?");
+        var includeLowerCase = selects.Contains(PasswordCriteriaOptions.LOWER_CASE); 
+        var includeUpperCase = selects.Contains(PasswordCriteriaOptions.UPPER_CASE); ; 
+        var includeNumeric = selects.Contains(PasswordCriteriaOptions.NUMERIC); ;
+        var includeSpecial = selects.Contains(PasswordCriteriaOptions.SPECIAL); ;
+        var includeBrackets = selects.Contains(PasswordCriteriaOptions.BRACKETS); ;
+        var includeSpaces = selects.Contains(PasswordCriteriaOptions.SPACE); ;
 
         var minLength = Prompt.Input<int>("What's the minimum length your passwoard should have?");
         var maxLength = Prompt.Input<int>("What's the maximum length your passwoard should have?");
