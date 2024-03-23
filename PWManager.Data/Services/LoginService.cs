@@ -2,8 +2,7 @@
 using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
-using PWManager.Data.Abstraction;
-using PWManager.Domain.Exceptions;
+using PWManager.Domain.Entities;
 using PWManager.Domain.Repositories;
 using PWManager.Domain.Services.Interfaces;
 
@@ -42,15 +41,19 @@ namespace PWManager.Data.Services {
                 return false;
             }
 
+            SetSessionParameters(user, password);
+
+            return true;
+        }
+
+        private void SetSessionParameters(User user, string password) {
             _userEnv.CurrentUser = user;
-            _cryptEnv.EncryptionKey = _cryptService.DeriveKeyFrom(password, username);
+            _cryptEnv.EncryptionKey = _cryptService.DeriveKeyFrom(password, user.UserName);
 
             var mainGroup = _settingsRepository.GetSettings().MainGroup;
 
             _cliEnv.RunningSession = true;
             _userEnv.CurrentGroup = _groupRepository.GetGroup(mainGroup.MainGroupIdentifier);
-
-            return true;
         }
 
         public bool CheckPassword(string username, string password) {
