@@ -29,6 +29,8 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
     }
     
     public void InitDatabase(string path, string username, string password) {
+        CheckIfDataBaseExistsOnPath(path);
+
         if (username.Length < 1 || !Regex.IsMatch(username, @"^[a-zA-Z]+$")) {
             throw new UserFeedbackException("Invalid Username! Only letters are allowed!");
         }
