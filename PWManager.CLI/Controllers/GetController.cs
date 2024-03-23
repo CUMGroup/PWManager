@@ -25,6 +25,10 @@ public class GetController : IController {
     public ExitCondition Handle(string[] args) {
 
         var selection = GetAccountSelection();
+        
+        if (selection is null) {
+            return ExitCondition.CONTINUE;
+        }
 
         AccountAction action;
         var executed = false;
@@ -89,9 +93,12 @@ public class GetController : IController {
         return Prompt.Select<AccountAction>("Select an Action");
     }
     
-    private string GetAccountSelection() {
+    private string? GetAccountSelection() {
         var names = _accountService.GetCurrentAccountNames();
-
-        return Prompt.Select("Search an Account", names);
+        if (names.Any()) {
+            return Prompt.Select("Search an Account", names);
+        }
+        PromptHelper.PrintColoredText(ConsoleColor.Red, "There are no accounts in this group!");
+        return null;
     }
 }

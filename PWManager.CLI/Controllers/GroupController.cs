@@ -1,4 +1,5 @@
 ﻿using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
@@ -64,6 +65,9 @@ public class GroupController : IController {
     }
 
     private void SwitchGroup(List<string> groups) {
+        if (!groups.Any()) {
+            throw new UserFeedbackException("There are no groups in your database. Something is really wrong!");
+        }
         var groupidentifier = Prompt.Select("To which group do you want to switch to", groups);
         _groupService.SwitchGroup(groupidentifier);
     }
