@@ -10,7 +10,7 @@ public enum PasswordCriteriaOptions {
     NUMERIC,
     [Display(Name = "Special characters: !#$%&*+,-.:;<=>?^_~?")]
     SPECIAL,
-    [Display(Name = "Bbrackets: ()[]{}")]
+    [Display(Name = "Brackets: ()[]{}")]
     BRACKETS,
     [Display(Name = "Spaces")]
     SPACE

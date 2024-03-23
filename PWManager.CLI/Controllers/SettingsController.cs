@@ -37,6 +37,7 @@ internal class SettingsController : IController {
 
     private bool ExecuteAction(SettingsActions action) {
         return action switch {
+            SettingsActions.CURRENT_SETTINGS => ShowCurrentSettings(),
             SettingsActions.MAIN_GROUP => HandleChangeMainGroup(),
             SettingsActions.CLIPBOARD_TIMEOUT => HandleChangeClipboardTimeout(),
             SettingsActions.PASSWORD_CRITERIA => HandleChangePwGenCriteria(),
@@ -97,5 +98,71 @@ internal class SettingsController : IController {
             PromptHelper.PrintColoredText(ConsoleColor.Red, ex.Message);
             return null;
         }
+    }
+
+    public bool ShowCurrentSettings() {
+        var settings = _settingsService.GetSettings();
+
+        var defaultcolor = Console.ForegroundColor;
+
+        Console.WriteLine("-----------------------------");
+        Console.Write("Main Group: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(settings.MainGroup.MainGroupIdentifier);
+        Console.ForegroundColor = defaultcolor;
+
+        Console.Write("Clipboard Timeout: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(settings.ClipboardTimeout.TimeOutDuration.TotalSeconds + " s");
+        Console.ForegroundColor = defaultcolor;
+
+        Console.WriteLine("-----------------------------");
+
+        Console.WriteLine("Password Generation Criteria:");
+        Console.Write("Min Length: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(settings.PwGenCriteria.MinLength);
+        Console.ForegroundColor = defaultcolor;
+        Console.Write("Max Length: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(settings.PwGenCriteria.MaxLength);
+        Console.ForegroundColor = defaultcolor;
+
+        ShowInclude(settings.PwGenCriteria.IncludeLowerCase);
+        Console.WriteLine(UIstrings.LOWER_CASE);
+
+        ShowInclude(settings.PwGenCriteria.IncludeUpperCase);
+        Console.WriteLine(UIstrings.UPPER_CASE);
+
+        ShowInclude(settings.PwGenCriteria.IncludeNumeric);
+        Console.WriteLine(UIstrings.NUMERIC);
+
+        ShowInclude(settings.PwGenCriteria.IncludeSpecial);
+        Console.WriteLine(UIstrings.SPECIAL);
+
+        ShowInclude(settings.PwGenCriteria.IncludeBrackets);
+        Console.WriteLine(UIstrings.BRACKETS);
+
+        ShowInclude(settings.PwGenCriteria.IncludeSpaces);
+        Console.WriteLine(UIstrings.SPACE);
+        Console.WriteLine("-----------------------------");
+
+        Console.ForegroundColor = defaultcolor;
+
+        return true;
+    }
+
+    private void ShowInclude(bool include) {
+        var defaultcolor = Console.ForegroundColor;
+
+        if (include) {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("+ ");
+        } else {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("- ");
+        }
+
+        Console.ForegroundColor = defaultcolor;
     }
 }

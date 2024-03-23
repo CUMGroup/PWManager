@@ -8,4 +8,5 @@ public interface ISettingsService {
     void ChangePasswordGenerationCriteria(PasswordGeneratorCriteria generatorCriteria);
     void ChangeClipboardTimeoutSetting(ClipboardTimeoutSetting clipboardTimeoutSetting);
     void ChangeMainGroupSetting(MainGroupSetting mainGroupSetting);
+    Settings GetSettings();
 }

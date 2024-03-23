@@ -1,6 +1,7 @@
 ﻿
 using PWManager.Application.Context;
 using PWManager.Application.Services.Interfaces;
+using PWManager.Domain.Entities;
 using PWManager.Domain.Repositories;
 using PWManager.Domain.ValueObjects;
 
@@ -29,5 +30,9 @@ public class SettingsService : ISettingsService {
         var settings = _settingsRepository.GetSettings();
         settings.PwGenCriteria = generatorCriteria;
         _settingsRepository.UpdateSettings(settings);
+    }
+
+    public Settings GetSettings() {
+        return _settingsRepository.GetSettings();
     }
 }
