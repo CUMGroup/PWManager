@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PWManager.Application.Exceptions;
+using PWManager.Data.Abstraction;
+using PWManager.Data.Abstraction.Interfaces;
 using PWManager.Data.Models;
 using PWManager.Data.Persistance;
 using PWManager.Domain.Entities;
@@ -10,11 +12,15 @@ namespace PWManager.Data.Repositories;
 
 public class UserRepository : IUserRepository {
 
-    private ApplicationDbContext _dbContext => DataContext.GetDbContext();
+    private readonly IHaveDataContext _dataContext;
+    private ApplicationDbContext _dbContext => _dataContext.GetDbContext();
     private readonly ICryptService _cryptService;
 
-    public UserRepository(ICryptService cryptService) {
+    public UserRepository(ICryptService cryptService) : this(cryptService, HaveDataContextFactory.Create()) {}
+    
+    internal UserRepository(ICryptService cryptService, IHaveDataContext dataContext) {
         _cryptService = cryptService;
+        _dataContext = dataContext;
     }
 
     public User AddUser(string username, string password) {

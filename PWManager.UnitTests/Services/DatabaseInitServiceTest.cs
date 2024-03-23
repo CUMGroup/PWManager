@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
 using NSubstitute;
+using PWManager.Application.Abstractions.Interfaces;
 using PWManager.Application.Context;
 using PWManager.Application.Exceptions;
 using PWManager.Data.Abstraction;
@@ -17,17 +18,15 @@ public class DatabaseInitServiceTest {
     private ICryptService _cryptService = Substitute.For<ICryptService>();
     private IUserEnvironment _userEnv = Substitute.For<IUserEnvironment>();
     private ICryptEnvironment _cryptEnv = Substitute.For<ICryptEnvironment>();
-    private DataContextWrapper _wrapper = Substitute.For<DataContextWrapper>();
+    private IDataContextInitializer _dataContextInitializer = Substitute.For<IDataContextInitializer>();
     private IUserRepository _userRepo = Substitute.For<IUserRepository>();
     
     [Fact]
     public void Init_Should_SetEnvironment() {
-        _wrapper.DatabaseExists(Arg.Any<string>()).Returns(false);
-        var user = new User(Guid.NewGuid().ToString(), DateTimeOffset.Now, DateTimeOffset.Now, "TestUserName");
-        _userRepo.AddUser(Arg.Any<string>(), Arg.Any<string>()).Returns(user);
+        SetupDatabaseExists(false);
+        var user = SetupUserRepoReturnsUser();
         
-        
-        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv);
+        _sut = new DatabaseInitializerService(_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv, _dataContextInitializer);
         
         _sut.InitDatabase(".", "TestUserName", "WhatAPassword");
         
@@ -37,8 +36,9 @@ public class DatabaseInitServiceTest {
 
     [Fact]
     public void Init_ShouldNot_AcceptInvalidName() {
-        _wrapper.DatabaseExists(Arg.Any<string>()).Returns(false);
-        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv);
+        SetupDatabaseExists(false);
+        
+        _sut = new DatabaseInitializerService(_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv, _dataContextInitializer);
 
         var ex = Assert.Throws<UserFeedbackException>(() => _sut.InitDatabase(".","asd$", "WhatAPassword"));
         
@@ -47,11 +47,22 @@ public class DatabaseInitServiceTest {
     
     [Fact]
     public void Init_ShouldNot_InitExistingDb() {
-        _wrapper.DatabaseExists(Arg.Any<string>()).Returns(true);
-        _sut = new DatabaseInitializerService(_wrapper,_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv);
+        SetupDatabaseExists(true);
+        
+        _sut = new DatabaseInitializerService(_userRepo,_groupRepo,_userEnv, _cryptService, _cryptEnv, _dataContextInitializer);
 
         var ex = Assert.Throws<UserFeedbackException>(() => _sut.InitDatabase(".","TestUserName", "WhatAPassword"));
         
         Assert.Equal("Database initialization failed! The database already exists at the specified path!", ex.Message);
+    }
+
+    private void SetupDatabaseExists(bool exists) {
+        _dataContextInitializer.DatabaseExists(Arg.Any<string>()).Returns(exists);
+    }
+
+    private User SetupUserRepoReturnsUser() {
+        var user = new User(Guid.NewGuid().ToString(), DateTimeOffset.Now, DateTimeOffset.Now, "TestUserName");
+        _userRepo.AddUser(Arg.Any<string>(), Arg.Any<string>()).Returns(user);
+        return user;
     }
 }
