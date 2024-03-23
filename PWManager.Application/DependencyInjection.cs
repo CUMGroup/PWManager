@@ -14,7 +14,8 @@ public static class DependencyInjection {
 
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IGroupService, GroupService>();
-        
+        services.AddTransient<ISettingsService, SettingsService>();
+
         return services;
     }
     

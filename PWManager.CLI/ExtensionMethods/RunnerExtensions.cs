@@ -15,6 +15,7 @@ internal static class RunnerExtensions {
         services.AddTransient<NewController>();
         services.AddTransient<GroupController>();
         services.AddTransient<GetController>();
+        services.AddTransient<SettingsController>();
         services.AddTransient<QuitController>();
     }
     public static void MapControllers(this ConsoleRunner runner) {
@@ -26,6 +27,7 @@ internal static class RunnerExtensions {
         runner.MapCommand<NewController>(AvailableCommands.NEW);
         runner.MapCommand<GroupController>(AvailableCommands.GROUP);
         runner.MapCommand<GetController>(AvailableCommands.GET);
+        runner.MapCommand<SettingsController>(AvailableCommands.SETTINGS);
         runner.MapCommand<QuitController>(AvailableCommands.QUIT);
     }
 }
