@@ -82,7 +82,7 @@ internal static class UIstrings {
     // ----------------------------------------
 
     // GROUP Controller
-    public const string NO_GROUPS_AVAILABLE = "There are no groups in your database. Something is really wrong!";
+    // public const string NO_GROUPS_AVAILABLE = "There are no groups in your database. Something is really wrong!";
 
     public const string SWITCH_GROUP_PROMPT = "To which group do you want to switch to";
     public const string NEW_GROUP_NAME = "What's the name of the new group";
@@ -121,6 +121,19 @@ internal static class UIstrings {
     // ----------------------------------------
 
     // SETTINGS Controller
+    public const string MAIN_GROUP_CHANGE = "Which group will be your new main group?";
+    public static string ConfirmOfMainGroupChangedTo(string input) => $"Main group set to '{input}'";
+
+    public const string TIMEOUT_PROMPT = "After how many seconds should your Clipboard be cleared?";
+    public const string TIMEOUT_INVALID = "Timeout cannot be less or equal than 0";
+    public static string ConfirmOfTimeoutSetTo(int seconds) => $"Timeout is now set to {seconds} seconds";
+
+    public const string INCLUDE = "Include";
+
+    public const string PWGEN_CRITERIA_PROMPT = "Please select your desired configurations:";
+    public const string PWGEN_CRITERIA_CONFIRM = "New password generation criteria set!";
+    public const string PWGEN_MINIMUM_PROMPT = "What's the minimum length your password should have?";
+    public const string PWGEN_MAXIMUM_PROMPT = "What's the maximum length your password should have?";
     // ----------------------------------------
 
     // HELP Controller
