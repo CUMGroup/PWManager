@@ -70,7 +70,7 @@ internal static class UIstrings {
     public const string PATH_DOES_NOT_EXIST = "The given path does not exist.";
 
     public const string DESIRED_NAME = "What's your desired user name?";
-    public const string INVALID_NAME = "Invalid name! It mus be longer than 1 character and must include only letters!";
+    public const string INVALID_NAME = "Invalid name! It must be longer than 1 character and must include only letters!";
 
     public const string CREATED_DATABASE = "Created your database! Enjoy";
     // ----------------------------------------
