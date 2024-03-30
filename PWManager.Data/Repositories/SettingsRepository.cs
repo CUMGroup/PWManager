@@ -75,21 +75,24 @@ internal class SettingsRepository : ISettingsRepository {
     }
 
     private SettingsModel SettingsEntityToModel(Settings e) {
-        return new SettingsModel {
+        var settingsModel = _dbContext.Settings.Find(e.Id) ?? new SettingsModel {
             Id = e.Id,
             Created = e.Created,
             Updated = e.Updated,
             UserId = _environment.CurrentUser!.Id,
-            IncludeLowerCase = e.PwGenCriteria.IncludeLowerCase,
-            IncludeUpperCase = e.PwGenCriteria.IncludeUpperCase,
-            IncludeSpaces = e.PwGenCriteria.IncludeSpaces,
-            IncludeBrackets = e.PwGenCriteria.IncludeBrackets,
-            IncludeNumeric = e.PwGenCriteria.IncludeNumeric,
-            IncludeSpecial = e.PwGenCriteria.IncludeSpecial,
-            MinLength = e.PwGenCriteria.MinLength,
-            MaxLength = e.PwGenCriteria.MaxLength,
-            TimeOutDuration = e.ClipboardTimeout.TimeOutDuration,
-            MainGroupIdentifier = _cryptService.Encrypt(e.MainGroup.MainGroupIdentifier),
         };
+
+        settingsModel.IncludeLowerCase = e.PwGenCriteria.IncludeLowerCase;
+        settingsModel.IncludeUpperCase = e.PwGenCriteria.IncludeUpperCase;
+        settingsModel.IncludeSpaces = e.PwGenCriteria.IncludeSpaces;
+        settingsModel.IncludeBrackets = e.PwGenCriteria.IncludeBrackets;
+        settingsModel.IncludeNumeric = e.PwGenCriteria.IncludeNumeric;
+        settingsModel.IncludeSpecial = e.PwGenCriteria.IncludeSpecial;
+        settingsModel.MinLength = e.PwGenCriteria.MinLength;
+        settingsModel.MaxLength = e.PwGenCriteria.MaxLength;
+        settingsModel.TimeOutDuration = e.ClipboardTimeout.TimeOutDuration;
+        settingsModel.MainGroupIdentifier = _cryptService.Encrypt(e.MainGroup.MainGroupIdentifier);
+
+        return settingsModel;
     }
 }
