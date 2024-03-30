@@ -29,10 +29,7 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
     }
     
     public void InitDatabase(string path, string username, string password) {
-        if (_dataContextInitializer.DatabaseExists(path)) {
-            throw new UserFeedbackException(
-                "Database initialization failed! The database already exists at the specified path!");
-        }
+        CheckIfDataBaseExistsOnPath(path);
 
         if (username.Length < 1 || !Regex.IsMatch(username, @"^[a-zA-Z]+$")) {
             throw new UserFeedbackException("Invalid Username! Only letters are allowed!");
@@ -45,5 +42,12 @@ internal class DatabaseInitializerService : IDatabaseInitializerService {
         _cryptEnvironment.EncryptionKey = _cryptService.DeriveKeyFrom(password, username);
         
         _groupRepository.AddGroup(new Group("main", user.Id));
+    }
+
+    public void CheckIfDataBaseExistsOnPath(string path) {
+        if (_dataContextInitializer.DatabaseExists(path)) {
+            throw new UserFeedbackException(
+                "Database initialization failed! The database already exists at the specified path!");
+        }
     }
 }
