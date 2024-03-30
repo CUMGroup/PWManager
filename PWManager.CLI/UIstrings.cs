@@ -106,6 +106,18 @@ internal static class UIstrings {
     // ----------------------------------------
 
     // GET Controller
+    public const string COPIED_PASSWORD = "Copied the password to your clipboard!";
+    public const string COPIED_LOGIN_NAME = "Copied the login-name to your clipboard!";
+
+
+    public const string REGENERATION_ABORADED = "Regeneration aborted!";
+    public const string REGENERATION_CONFIRMED = "Regenerated your password!";
+    public static string ConfirmPwRegenerationOf(string input) => $"Are you sure you want to update the password of {input}?";
+
+    public const string ACCOUNT_DELETION_CONFIRMED = "Account deleted!";
+
+    public const string SEARCH_ACCOUNT = "Search an account";
+    public const string NO_ACCOUNTS_AVAILABLE = "There are no accounts in this group!";
     // ----------------------------------------
 
     // SETTINGS Controller

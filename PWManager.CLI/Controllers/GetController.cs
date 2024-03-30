@@ -53,23 +53,23 @@ public class GetController : IController {
 
     private bool HandleCopyPassword(string identifier) {
         _accountService.CopyPasswordToClipboard(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Copied the password to your clipboard!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.COPIED_PASSWORD);
         return true;
     }
 
     private bool HandleCopyLoginName(string identifier) {
         _accountService.CopyLoginnameToClipboard(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Copied the login-name to your clipboard!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.COPIED_LOGIN_NAME);
         return true;
     }
 
     private bool HandleRegeneration(string identifier) {
         if (!ConfirmRegeneration(identifier)) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, "Regeneration aborted!");
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.REGENERATION_ABORADED);
             return false;
         }
         _accountService.RegeneratePassword(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Regenerated your password!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.REGENERATION_CONFIRMED);
         return true;
     }
 
@@ -77,28 +77,28 @@ public class GetController : IController {
         var username = _userEnvironment.CurrentUser!.UserName;
         
         if (!PromptHelper.ConfirmDeletion(identifier, (pT) => _loginService.CheckPassword(username, pT))) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.DELETE_ABORTED);
             return false;
         }
         _accountService.DeleteAccount(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Account deleted!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.ACCOUNT_DELETION_CONFIRMED);
         return true;
     }
     
     private bool ConfirmRegeneration(string identifier) {
-        return Prompt.Confirm($"Are you sure you want to update the password of {identifier}?");
+        return Prompt.Confirm(UIstrings.ConfirmPwRegenerationOf(identifier));
     }
     
     private AccountAction GetAccountAction() {
-        return Prompt.Select<AccountAction>("Select an Action");
+        return Prompt.Select<AccountAction>(UIstrings.SELECT_ACTION);
     }
     
     private string? GetAccountSelection() {
         var names = _accountService.GetCurrentAccountNames();
         if (names.Any()) {
-            return Prompt.Select("Search an Account", names);
+            return Prompt.Select(UIstrings.SEARCH_ACCOUNT, names);
         }
-        PromptHelper.PrintColoredText(ConsoleColor.Red, "There are no accounts in this group!");
+        PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.NO_ACCOUNTS_AVAILABLE);
         return null;
     }
 }
