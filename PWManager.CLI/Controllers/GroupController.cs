@@ -39,7 +39,7 @@ public class GroupController : IController {
     }
 
     private GroupAction GetGroupAction() {
-        throw new NotImplementedException();
+        return Prompt.Select<GroupAction>(UIstrings.SELECT_ACTION);
     }
 
     private bool ExecuteAction(GroupAction action) {

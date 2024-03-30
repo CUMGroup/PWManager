@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PWManager.CLI.Controllers;
 using PWManager.CLI.Enums;
-using PWManager.CLI.Interfaces;
 
 namespace PWManager.CLI.ExtensionMethods; 
 
