@@ -14,6 +14,7 @@ namespace PWManager.CLI.Abstractions {
         }
         public static void WriteDefaultFile(string username, string path) {
             var defaultFilePath = GetPath();
+            path = Path.GetFullPath(path);
 
             try {
                 File.WriteAllText(Path.Combine(defaultFilePath, "last.txt"), username + '\n' + path);
