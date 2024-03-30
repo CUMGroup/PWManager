@@ -35,7 +35,7 @@ public class CommandParser {
             return Enum.Parse<AvailableCommands>(cmd.ToUpper().Replace("-", "_"));
         }
         catch(Exception) {
-            Console.WriteLine("Unknown command " + cmd);
+            Console.WriteLine(UIstrings.UNKNOWN_COMMAND + cmd);
         }
         return AvailableCommands.HELP;
     }

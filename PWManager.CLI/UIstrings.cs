@@ -1,6 +1,20 @@
 ﻿namespace PWManager.CLI;
 internal static class UIstrings {
 
+    // Console Runner
+    public const string CONTROLER_TYPE_INTERFACE = "Controller type does not implement IController interface";
+    public const string ERROR_OCCURED = "An Error occured!";
+    // ----------------------------------------
+
+    // Command Parser
+    public const string UNKNOWN_COMMAND = "Unknown command ";
+    // ----------------------------------------
+
+    // CLI Enviroment
+    public const string USER = "User";
+    public const string GROUP = "Group";
+    // ----------------------------------------
+
     // Password Criteria Settings
     public const string PWCRITERIA_LOWER_CASE = "Lower case characters: a-z";
     public const string PWCRITERIA_UPPER_CASE = "Upper case characters: A-Z";
