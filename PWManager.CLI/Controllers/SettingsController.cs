@@ -61,11 +61,11 @@ internal class SettingsController : IController {
     }
 
     private bool HandleChangeClipboardTimeout() {
-        var seconds = Prompt.Input<int>("After how many seconds shoud your Clipboard be cleared?");
+        var seconds = Prompt.Input<int>("After how many seconds should your Clipboard be cleared?");
 
         while(seconds <= 0) {
             PromptHelper.PrintColoredText(ConsoleColor.Red, "Timeout cannot be less or equal than 0");
-            seconds = Prompt.Input<int>("After how many seconds shoud your Clipboard be cleared?");
+            seconds = Prompt.Input<int>("After how many seconds should your Clipboard be cleared?");
         }
 
         var timeout = new TimeSpan(TimeSpan.TicksPerSecond * seconds);
@@ -159,22 +159,22 @@ internal class SettingsController : IController {
         Console.ForegroundColor = defaultcolor;
 
         ShowInclude(settings.PwGenCriteria.IncludeLowerCase);
-        Console.WriteLine(UIstrings.LOWER_CASE);
+        Console.WriteLine(UIstrings.PWCRITERIA_LOWER_CASE);
 
         ShowInclude(settings.PwGenCriteria.IncludeUpperCase);
-        Console.WriteLine(UIstrings.UPPER_CASE);
+        Console.WriteLine(UIstrings.PWCRITERIA_UPPER_CASE);
 
         ShowInclude(settings.PwGenCriteria.IncludeNumeric);
-        Console.WriteLine(UIstrings.NUMERIC);
+        Console.WriteLine(UIstrings.PWCRITERIA_NUMERIC);
 
         ShowInclude(settings.PwGenCriteria.IncludeSpecial);
-        Console.WriteLine(UIstrings.SPECIAL);
+        Console.WriteLine(UIstrings.PWCRITERIA_SPECIAL);
 
         ShowInclude(settings.PwGenCriteria.IncludeBrackets);
-        Console.WriteLine(UIstrings.BRACKETS);
+        Console.WriteLine(UIstrings.PWCRITERIA_BRACKETS);
 
         ShowInclude(settings.PwGenCriteria.IncludeSpaces);
-        Console.WriteLine(UIstrings.SPACE);
+        Console.WriteLine(UIstrings.PWCRITERIA_SPACE);
         Console.WriteLine("-----------------------------");
 
         Console.ForegroundColor = defaultcolor;
