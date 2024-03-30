@@ -101,8 +101,8 @@ internal class SettingsController : IController {
         var includeBrackets = selects.Contains(PasswordCriteriaOptions.BRACKETS); ;
         var includeSpaces = selects.Contains(PasswordCriteriaOptions.SPACE); ;
 
-        var minLength = Prompt.Input<int>("What's the minimum length your passwoard should have?");
-        var maxLength = Prompt.Input<int>("What's the maximum length your passwoard should have?");
+        var minLength = Prompt.Input<int>("What's the minimum length your password should have?");
+        var maxLength = Prompt.Input<int>("What's the maximum length your password should have?");
 
         try {
             var pwGenCriteria = new PasswordGeneratorCriteria(includeLowerCase, includeUpperCase, includeNumeric, includeSpecial, includeBrackets,

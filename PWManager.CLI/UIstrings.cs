@@ -2,7 +2,6 @@
 internal static class UIstrings {
 
     // Console Runner
-    public const string CONTROLER_TYPE_INTERFACE = "Controller type does not implement IController interface";
     public const string ERROR_OCCURED = "An Error occured!";
     // ----------------------------------------
 
