@@ -134,8 +134,115 @@ internal static class UIstrings {
     public const string PWGEN_CRITERIA_CONFIRM = "New password generation criteria set!";
     public const string PWGEN_MINIMUM_PROMPT = "What's the minimum length your password should have?";
     public const string PWGEN_MAXIMUM_PROMPT = "What's the maximum length your password should have?";
+
+    public const string MAIN_GROUP = "Main Group: ";
+    public const string CLIPPBOARD_TIMEOUT = "Clipboard Timeout: ";
+    public const string PASSWORD_GEN_CRITERIA = "Password Generation Criteria:";
+    public const string MIN_LENGTH = "Min Length: ";
+    public const string MAX_LENGTH = "Max Length: ";
     // ----------------------------------------
 
     // HELP Controller
+    public const string SEPARATOR = "---------------------------------";
+
+    public const string IN_SESSIONHELP = $"""
+                                         {SEPARATOR}
+                                         Usage: $ [option]
+                                            option:
+                                                delete-database     Delete the current database
+                                                get                 Get a specific account
+                                                group               Add, Change, List or Delete groups
+                                                list                List all accounts in the current group
+                                                new                 Create a new account in the current group
+                                                quit                Quits the application
+                                                settings            Opens the settings menu
+                                                help                To view this message
+                                                help [option]       To view a help message for a command
+                                         """;
+    public const string IN_SESSIONHELP_DELETEDB = $"""
+                                         {SEPARATOR}
+                                         Usage: $ delete-database
+                                            Description:
+                                                Deletes the entire database file if you are the only user. 
+                                                Otherwise, it removes your user data from the file.
+                                                
+                                                YOU WILL LOSE ALL YOUR ACCOUNTS AND GROUPS!
+                                         """;
+    public const string IN_SESSIONHELP_GET = $"""
+                                         {SEPARATOR}
+                                         Usage: $ get
+                                            Description:
+                                                Lets you search through all accounts in this group.
+                                                
+                                                If you have selected an account, you can copy information, update your password, or delete the account.
+                                         """;
+    public const string IN_SESSIONHELP_GROUP = $"""
+                                         {SEPARATOR}
+                                         Usage: $ group
+                                            Description:
+                                                Displays different group based actions:
+                                                    - Creating a new group
+                                                    - Changing the current group
+                                                    - List all of your groups
+                                                    - Delete the current group
+                                                Each option will present a fitting dialog as a guide.
+                                         """;
+    public const string IN_SESSIONHELP_LIST = $"""
+                                         {SEPARATOR}
+                                         Usage: $ list
+                                            Description:
+                                                Retrieves a list of all the names of the accounts of the current group.
+                                         """;
+    public const string IN_SESSIONHELP_NEW = $"""
+                                         {SEPARATOR}
+                                         Usage: $ new
+                                            Description:
+                                                Add a new account to the current group.
+                                                You will get asked to enter an account identifier and a login name.
+                                                You can either generate a new password or enter one yourself.
+                                         """;
+    public const string IN_SESSIONHELP_QUIT = $"""
+                                         {SEPARATOR}
+                                         Usage: $ quit
+                                            Description:
+                                                Quits the application. Instead you can also use Ctrl+C (SIGINT).
+                                         """;
+    public const string IN_SESSIONHELP_SETTINGS = $"""
+                                         {SEPARATOR}
+                                         Usage: $ settings
+                                            Description:
+                                                Opens a dialog to adjust the application settings
+                                                - Clipboard Timeout to empty it after copying a password
+                                                - Inactivity Timeout to automatically log out after a no action
+                                                - Password Generator Settings
+                                                - Main Group, that gets checked out after login 
+                                         """;
+
+    public const string NO_SESSIONHELP = $"""
+                                         {SEPARATOR}
+                                         Usage: pwMan [option]
+                                            option:
+                                                init            Creates a new database
+                                                login           Login to your database
+                                                help            To view this message
+                                                help [option]   To view a help message for a command
+                                         """;
+    public const string NO_SESSIONHELP_INIT = $"""
+                                         {SEPARATOR}
+                                         Usage: pwMan init
+                                            Description:
+                                                Starts a dialog to initialize a new database for the password manager. 
+                                                It asks where the database file should be located, whats the main user's name, and whats the master password.
+                                         """;
+    public const string NO_SESSIONHELP_LOGIN = $"""
+                                         {SEPARATOR}
+                                         Usage: pwMan login [options]
+                                            options:
+                                                -d, --directory     Specify the directory of the database file used to login. Default is the last used.
+                                                -u, --username      Specify which user gets logged in. Default is the last used.
+                                            Description:
+                                                Tries to login the user into the password database. If no options are specified, the required ones (like password) will be asked!
+                                         """;
+
     // ----------------------------------------
 }
