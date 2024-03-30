@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 
 namespace PWManager.Application.Services {
     public class CryptService : ICryptService {
@@ -28,7 +29,7 @@ namespace PWManager.Application.Services {
 
         public string Decrypt(string input) {
             if (_env.EncryptionKey is null) {
-                throw new InvalidOperationException("Encryption Key is null! Are you in a session?");
+                throw new InvalidOperationException(MessageStrings.ENCRYPT_KEY_NULL);
             }
             
             var inputBytes = Convert.FromBase64String(input);
@@ -42,7 +43,7 @@ namespace PWManager.Application.Services {
 
         public string Encrypt(string input) {
             if (_env.EncryptionKey is null) {
-                throw new InvalidOperationException("Encryption Key is null! Are you in a session?");
+                throw new InvalidOperationException(MessageStrings.ENCRYPT_KEY_NULL);
             }
             
             var inputBytes = GetBytesFrom(input);

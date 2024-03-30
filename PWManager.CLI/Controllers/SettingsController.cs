@@ -48,7 +48,7 @@ internal class SettingsController : IController {
     private bool HandleChangeMainGroup() {
         var groups = _groupService.GetAllGroupNames();
         if (!groups.Any()) {
-            throw new UserFeedbackException("There are no groups in your database. Something is really wrong!"); // TODO: Exception Message auslagern
+            throw new UserFeedbackException(MessageStrings.NO_GROUPS_FOUND);
         }
 
         var selectedgroup = Prompt.Select<string>(UIstrings.MAIN_GROUP_CHANGE, groups);
@@ -116,7 +116,7 @@ internal class SettingsController : IController {
     private List<PasswordCriteriaOptions> getDefaults() {
         var currentPWCriteria = _settingsService.GetSettings().PwGenCriteria;
         if (currentPWCriteria is null) {
-            throw new UserFeedbackException("There are no password generation criteria set. Something is really wrong!"); // TODO: Exception Message auslagern
+            throw new UserFeedbackException(MessageStrings.NO_PWGEN_CRITERIA_FOUND);
         }
 
         var defaults = new List<PasswordCriteriaOptions>();

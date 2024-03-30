@@ -60,7 +60,7 @@ public class GroupController : IController {
 
     private bool HandleSwitchGroup(List<string> groups) {
         if (!groups.Any()) {
-            throw new UserFeedbackException("There are no groups in your database. Something is really wrong!"); // TODO: Exception Message auslagern
+            throw new UserFeedbackException(MessageStrings.NO_GROUPS_FOUND);
         }
         var groupidentifier = Prompt.Select(UIstrings.SWITCH_GROUP_PROMPT, groups);
         _groupService.SwitchGroup(groupidentifier);

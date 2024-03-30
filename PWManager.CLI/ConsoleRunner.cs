@@ -78,7 +78,7 @@ namespace PWManager.CLI {
 
         public void MapCommand<TCommand>(AvailableCommands command) {
             if (!typeof(IController).IsAssignableFrom(typeof(TCommand))) {
-                throw new ArgumentException("Controller type does not implement IController interface");
+                throw new ArgumentException(MessageStrings.CONTROLER_TYPE_ERROR);
             }
             _controller[(int) command] = typeof(TCommand);
         }
