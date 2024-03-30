@@ -2,16 +2,19 @@
 using PWManager.Domain.Common;
 
 namespace PWManager.Domain.ValueObjects {
-    public class ClipboardTimeoutSetting : ValueObject {
+    public class TimeoutSettings : ValueObject {
 
-        public TimeSpan TimeOutDuration { get; }
+        public TimeSpan ClipboardTimeOutDuration { get; }
+        public TimeSpan AccountTimeOutDuration { get; }
 
-        public ClipboardTimeoutSetting(TimeSpan timeOutDuration) {
-            TimeOutDuration = timeOutDuration;
+        public TimeoutSettings(TimeSpan clipboardTimeOutDuration, TimeSpan accountTimeOutDuration) {
+            ClipboardTimeOutDuration = clipboardTimeOutDuration;
+            AccountTimeOutDuration = accountTimeOutDuration;
         }
 
         protected override IEnumerable<object> GetEqualityComponents() {
-            yield return TimeOutDuration;
+            yield return ClipboardTimeOutDuration;
+            yield return AccountTimeOutDuration;
         }
     }
 }

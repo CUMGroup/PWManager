@@ -18,7 +18,7 @@ public static class ConsoleInteraction {
         return Prompt.Select<T>(message, items, defaultValue: defaultValue);
     }
 
-    public static IEnumerable<T> MultiSelect<T>(string message, IEnumerable<T>? items, IEnumerable<T>? defaultValues)
+    public static IEnumerable<T> MultiSelect<T>(string message, IEnumerable<T>? items = null, IEnumerable<T>? defaultValues = null)
         where T : notnull {
         return Prompt.MultiSelect<T>(message, items, defaultValues: defaultValues);
     }

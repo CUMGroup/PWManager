@@ -40,6 +40,7 @@ internal class SettingsController : IController {
             SettingsActions.CURRENT_SETTINGS => ShowCurrentSettings(),
             SettingsActions.MAIN_GROUP => HandleChangeMainGroup(),
             SettingsActions.CLIPBOARD_TIMEOUT => HandleChangeClipboardTimeout(),
+            SettingsActions.ACCOUNT_TIMEOUT => HandleChangeAccountTimeout(),
             SettingsActions.PASSWORD_CRITERIA => HandleChangePwGenCriteria(),
             SettingsActions.RETURN => true,
             _ => false
@@ -52,7 +53,7 @@ internal class SettingsController : IController {
             throw new UserFeedbackException("There are no groups in your database. Something is really wrong!");
         }
 
-        var selectedgroup = Prompt.Select<string>("Which group will be your new main group?", groups);
+        var selectedgroup = ConsoleInteraction.Select<string>("Which group will be your new main group?", groups);
         var newMainGroup = new MainGroupSetting(selectedgroup);
         _settingsService.ChangeMainGroupSetting(newMainGroup);
 
@@ -61,20 +62,22 @@ internal class SettingsController : IController {
     }
 
     private bool HandleChangeClipboardTimeout() {
-        var seconds = Prompt.Input<int>("After how many seconds shoud your Clipboard be cleared?");
-
-        while(seconds <= 0) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, "Timeout cannot be less or equal than 0");
-            seconds = Prompt.Input<int>("After how many seconds shoud your Clipboard be cleared?");
-        }
-
+        var seconds = PromptHelper.GetInputGreaterThan("After how many seconds should your Clipboard be cleared?", 0);
         var timeout = new TimeSpan(TimeSpan.TicksPerSecond * seconds);
-        _settingsService.ChangeClipboardTimeoutSetting(new ClipboardTimeoutSetting(timeout));
+        _settingsService.ChangeClipboardTimeoutSetting(timeout);
 
-        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Timeout is now set to {seconds} seconds");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Clipboard Timeout is now set to {seconds} seconds");
         return true;
     }
+    private bool HandleChangeAccountTimeout() {
+        var minutes = PromptHelper.GetInputGreaterThan("After how many minutes of inactivity should the application quit?", 0);
+        var timeout = new TimeSpan(TimeSpan.TicksPerSecond * minutes * 60);
+        _settingsService.ChangeAccountTimeoutSetting(timeout);
 
+        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Account Timeout is now set to {minutes} minutes");
+        return true;
+    }
+    
     private bool HandleChangePwGenCriteria() {
         var pwGenCriteria = CreatePwGenerationCriteria();
         if(pwGenCriteria is null) {
@@ -92,7 +95,7 @@ internal class SettingsController : IController {
 
         List<PasswordCriteriaOptions> defaults = getDefaults();
 
-        var selects = Prompt.MultiSelect("Include", defaultValues: defaults);
+        var selects = ConsoleInteraction.MultiSelect<PasswordCriteriaOptions>("Include", defaultValues: defaults);
 
         var includeLowerCase = selects.Contains(PasswordCriteriaOptions.LOWER_CASE);
         var includeUpperCase = selects.Contains(PasswordCriteriaOptions.UPPER_CASE); ;
@@ -101,8 +104,8 @@ internal class SettingsController : IController {
         var includeBrackets = selects.Contains(PasswordCriteriaOptions.BRACKETS); ;
         var includeSpaces = selects.Contains(PasswordCriteriaOptions.SPACE); ;
 
-        var minLength = Prompt.Input<int>("What's the minimum length your passwoard should have?");
-        var maxLength = Prompt.Input<int>("What's the maximum length your passwoard should have?");
+        var minLength = ConsoleInteraction.Input<int>("What's the minimum length your password should have?");
+        var maxLength = ConsoleInteraction.Input<int>("What's the maximum length your password should have?");
 
         try {
             var pwGenCriteria = new PasswordGeneratorCriteria(includeLowerCase, includeUpperCase, includeNumeric, includeSpecial, includeBrackets,
@@ -143,7 +146,12 @@ internal class SettingsController : IController {
 
         Console.Write("Clipboard Timeout: ");
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine(settings.ClipboardTimeout.TimeOutDuration.TotalSeconds + " s");
+        Console.WriteLine(settings.Timeout.ClipboardTimeOutDuration.TotalSeconds + " s");
+        Console.ForegroundColor = defaultcolor; 
+        
+        Console.Write("Account Timeout: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(settings.Timeout.AccountTimeOutDuration.TotalMinutes + " m");
         Console.ForegroundColor = defaultcolor;
 
         Console.WriteLine("-----------------------------");

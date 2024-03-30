@@ -69,7 +69,7 @@ internal class SettingsRepository : ISettingsRepository {
             e.UserId,
             new PasswordGeneratorCriteria(e.IncludeLowerCase, e.IncludeUpperCase, e.IncludeNumeric, e.IncludeSpecial,
                 e.IncludeBrackets, e.IncludeSpaces, e.MinLength, e.MaxLength),
-            new ClipboardTimeoutSetting(e.TimeOutDuration),
+            new TimeoutSettings(e.ClipboardTimeOutDuration, e.AccountTimeOutDuration),
             new MainGroupSetting(_cryptService.Decrypt(e.MainGroupIdentifier))
         );
     }
@@ -90,7 +90,8 @@ internal class SettingsRepository : ISettingsRepository {
         settingsModel.IncludeSpecial = e.PwGenCriteria.IncludeSpecial;
         settingsModel.MinLength = e.PwGenCriteria.MinLength;
         settingsModel.MaxLength = e.PwGenCriteria.MaxLength;
-        settingsModel.TimeOutDuration = e.ClipboardTimeout.TimeOutDuration;
+        settingsModel.ClipboardTimeOutDuration = e.Timeout.ClipboardTimeOutDuration;
+        settingsModel.AccountTimeOutDuration = e.Timeout.AccountTimeOutDuration;
         settingsModel.MainGroupIdentifier = _cryptService.Encrypt(e.MainGroup.MainGroupIdentifier);
 
         return settingsModel;

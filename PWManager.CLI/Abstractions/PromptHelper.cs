@@ -13,6 +13,17 @@ public static class PromptHelper {
 
         return input;
     }
+    
+    public static int GetInputGreaterThan(string message, int greaterThan) {
+        var val = ConsoleInteraction.Input<int>(message);
+
+        while(val <= greaterThan) {
+            PromptHelper.PrintColoredText(ConsoleColor.Red, $"Value cannot be less than {greaterThan + 1}");
+            val = ConsoleInteraction.Input<int>(message);
+        }
+
+        return val;
+    }
 
     public static bool InputPassword(Func<string, bool> passwordValidator) {
         var tryCount = 0;

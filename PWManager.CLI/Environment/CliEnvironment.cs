@@ -26,5 +26,7 @@ public class CliEnvironment : ICliEnvironment, IDebugEnvironment, IUserEnvironme
     
     public Group? CurrentGroup { get; set; }
     
+    public Settings? UserSettings { get; set; }
+    
     public string? EncryptionKey { get; set; }
 }

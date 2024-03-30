@@ -6,7 +6,8 @@ namespace PWManager.Application.Services.Interfaces;
 public interface ISettingsService {
 
     void ChangePasswordGenerationCriteria(PasswordGeneratorCriteria generatorCriteria);
-    void ChangeClipboardTimeoutSetting(ClipboardTimeoutSetting clipboardTimeoutSetting);
+    void ChangeClipboardTimeoutSetting(TimeSpan timeout);
+    void ChangeAccountTimeoutSetting(TimeSpan timeout);
     void ChangeMainGroupSetting(MainGroupSetting mainGroupSetting);
     Settings GetSettings();
 }

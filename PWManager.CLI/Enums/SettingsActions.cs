@@ -8,6 +8,8 @@ public enum SettingsActions {
     MAIN_GROUP,
     [Display(Name = "Change Clipboard Timeout")]
     CLIPBOARD_TIMEOUT,
+    [Display(Name = "Change Account Timeout")]
+    ACCOUNT_TIMEOUT,
     [Display(Name = "Change Password Criterias")]
     PASSWORD_CRITERIA,
     [Display(Name = "Go Back")]

@@ -32,7 +32,8 @@ internal class SettingsModel {
     [Required]
     public int MaxLength { get; set; } = 10;
     
-    public TimeSpan TimeOutDuration { get; set; }
+    public TimeSpan ClipboardTimeOutDuration { get; set; }
+    public TimeSpan AccountTimeOutDuration { get; set; }
     
     [Required]
     public string MainGroupIdentifier { get; set; } = "main";
