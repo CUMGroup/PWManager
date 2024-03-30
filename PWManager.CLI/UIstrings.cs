@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace PWManager.CLI;
+﻿namespace PWManager.CLI;
 internal static class UIstrings {
 
     // Password Criteria Settings
@@ -10,6 +8,30 @@ internal static class UIstrings {
     public const string PWCRITERIA_SPECIAL = "Special characters: !#$%&*+,-.:;<=>?^_~?";
     public const string PWCRITERIA_BRACKETS = "Brackets: ()[]{}";
     public const string PWCRITERIA_SPACE = "Spaces";
+    // ----------------------------------------
+
+    // ACTIONS
+    public const string SELECT_ACTION = "Select an action";
+
+    // Settings
+    public const string ACTION_SHOW_SETTINGS = "Show current settings";
+    public const string ACTION_CHANGE_MAIN_GROUP = "Change Main Group";
+    public const string ACTION_CHANGE_TIMEOUT = "Change Clipboard Timeout";
+    public const string ACTION_CHANGE_PW_CRITERIA = "Change Password Criterias";
+
+    // Account
+    public const string ACTION_COPY_PASSWORD = "Copy Password";
+    public const string ACTION_COPY_LOGIN = "Copy Login-Name";
+    public const string ACTION_REGNERATE_PW = "Regenerate Password";
+    public const string ACTION_DELETE_ACCOUNT = "Delete";
+
+    // Group
+    public const string ACTION_NEW_GROUP = "New group";
+    public const string ACTION_SWITCH_GROUP = "Switch group";
+    public const string ACTION_LIST_GROUPS = "List all groups";
+    public const string ACTION_DELETE_GROUP = "";
+
+    public const string ACTION_RETURN = "Go Back";
     // ----------------------------------------
 
     // Prompt Helper
@@ -44,5 +66,20 @@ internal static class UIstrings {
     public const string ENTER_USERNAME = "Please enter your username";
     public const string ENTER_PATH = "Please enter the location of your databasefile";
     public static string WelcomeMessage(string input) => $"Welcome {input} :)";
+    // ----------------------------------------
+
+    // GROUP Controller
+    // ----------------------------------------
+
+    // NEW Controller
+    // ----------------------------------------
+
+    // GET Controller
+    // ----------------------------------------
+
+    // SETTINGS Controller
+    // ----------------------------------------
+
+    // HELP Controller
     // ----------------------------------------
 }

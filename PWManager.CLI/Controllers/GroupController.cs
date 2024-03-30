@@ -19,10 +19,10 @@ public class GroupController : IController {
 
     private readonly ILoginService _loginService;
 
-    private readonly string newGroup = "New group";
-    private readonly string switchGroup = "Switch group";
-    private readonly string listAllGroups = "List all groups";
-    private readonly string exit = "Return";
+    private readonly string newGroup = UIstrings.ACTION_NEW_GROUP;
+    private readonly string switchGroup = UIstrings.ACTION_SWITCH_GROUP;
+    private readonly string listAllGroups = UIstrings.ACTION_LIST_GROUPS;
+    private readonly string exit = UIstrings.ACTION_RETURN;
     private readonly string deleteGroup;
 
     public GroupController(IGroupService groupService, IUserEnvironment userEnv, ILoginService loginService, ISettingsRepository settingsRepository) {
@@ -34,7 +34,7 @@ public class GroupController : IController {
     }
 
     public ExitCondition Handle(string[] args) { // TODO: eventuell refactoring
-        var option = Prompt.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup, exit });
+        var option = Prompt.Select(UIstrings.SELECT_ACTION, new[] { newGroup, switchGroup, listAllGroups, deleteGroup, exit });
         
         if (option.Equals(exit)) {
             return ExitCondition.CONTINUE;
