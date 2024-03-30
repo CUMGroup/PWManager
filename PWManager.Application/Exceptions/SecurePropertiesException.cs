@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PWManager.Domain.Exceptions {
-    public class SecurePropertiesException : Exception {
+namespace PWManager.Application.Exceptions {
+    public class SecurePropertiesException : UserFeedbackException {
         public SecurePropertiesException() { }
         protected SecurePropertiesException(SerializationInfo info, StreamingContext context) : base(info, context) { }
         public SecurePropertiesException(string? message) : base(message) { }

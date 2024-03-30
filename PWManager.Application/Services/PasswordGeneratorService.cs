@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using PWManager.Application.Exceptions;
-using PWManager.Domain.Exceptions;
 using PWManager.Domain.Repositories;
 using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
