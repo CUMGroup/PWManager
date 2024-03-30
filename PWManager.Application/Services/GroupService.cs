@@ -20,7 +20,7 @@ public class GroupService : IGroupService {
         var group = _groupRepo.GetGroup(identifier);
 
         if (group is not null) {
-            throw new UserFeedbackException($"A group with the name '{identifier}' already exists!");
+            throw new UserFeedbackException(MessageStrings.GroupAlreadyExist(identifier));
         }
 
         group = new Group(identifier, userID);
@@ -30,7 +30,7 @@ public class GroupService : IGroupService {
     public void DeleteGroup(string identifier) {
         var succ = _groupRepo.RemoveGroup(identifier);
         if(!succ) {
-            throw new UserFeedbackException($"Could not delete group '{identifier}'");
+            throw new UserFeedbackException(MessageStrings.FailedDeletingGroup(identifier));
         }
     }
 

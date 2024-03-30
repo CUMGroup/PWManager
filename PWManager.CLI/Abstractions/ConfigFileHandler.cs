@@ -9,7 +9,7 @@ namespace PWManager.CLI.Abstractions {
             try {
                 return File.ReadAllText(Path.Combine(defaultFilePath, "last.txt"));
             } catch (IOException) {
-                throw new UserFeedbackException("The config file could not be read");
+                throw new UserFeedbackException(MessageStrings.READ_FILE_ERROR); 
             }
         }
         public static void WriteDefaultFile(string username, string path) {
@@ -19,18 +19,18 @@ namespace PWManager.CLI.Abstractions {
             try {
                 File.WriteAllText(Path.Combine(defaultFilePath, "last.txt"), username + '\n' + path);
             } catch (IOException) {
-                throw new UserFeedbackException("The config file could not be written");
+                throw new UserFeedbackException(MessageStrings.WRITE_FILE_ERROR); 
             }
         }
 
         private static string GetPath() {
             var assembly = Assembly.GetEntryAssembly();
             if (assembly is null) {
-                throw new ApplicationException("An unknown error occured! Could not determine execution path!");
+                throw new ApplicationException(MessageStrings.PATH_ERROR); 
             }
             var path = Path.GetDirectoryName(assembly.Location);
             if (path is null) {
-                throw new ApplicationException("An unknown error occured! Execution path is not a directory!");
+                throw new ApplicationException(MessageStrings.DIRECTORY_ERROR); 
             }
 
             return path;

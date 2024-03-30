@@ -32,8 +32,7 @@ public class AccountService : IAccountService {
 
         var account = GetAccountByIdentifier(identifier);
         if (account is not null) {
-            throw new UserFeedbackException("Account with identifier '" + identifier +
-                                            "' does already exist in your group!");
+            throw new UserFeedbackException(MessageStrings.AccountAlreadyExist(identifier));
         }
 
         account = new Account(identifier, loginname, password);
@@ -42,7 +41,7 @@ public class AccountService : IAccountService {
 
         var saved = _groupRepo.AddAccountToGroup(account, _environment.CurrentGroup);
         if (!saved) {
-            throw new UserFeedbackException("Failed adding the account!");
+            throw new UserFeedbackException(MessageStrings.FAILED_ADDING_ACCOUNT);
         }
     }
 
@@ -55,7 +54,7 @@ public class AccountService : IAccountService {
     public void CopyPasswordToClipboard(string identifier) {
         var acc = GetAccountByIdentifier(identifier);
         if (acc is null) {
-            throw new UserFeedbackException("Could not find the account!");
+            throw new UserFeedbackException(MessageStrings.ACCOUNT_NOT_FOUND);
         }
         _clipboard.WriteClipboard(acc.Password);
     }
@@ -63,7 +62,7 @@ public class AccountService : IAccountService {
     public void CopyLoginnameToClipboard(string identifier) {
         var acc = GetAccountByIdentifier(identifier);
         if (acc is null) {
-            throw new UserFeedbackException("Could not find the account!");
+            throw new UserFeedbackException(MessageStrings.ACCOUNT_NOT_FOUND);
         }
         _clipboard.WriteClipboard(acc.LoginName);
     }
@@ -73,7 +72,7 @@ public class AccountService : IAccountService {
 
         var acc = GetAccountByIdentifier(identifier);
         if (acc is null) {
-            throw new UserFeedbackException("Could not find the account!");
+            throw new UserFeedbackException(MessageStrings.ACCOUNT_NOT_FOUND);
         }
 
         acc.Password = _passGen.GeneratePassword();
@@ -85,7 +84,7 @@ public class AccountService : IAccountService {
         
         var acc = GetAccountByIdentifier(identifier);
         if (acc is null) {
-            throw new UserFeedbackException("Could not find the account!");
+            throw new UserFeedbackException(MessageStrings.ACCOUNT_NOT_FOUND);
         }
 
         _groupRepo.DeleteAccountInGroup(acc, _environment.CurrentGroup);
@@ -94,7 +93,7 @@ public class AccountService : IAccountService {
 
     private static void ThrowIfGroupIsNull([NotNull]Group? group) {
         if (group is null) {
-            throw new UserFeedbackException("No active group found. Are you in a session?");
+            throw new UserFeedbackException(MessageStrings.NO_ACTIVE_GROUP);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PWManager.Domain.Exceptions; 
+namespace PWManager.Application.Exceptions; 
 
-public class PasswordGenerationException : Exception {
+public class PasswordGenerationException : UserFeedbackException {
     public PasswordGenerationException() { }
     protected PasswordGenerationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     public PasswordGenerationException(string? message) : base(message) { }
