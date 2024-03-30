@@ -97,6 +97,12 @@ internal static class UIstrings {
     // ----------------------------------------
 
     // NEW Controller
+    public const string PROMPT_NAME_WEBSITE = "What's the name of the website?";
+    public const string PROMPT_LOGIN_NAME = "What's your name or email for the login?";
+    public const string PROMPT_GENERATE_PW = "Do you want to generate a random password?";
+
+    public const string PASSWORD_PROVISION_FAILED = "You failed to provide a password. Please try again creating your account!";
+    public const string ACCOUNT_CREATION_CONFIRM = "Created the account!";
     // ----------------------------------------
 
     // GET Controller
