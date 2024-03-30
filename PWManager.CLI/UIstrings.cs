@@ -42,7 +42,7 @@ internal static class UIstrings {
     public const string ACTION_NEW_GROUP = "New group";
     public const string ACTION_SWITCH_GROUP = "Switch group";
     public const string ACTION_LIST_GROUPS = "List all groups";
-    public const string ACTION_DELETE_GROUP = "";
+    public const string ACTION_DELETE_GROUP = "Delete group";
 
     public const string ACTION_RETURN = "Go Back";
     // ----------------------------------------
