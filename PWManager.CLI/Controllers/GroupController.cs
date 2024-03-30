@@ -66,19 +66,19 @@ public class GroupController : IController {
 
     private void SwitchGroup(List<string> groups) {
         if (!groups.Any()) {
-            throw new UserFeedbackException("There are no groups in your database. Something is really wrong!");
+            throw new UserFeedbackException(UIstrings.NO_GROUPS_AVAILABLE);
         }
-        var groupidentifier = Prompt.Select("To which group do you want to switch to", groups);
+        var groupidentifier = Prompt.Select(UIstrings.SWITCH_GROUP_PROMPT, groups);
         _groupService.SwitchGroup(groupidentifier);
     }
 
     private void CreateNewGroupAndSwitchToIt() {
-        var groupIdentifier = PromptHelper.GetInput("What's the name of the new group");
+        var groupIdentifier = PromptHelper.GetInput(UIstrings.NEW_GROUP_NAME);
 
         _groupService.AddGroup(_userEnv.CurrentUser!.Id, groupIdentifier);
         _groupService.SwitchGroup(groupIdentifier);
 
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Switched to new group!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.GROUP_SWITCH_CONFIRM);
     }
 
     private bool HandleDeletion(string identifier) {
@@ -87,15 +87,15 @@ public class GroupController : IController {
 
         var username = _userEnv.CurrentUser!.UserName;
         if (!PromptHelper.ConfirmDeletion(identifier, (pT) => _loginService.CheckPassword(username, pT))) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.DELETE_ABORTED);
             return false;
         }
 
         var settings = _settingsRepository.GetSettings(); // TODD in den SettingsService auslagern (?)
         var isMainGroup = settings.MainGroup.MainGroupIdentifier.Equals(identifier);
         if (isMainGroup) {
-            PromptHelper.PrintColoredText(ConsoleColor.Yellow, "You are going to delete your standard group.");
-            PromptHelper.PrintColoredText(ConsoleColor.Yellow, "Please provide a new standard group.");
+            PromptHelper.PrintColoredText(ConsoleColor.Yellow, UIstrings.DELETE_STANDARD_GROUP);
+            PromptHelper.PrintColoredText(ConsoleColor.Yellow, UIstrings.PROVIDE_NEW_STANDARD_GROUP);
         }
 
         if (groups.Count > 0) {
@@ -110,7 +110,7 @@ public class GroupController : IController {
         }
 
         _groupService.DeleteGroup(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Group '{identifier}' deleted!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green,UIstrings.DeletionOfGroupConfirmed(identifier));
         return true;
     }
 }

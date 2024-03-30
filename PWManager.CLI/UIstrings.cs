@@ -69,6 +69,18 @@ internal static class UIstrings {
     // ----------------------------------------
 
     // GROUP Controller
+    public const string NO_GROUPS_AVAILABLE = "There are no groups in your database. Something is really wrong!";
+
+    public const string SWITCH_GROUP_PROMPT = "To which group do you want to switch to";
+    public const string NEW_GROUP_NAME = "What's the name of the new group";
+    public const string GROUP_SWITCH_CONFIRM = "Switched to new group!";
+
+    public const string DELETE_ABORTED = "Delete aborted!";
+
+    public const string DELETE_STANDARD_GROUP = "You are going to delete your standard group.";
+    public const string PROVIDE_NEW_STANDARD_GROUP = "Please provide a new standard group.";
+
+    public static string DeletionOfGroupConfirmed(string input) => $"Group '{input}' deleted!";
     // ----------------------------------------
 
     // NEW Controller
