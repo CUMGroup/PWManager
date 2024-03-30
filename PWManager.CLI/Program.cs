@@ -2,9 +2,11 @@
 using PWManager.Application;
 using PWManager.Application.Context;
 using PWManager.CLI;
+using PWManager.CLI.Abstractions;
 using PWManager.CLI.Environment;
 using PWManager.CLI.ExtensionMethods;
 using PWManager.CLI.Interfaces;
+using PWManager.CLI.Services;
 using PWManager.Data;
 using Sharprompt;
 
@@ -23,6 +25,10 @@ services.AddSingleton<ICliEnvironment>(environment);
 services.AddSingleton<ICryptEnvironment>(environment);
 services.AddSingleton<IDebugEnvironment>(environment);
 services.AddSingleton<IUserEnvironment>(environment);
+services.AddSingleton<ICancelEnvironment>(environment);
+
+// Create Observer for key inputs to kick client for inactivity
+var accountTimeOutObserver = new AccountTimeoutService(environment, environment);
 
 // Add all services to DI
 services.AddSingleton<IRunner, ConsoleRunner>();
@@ -42,4 +48,12 @@ ArgumentNullException.ThrowIfNull(runner);
 // Map Controller routes
 ((ConsoleRunner)runner).MapControllers();
 
-runner.Run(args);
+using var cancelTokenSource = new CancellationTokenSource();
+var cancelToken = cancelTokenSource.Token;
+accountTimeOutObserver.StartMonitoring(cancelToken);
+
+try {
+    runner.Run(args);
+} finally {
+    ConsoleInteraction.ResetConsole();
+}

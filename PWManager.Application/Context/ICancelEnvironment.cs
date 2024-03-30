@@ -1,5 +1,5 @@
 ﻿namespace PWManager.Application.Context; 
 
-public class ICancelEnvironment {
-    
+public interface ICancelEnvironment {
+    bool CancelableState { get; set; }
 }

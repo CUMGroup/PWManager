@@ -3,7 +3,7 @@ using PWManager.Domain.Entities;
 
 namespace PWManager.CLI.Environment; 
 
-public class CliEnvironment : ICliEnvironment, IDebugEnvironment, IUserEnvironment, ICryptEnvironment {
+public class CliEnvironment : ICliEnvironment, IDebugEnvironment, IUserEnvironment, ICryptEnvironment, ICancelEnvironment {
     
     public bool IsDevelopmentMode { get; init; } = true;
 
@@ -29,4 +29,6 @@ public class CliEnvironment : ICliEnvironment, IDebugEnvironment, IUserEnvironme
     public Settings? UserSettings { get; set; }
     
     public string? EncryptionKey { get; set; }
+    
+    public bool CancelableState { get; set; }
 }

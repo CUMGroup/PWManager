@@ -16,12 +16,14 @@ namespace PWManager.CLI {
         private readonly IServiceProvider _provider;
         private readonly ICliEnvironment _environment;
         private readonly IDebugEnvironment _debugInfo;
+        private readonly ICancelEnvironment _cancelEnvironment;
         private readonly CommandParser _commandParser;
 
-        public ConsoleRunner(IServiceProvider provider, ICliEnvironment environment, IDebugEnvironment debugInfo) {
+        public ConsoleRunner(IServiceProvider provider, ICliEnvironment environment, IDebugEnvironment debugInfo, ICancelEnvironment cancelEnvironment) {
             _provider = provider;
             _environment = environment;
             _debugInfo = debugInfo;
+            _cancelEnvironment = cancelEnvironment;
             _commandParser = new CommandParser();
         }
 
@@ -62,7 +64,9 @@ namespace PWManager.CLI {
             return ExecuteCommand(_commandParser.ParseCommandWithArguments(input).ToArray());
         }
         private ExitCondition ExecuteCommand(string[] args) {
+            _cancelEnvironment.CancelableState = false;
             if (args.Length <= 0 && _environment.RunningSession) {
+                _cancelEnvironment.CancelableState = true;
                 return ExitCondition.CONTINUE;
             }
             var cmd = args.Length <= 0 ? AvailableCommands.HELP : _commandParser.ParseCommand(args[0]);
@@ -73,7 +77,10 @@ namespace PWManager.CLI {
 
             var controller = (IController) _provider.GetRequiredService(controllerType);
             var commandArgs = args.Length <= 1 ? Array.Empty<string>() : args[1..];
-            return controller.Handle(commandArgs);
+            
+            var exit = controller.Handle(commandArgs);
+            _cancelEnvironment.CancelableState = true;
+            return exit;
         }
 
         public void MapCommand<TCommand>(AvailableCommands command) {
