@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PWManager.Application;
 using PWManager.Application.Context;
+using PWManager.Application.Services.Interfaces;
 using PWManager.CLI;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Environment;
@@ -48,12 +49,18 @@ ArgumentNullException.ThrowIfNull(runner);
 // Map Controller routes
 ((ConsoleRunner)runner).MapControllers();
 
+#region Hosted Services
 using var cancelTokenSource = new CancellationTokenSource();
 var cancelToken = cancelTokenSource.Token;
+
 accountTimeOutObserver.StartMonitoring(cancelToken);
 
+var clipboard = provider.GetService<IClipboard>()!;
+var clipboardTimeoutObserver = new ClipboardTimeoutService(clipboard, environment, cancelToken);
+#endregion
 try {
     runner.Run(args);
 } finally {
+    cancelTokenSource.Cancel();
     ConsoleInteraction.ResetConsole();
 }

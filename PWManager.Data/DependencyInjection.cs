@@ -27,7 +27,7 @@ public static class DependencyInjection {
         services.AddTransient<ILoginService, LoginService>();
         services.AddTransient<IDatabaseInitializerService, DatabaseInitializerService>();
         
-        services.AddTransient<IClipboard, Clipboard>();
+        services.AddSingleton<IClipboard, Clipboard>();
         return services;
     }
 }

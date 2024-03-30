@@ -5,6 +5,8 @@ namespace PWManager.Data.System;
 
 public class Clipboard : IClipboard {
     
+    public event Action<string> OnClipboardUpdated;
+
     public void WriteClipboard(string val) {
         if (OperatingSystem.IsWindows()) {
             var escaped = val.Replace("\n", "\\n").Replace("\"", "\"\"");
@@ -23,6 +25,8 @@ public class Clipboard : IClipboard {
         else {
             throw new UserFeedbackException("Your Operating System does not support the clipboard functionality");
         }
+
+        OnClipboardUpdated(val);
     }
 
     public void ClearClipboard() {
