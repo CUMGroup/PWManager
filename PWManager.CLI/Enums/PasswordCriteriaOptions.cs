@@ -2,16 +2,16 @@
 
 namespace PWManager.CLI.Enums;
 public enum PasswordCriteriaOptions {
-    [Display(Name = "Lower case characters: a-z")]
+    [Display(Name = UIstrings.LOWER_CASE)]
     LOWER_CASE,
-    [Display(Name = "Upper case characters: A-Z")]
+    [Display(Name = UIstrings.UPPER_CASE)]
     UPPER_CASE,
-    [Display(Name = "Nnumeric characters: 0-9")]
+    [Display(Name = UIstrings.NUMERIC)]
     NUMERIC,
-    [Display(Name = "Special characters: !#$%&*+,-.:;<=>?^_~?")]
+    [Display(Name = UIstrings.SPECIAL)]
     SPECIAL,
-    [Display(Name = "Brackets: ()[]{}")]
+    [Display(Name = UIstrings.BRACKETS)]
     BRACKETS,
-    [Display(Name = "Spaces")]
+    [Display(Name = UIstrings.SPACE)]
     SPACE
 }
