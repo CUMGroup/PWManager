@@ -39,4 +39,10 @@ internal static class UIstrings {
 
     public const string CREATED_DATABASE = "Created your database! Enjoy";
     // ----------------------------------------
+
+    // LOGIN Controller
+    public const string ENTER_USERNAME = "Please enter your username";
+    public const string ENTER_PATH = "Please enter the location of your databasefile";
+    public static string WelcomeMessage(string input) => $"Welcome {input} :)";
+    // ----------------------------------------
 }

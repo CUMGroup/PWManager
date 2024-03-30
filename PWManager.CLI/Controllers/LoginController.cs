@@ -37,7 +37,7 @@ namespace PWManager.CLI.Controllers {
             }
 
             ConfigFileHandler.WriteDefaultFile(username, path);
-            Console.WriteLine($"Welcome {username} :)");
+            Console.WriteLine(UIstrings.WelcomeMessage(username));
             return ExitCondition.CONTINUE;
         }
 
@@ -49,14 +49,14 @@ namespace PWManager.CLI.Controllers {
             while (basepointer < args.Length) {
                 if ((args[basepointer].Equals("-u") || args[basepointer].Equals("--username"))) {
                     if ((args.Length - basepointer <= 1) || args[basepointer + 1].StartsWith('-')) {
-                        username = AskForInput("Please enter your username");
+                        username = AskForInput(UIstrings.ENTER_USERNAME);
                     } else {
                         username = args[basepointer + 1];
                         basepointer++;
                     }
                 } else if ((args[basepointer].Equals("-d") || args[basepointer].Equals("--directory"))) {
                     if ((args.Length - basepointer <= 1) || args[basepointer + 1].StartsWith('-')) {
-                        path = AskForInput("Please enter the location of your databasefile");
+                        path = AskForInput(UIstrings.ENTER_PATH);
                     } else {
                         path = args[basepointer + 1];
                         basepointer++;
