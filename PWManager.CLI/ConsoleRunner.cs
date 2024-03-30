@@ -30,7 +30,7 @@ namespace PWManager.CLI {
                 var exitCondition = ExecuteCommand(args);
                 while (exitCondition is ExitCondition.CONTINUE) {
                     _environment.WritePrompt();
-                    var input = Console.ReadLine();
+                    var input = ConsoleInteraction.ReadLine();
                     if (input is null) {
                         continue;
                     }

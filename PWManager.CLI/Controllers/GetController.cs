@@ -86,17 +86,17 @@ public class GetController : IController {
     }
     
     private bool ConfirmRegeneration(string identifier) {
-        return Prompt.Confirm($"Are you sure you want to update the password of {identifier}?");
+        return ConsoleInteraction.Confirm($"Are you sure you want to update the password of {identifier}?");
     }
     
     private AccountAction GetAccountAction() {
-        return Prompt.Select<AccountAction>("Select an Action");
+        return ConsoleInteraction.Select<AccountAction>("Select an Action");
     }
     
     private string? GetAccountSelection() {
         var names = _accountService.GetCurrentAccountNames();
         if (names.Any()) {
-            return Prompt.Select("Search an Account", names);
+            return ConsoleInteraction.Select("Search an Account", names);
         }
         PromptHelper.PrintColoredText(ConsoleColor.Red, "There are no accounts in this group!");
         return null;

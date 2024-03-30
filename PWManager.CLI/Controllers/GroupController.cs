@@ -34,7 +34,7 @@ public class GroupController : IController {
     }
 
     public ExitCondition Handle(string[] args) { // TODO: eventuell refactoring
-        var option = Prompt.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup, exit });
+        var option = ConsoleInteraction.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup, exit });
         
         if (option.Equals(exit)) {
             return ExitCondition.CONTINUE;
@@ -68,7 +68,7 @@ public class GroupController : IController {
         if (!groups.Any()) {
             throw new UserFeedbackException("There are no groups in your database. Something is really wrong!");
         }
-        var groupidentifier = Prompt.Select("To which group do you want to switch to", groups);
+        var groupidentifier = ConsoleInteraction.Select("To which group do you want to switch to", groups);
         _groupService.SwitchGroup(groupidentifier);
     }
 

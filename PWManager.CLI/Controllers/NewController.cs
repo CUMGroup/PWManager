@@ -24,7 +24,7 @@ public class NewController : IController {
         var identifier = PromptHelper.GetInput("What's the name of the website?");
         var loginName = PromptHelper.GetInput("What's your name or email for the login?");
 
-        var genPassword = Prompt.Confirm("Do you want to generate a random password?");
+        var genPassword = ConsoleInteraction.Confirm("Do you want to generate a random password?");
         string password;
         if (genPassword) {
             password = _passwordGeneratorService.GeneratePassword();

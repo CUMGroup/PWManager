@@ -22,18 +22,19 @@ public class InitController : IController {
     }
 
     public ExitCondition Handle(string[] args) {
-        var path = Prompt.Input<string>("Where do you want to create your database file?");
+        var path = ConsoleInteraction.Input<string>("Where do you want to create your database file?");
         while(!Path.Exists(path)) {
             Console.WriteLine("The given path does not exist.");
-            path = Prompt.Input<string>("Where do you want to create your database file?");
+            path = ConsoleInteraction.Input<string>("Where do you want to create your database file?");
         }
 
         _dbInit.CheckIfDataBaseExistsOnPath(path);
 
-        var name = Prompt.Input<string>("What's your desired user name?");
+        var name = ConsoleInteraction.Input<string>("What's your desired user name?");
+
         while (name.Length <= 1 || !Regex.IsMatch(name, @"^[a-zA-Z]+$")) {
             Console.WriteLine("Invalid name! It mus be longer than 1 character and must include only letters!");
-            name = Prompt.Input<string>("What's your desired user name?");
+            name = ConsoleInteraction.Input<string>("What's your desired user name?");
         }
 
         var password = PromptHelper.InputNewPassword();
