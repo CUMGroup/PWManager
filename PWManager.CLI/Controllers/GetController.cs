@@ -65,7 +65,7 @@ public class GetController : IController {
 
     private bool HandleRegeneration(string identifier) {
         if (!ConfirmRegeneration(identifier)) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.REGENERATION_ABORADED);
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.REGENERATION_ABORTED);
             return false;
         }
         _accountService.RegeneratePassword(identifier);

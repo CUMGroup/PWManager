@@ -110,7 +110,7 @@ internal static class UIstrings {
     public const string COPIED_LOGIN_NAME = "Copied the login-name to your clipboard!";
 
 
-    public const string REGENERATION_ABORADED = "Regeneration aborted!";
+    public const string REGENERATION_ABORTED = "Regeneration aborted!";
     public const string REGENERATION_CONFIRMED = "Regenerated your password!";
     public static string ConfirmPwRegenerationOf(string input) => $"Are you sure you want to update the password of {input}?";
 
