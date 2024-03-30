@@ -52,7 +52,7 @@ internal static class UIstrings {
     public const string PASSWORD_TOO_SHORT = "Your password was too short. Please use a password with at least 8 characters!";
 
     public const string ENTER_PASSWORD = "Enter your password";
-    public const string ENTER_MASTER_PASSWORD = "Enter your password";
+    public const string ENTER_MASTER_PASSWORD = "Enter your master password to confirm";
 
     public const string REPEAT_PASSWORD = "Repeat your password";
     public const string REPEAT_PASSWORD_FAILED = "You failed to repeat your password 3 times in a row!";
