@@ -85,7 +85,11 @@ public class GroupController : IController {
             return false;
         }
 
-        var settings = _settingsService.GetSettings(); 
+        var settings = _userEnv.UserSettings;
+        if (settings is null) {
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.DELETE_ABORTED);
+            throw new UserFeedbackException(MessageStrings.NO_SETTINGS_IN_ENVIRONMENT);
+        }
         var isMainGroup = settings.MainGroup.MainGroupIdentifier.Equals(identifier);
         if (isMainGroup) {
             PromptHelper.PrintColoredText(ConsoleColor.Yellow, UIstrings.DELETE_STANDARD_GROUP);

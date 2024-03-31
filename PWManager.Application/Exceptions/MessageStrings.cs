@@ -22,6 +22,7 @@ public static class MessageStrings {
 
     // GROUP Controller
     public const string NO_GROUPS_FOUND = "There are no groups in your database. Something is really wrong!";
+    public const string NO_SETTINGS_IN_ENVIRONMENT = "There are not settings in your environment. Something is really wrong!";
     // ----------------------------------------
 
     // SETTINGS Controller

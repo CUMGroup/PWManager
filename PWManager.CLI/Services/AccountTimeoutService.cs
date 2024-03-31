@@ -44,7 +44,7 @@ public class AccountTimeoutService {
             return;
         }
         ConsoleInteraction.ResetConsole();
-        PromptHelper.PrintColoredText(ConsoleColor.Magenta, $"You were logged out due to inactivity for {GetAccountTimeoutSpan().Minutes} minutes");
+        PromptHelper.PrintColoredText(ConsoleColor.Magenta, UIstrings.KickedDueToInactivityFor(GetAccountTimeoutSpan().Minutes));
         System.Environment.Exit(0);
     }
 

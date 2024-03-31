@@ -8,7 +8,7 @@ public class ClipboardTimeoutService {
     private readonly IClipboard _clipboard;
     private readonly IUserEnvironment _userEnv;
 
-    private CancellationToken _programCancelToken;
+    private readonly CancellationToken _programCancelToken;
     
     private CancellationTokenSource? _cancelTokenSource;
     

@@ -250,4 +250,11 @@ internal static class UIstrings {
                                          """;
 
     // ----------------------------------------
+    
+    // Timeout Service
+
+    public static string KickedDueToInactivityFor(int minutes) =>
+        $"You were logged out due to inactivity for {minutes} minutes";
+
+    // -----------------------------------------
 }
