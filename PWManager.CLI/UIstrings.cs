@@ -142,6 +142,7 @@ internal static class UIstrings {
 
     public const string MAIN_GROUP = "Main Group: ";
     public const string CLIPPBOARD_TIMEOUT = "Clipboard Timeout: ";
+    public const string ACCOUNT_TIMEOUT = "Account Timeout: ";
     public const string PASSWORD_GEN_CRITERIA = "Password Generation Criteria:";
     public const string MIN_LENGTH = "Min Length: ";
     public const string MAX_LENGTH = "Max Length: ";

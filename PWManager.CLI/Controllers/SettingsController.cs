@@ -149,7 +149,7 @@ internal class SettingsController : IController {
         Console.WriteLine(settings.Timeout.ClipboardTimeOutDuration.TotalSeconds + " s");
         Console.ForegroundColor = defaultcolor; 
         
-        Console.Write("Account Timeout: ");
+        Console.Write(UIstrings.ACCOUNT_TIMEOUT);
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine(settings.Timeout.AccountTimeOutDuration.TotalMinutes + " m");
         Console.ForegroundColor = defaultcolor;
