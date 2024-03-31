@@ -54,6 +54,7 @@ namespace PWManager.Data.Services {
 
             _cliEnv.RunningSession = true;
             _userEnv.CurrentGroup = _groupRepository.GetGroup(mainGroup.MainGroupIdentifier);
+            _userEnv.UserSettings = _settingsRepository.GetSettings();
         }
 
         public bool CheckPassword(string username, string password) {

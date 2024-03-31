@@ -6,8 +6,10 @@ public enum SettingsActions {
     CURRENT_SETTINGS, 
     [Display(Name = UIstrings.ACTION_CHANGE_MAIN_GROUP)]
     MAIN_GROUP,
-    [Display(Name = UIstrings.ACTION_CHANGE_TIMEOUT)]
+    [Display(Name = UIstrings.ACTION_CHANGE_CLIPBOARD_TIMEOUT)]
     CLIPBOARD_TIMEOUT,
+    [Display(Name = UIstrings.ACTION_CHANGE_ACCOUNT_TIMEOUT)]
+    ACCOUNT_TIMEOUT,
     [Display(Name = UIstrings.ACTION_CHANGE_PW_CRITERIA)]
     PASSWORD_CRITERIA,
     [Display(Name = UIstrings.ACTION_RETURN)]

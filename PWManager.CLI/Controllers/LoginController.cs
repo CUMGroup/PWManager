@@ -69,7 +69,7 @@ namespace PWManager.CLI.Controllers {
         }
 
         public virtual string AskForInput(string prompt) {
-            return Prompt.Input<string>(prompt);
+            return ConsoleInteraction.Input<string>(prompt);
         }
     }
 }

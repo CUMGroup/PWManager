@@ -4,8 +4,6 @@ using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
-using Sharprompt;
-using System.IO;
 
 namespace PWManager.CLI.Controllers; 
 
@@ -86,17 +84,17 @@ public class GetController : IController {
     }
     
     private bool ConfirmRegeneration(string identifier) {
-        return Prompt.Confirm(UIstrings.ConfirmPwRegenerationOf(identifier));
+        return ConsoleInteraction.Confirm(UIstrings.ConfirmPwRegenerationOf(identifier));
     }
     
     private AccountAction GetAccountAction() {
-        return Prompt.Select<AccountAction>(UIstrings.SELECT_ACTION);
+        return ConsoleInteraction.Select<AccountAction>(UIstrings.SELECT_ACTION);
     }
     
     private string? GetAccountSelection() {
         var names = _accountService.GetCurrentAccountNames();
         if (names.Any()) {
-            return Prompt.Select(UIstrings.SEARCH_ACCOUNT, names);
+            return ConsoleInteraction.Select(UIstrings.SEARCH_ACCOUNT, names);
         }
         PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.NO_ACCOUNTS_AVAILABLE);
         return null;

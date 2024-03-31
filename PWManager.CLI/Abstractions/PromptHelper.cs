@@ -1,28 +1,36 @@
-﻿using PWManager.Application.Services.Interfaces;
-using Sharprompt;
-
-namespace PWManager.CLI.Abstractions; 
+﻿namespace PWManager.CLI.Abstractions; 
 
 public static class PromptHelper {
     public static string GetInput(string prompt) {
-        var input = Prompt.Input<string>(prompt);
+        var input = ConsoleInteraction.Input<string>(prompt);
         while (string.IsNullOrWhiteSpace(input)) {
             Console.WriteLine(UIstrings.EMPTY_INPUT);
-            input = Prompt.Input<string>(prompt);
+            input = ConsoleInteraction.Input<string>(prompt);
         }
 
         return input;
     }
+    
+    public static int GetInputGreaterThan(string message, int greaterThan) {
+        var val = ConsoleInteraction.Input<int>(message);
+
+        while(val <= greaterThan) {
+            PrintColoredText(ConsoleColor.Red, UIstrings.ValueCannotBeLessThan(greaterThan + 1));
+            val = ConsoleInteraction.Input<int>(message);
+        }
+
+        return val;
+    }
 
     public static bool InputPassword(Func<string, bool> passwordValidator) {
         var tryCount = 0;
-        var pass = Prompt.Password(UIstrings.ENTER_PASSWORD);
+        var pass = ConsoleInteraction.Password(UIstrings.ENTER_PASSWORD);
         var succ = passwordValidator(pass);
 
         while (!succ && tryCount < 3) {
             ++tryCount;
             Console.WriteLine($"{UIstrings.INVALID_PASSWORD} {UIstrings.TRY_AGAIN} ({tryCount}/3)");
-            pass = Prompt.Password(UIstrings.ENTER_PASSWORD);
+            pass = ConsoleInteraction.Password(UIstrings.ENTER_PASSWORD);
             succ = passwordValidator(pass);
         }
 
@@ -40,18 +48,18 @@ public static class PromptHelper {
     }
     
     public static string? TryPasswordInput() {
-        var password = Prompt.Password(UIstrings.ENTER_PASSWORD);
+        var password = ConsoleInteraction.Password(UIstrings.ENTER_PASSWORD);
         while (string.IsNullOrWhiteSpace(password) || password.Length < 8) {
             Console.WriteLine(UIstrings.PASSWORD_TOO_SHORT);
-            password = Prompt.Password(UIstrings.ENTER_PASSWORD);
+            password = ConsoleInteraction.Password(UIstrings.ENTER_PASSWORD);
         }
     
-        var repeat = Prompt.Password(UIstrings.REPEAT_PASSWORD);
+        var repeat = ConsoleInteraction.Password(UIstrings.REPEAT_PASSWORD);
         var tryCount = 0;
         while (!password.Equals(repeat) && tryCount < 3) {
             ++tryCount;
             Console.WriteLine($"{UIstrings.REPEAT_PASSWORD_DOES_NOT_MATCH} {UIstrings.TRY_AGAIN} ({tryCount}/3)");
-            repeat = Prompt.Password(UIstrings.REPEAT_PASSWORD);
+            repeat = ConsoleInteraction.Password(UIstrings.REPEAT_PASSWORD);
         }
 
         return password.Equals(repeat) ? password : null;
@@ -95,12 +103,12 @@ public static class PromptHelper {
     }
 
     public static bool ConfirmDeletion(string identifier, Func<string, bool> passwordValidator) {
-        var areYouSure = Prompt.Confirm(UIstrings.DeletionOf(identifier));
+        var areYouSure = ConsoleInteraction.Confirm(UIstrings.DeletionOf(identifier));
         if (!areYouSure) {
             return false;
         }
 
-        var passwordTest = Prompt.Password(UIstrings.ENTER_MASTER_PASSWORD);
+        var passwordTest = ConsoleInteraction.Password(UIstrings.ENTER_MASTER_PASSWORD);
         var passwordCorrect = passwordValidator(passwordTest);
 
         if (passwordCorrect) {

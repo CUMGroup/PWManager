@@ -5,7 +5,6 @@ using PWManager.CLI.Abstractions;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using PWManager.Domain.ValueObjects;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers;
 internal class SettingsController : IController {
@@ -31,7 +30,7 @@ internal class SettingsController : IController {
     }
 
     private SettingsActions GetSettingsAction() {
-        return Prompt.Select<SettingsActions>(UIstrings.SELECT_ACTION);
+        return ConsoleInteraction.Select<SettingsActions>(UIstrings.SELECT_ACTION);
     }
 
     private bool ExecuteAction(SettingsActions action) {
@@ -39,6 +38,7 @@ internal class SettingsController : IController {
             SettingsActions.CURRENT_SETTINGS => ShowCurrentSettings(),
             SettingsActions.MAIN_GROUP => HandleChangeMainGroup(),
             SettingsActions.CLIPBOARD_TIMEOUT => HandleChangeClipboardTimeout(),
+            SettingsActions.ACCOUNT_TIMEOUT => HandleChangeAccountTimeout(),
             SettingsActions.PASSWORD_CRITERIA => HandleChangePwGenCriteria(),
             SettingsActions.RETURN => true,
             _ => false
@@ -51,29 +51,32 @@ internal class SettingsController : IController {
             throw new UserFeedbackException(MessageStrings.NO_GROUPS_FOUND);
         }
 
-        var selectedgroup = Prompt.Select<string>(UIstrings.MAIN_GROUP_CHANGE, groups);
-        var newMainGroup = new MainGroupSetting(selectedgroup);
+        var selectedGroup = ConsoleInteraction.Select<string>(UIstrings.MAIN_GROUP_CHANGE, groups);
+        var newMainGroup = new MainGroupSetting(selectedGroup);
         _settingsService.ChangeMainGroupSetting(newMainGroup);
 
-        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.ConfirmOfMainGroupChangedTo(selectedgroup));
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.ConfirmOfMainGroupChangedTo(selectedGroup));
         return true;
     }
 
     private bool HandleChangeClipboardTimeout() {
-        var seconds = Prompt.Input<int>(UIstrings.TIMEOUT_PROMPT);
-
-        while(seconds <= 0) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.TIMEOUT_INVALID);
-            seconds = Prompt.Input<int>(UIstrings.TIMEOUT_PROMPT);
-        }
+        var seconds = PromptHelper.GetInputGreaterThan(UIstrings.CLIPBOARD_TIMEOUT_PROMPT, 0);
 
         var timeout = new TimeSpan(TimeSpan.TicksPerSecond * seconds);
-        _settingsService.ChangeClipboardTimeoutSetting(new ClipboardTimeoutSetting(timeout));
+        _settingsService.ChangeClipboardTimeoutSetting(timeout);
 
-        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.ConfirmOfTimeoutSetTo(seconds));
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.ConfirmOfClipboardTimeoutSetTo(seconds));
         return true;
     }
+    private bool HandleChangeAccountTimeout() {
+        var minutes = PromptHelper.GetInputGreaterThan(UIstrings.ACCOUNT_TIMEOUT_PROMPT, 0);
+        var timeout = new TimeSpan(TimeSpan.TicksPerSecond * minutes * 60);
+        _settingsService.ChangeAccountTimeoutSetting(timeout);
 
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.ConfirmOfAccountTimeoutSetTo(minutes));
+        return true;
+    }
+    
     private bool HandleChangePwGenCriteria() {
         var pwGenCriteria = CreatePwGenerationCriteria();
         if(pwGenCriteria is null) {
@@ -89,9 +92,9 @@ internal class SettingsController : IController {
     private PasswordGeneratorCriteria? CreatePwGenerationCriteria() {
         Console.WriteLine(UIstrings.PWGEN_CRITERIA_PROMPT);
 
-        List<PasswordCriteriaOptions> defaults = getDefaults();
+        List<PasswordCriteriaOptions> defaults = GetDefaults();
 
-        var selects = Prompt.MultiSelect(UIstrings.INCLUDE, defaultValues: defaults);
+        var selects = ConsoleInteraction.MultiSelect(UIstrings.INCLUDE, defaultValues: defaults).ToArray();
 
         var includeLowerCase = selects.Contains(PasswordCriteriaOptions.LOWER_CASE);
         var includeUpperCase = selects.Contains(PasswordCriteriaOptions.UPPER_CASE); ;
@@ -100,8 +103,8 @@ internal class SettingsController : IController {
         var includeBrackets = selects.Contains(PasswordCriteriaOptions.BRACKETS); ;
         var includeSpaces = selects.Contains(PasswordCriteriaOptions.SPACE); ;
 
-        var minLength = Prompt.Input<int>(UIstrings.PWGEN_MINIMUM_PROMPT);
-        var maxLength = Prompt.Input<int>(UIstrings.PWGEN_MAXIMUM_PROMPT);
+        var minLength = ConsoleInteraction.Input<int>(UIstrings.PWGEN_MINIMUM_PROMPT);
+        var maxLength = ConsoleInteraction.Input<int>(UIstrings.PWGEN_MAXIMUM_PROMPT);
 
         try {
             var pwGenCriteria = new PasswordGeneratorCriteria(includeLowerCase, includeUpperCase, includeNumeric, includeSpecial, includeBrackets,
@@ -113,7 +116,7 @@ internal class SettingsController : IController {
         }
     }
 
-    private List<PasswordCriteriaOptions> getDefaults() {
+    private List<PasswordCriteriaOptions> GetDefaults() {
         var currentPWCriteria = _settingsService.GetSettings().PwGenCriteria;
         if (currentPWCriteria is null) {
             throw new UserFeedbackException(MessageStrings.NO_PWGEN_CRITERIA_FOUND);
@@ -143,7 +146,12 @@ internal class SettingsController : IController {
 
         Console.Write(UIstrings.CLIPPBOARD_TIMEOUT);
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine(settings.ClipboardTimeout.TimeOutDuration.TotalSeconds + " s");
+        Console.WriteLine(settings.Timeout.ClipboardTimeOutDuration.TotalSeconds + " s");
+        Console.ForegroundColor = defaultcolor; 
+        
+        Console.Write(UIstrings.ACCOUNT_TIMEOUT);
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(settings.Timeout.AccountTimeOutDuration.TotalMinutes + " m");
         Console.ForegroundColor = defaultcolor;
 
         Console.WriteLine(UIstrings.SEPARATOR);

@@ -4,7 +4,6 @@ using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using PWManager.Domain.Services.Interfaces;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
 
@@ -24,7 +23,7 @@ public class NewController : IController {
         var identifier = PromptHelper.GetInput(UIstrings.PROMPT_NAME_WEBSITE);
         var loginName = PromptHelper.GetInput(UIstrings.PROMPT_LOGIN_NAME);
 
-        var genPassword = Prompt.Confirm(UIstrings.PROMPT_GENERATE_PW);
+        var genPassword = ConsoleInteraction.Confirm(UIstrings.PROMPT_GENERATE_PW);
         string password;
         if (genPassword) {
             password = _passwordGeneratorService.GeneratePassword();

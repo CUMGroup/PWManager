@@ -1,13 +1,9 @@
-﻿using System.ComponentModel;
-using System.Text.RegularExpressions;
-using PWManager.Application.Context;
-using PWManager.Application.Exceptions;
+﻿using System.Text.RegularExpressions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
 
@@ -22,18 +18,18 @@ public class InitController : IController {
     }
 
     public ExitCondition Handle(string[] args) {
-        var path = Prompt.Input<string>(UIstrings.DESIRED_PATH);
+        var path = ConsoleInteraction.Input<string>(UIstrings.DESIRED_PATH);
         while(!Path.Exists(path)) {
             Console.WriteLine(UIstrings.PATH_DOES_NOT_EXIST);
-            path = Prompt.Input<string>(UIstrings.DESIRED_PATH);
+            path = ConsoleInteraction.Input<string>(UIstrings.DESIRED_PATH);
         }
 
         _dbInit.CheckIfDataBaseExistsOnPath(path);
 
-        var name = Prompt.Input<string>(UIstrings.DESIRED_NAME);
+        var name = ConsoleInteraction.Input<string>(UIstrings.DESIRED_NAME);
         while (name.Length <= 1 || !Regex.IsMatch(name, @"^[a-zA-Z]+$")) {
             Console.WriteLine(UIstrings.INVALID_NAME);
-            name = Prompt.Input<string>(UIstrings.DESIRED_NAME);
+            name = ConsoleInteraction.Input<string>(UIstrings.DESIRED_NAME);
         }
 
         var password = PromptHelper.InputNewPassword();

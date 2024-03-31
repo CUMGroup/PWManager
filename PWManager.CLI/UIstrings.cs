@@ -29,7 +29,8 @@ internal static class UIstrings {
     // Settings
     public const string ACTION_SHOW_SETTINGS = "Show current settings";
     public const string ACTION_CHANGE_MAIN_GROUP = "Change Main Group";
-    public const string ACTION_CHANGE_TIMEOUT = "Change Clipboard Timeout";
+    public const string ACTION_CHANGE_CLIPBOARD_TIMEOUT = "Change Clipboard Timeout";
+    public const string ACTION_CHANGE_ACCOUNT_TIMEOUT = "Change Account Timeout";
     public const string ACTION_CHANGE_PW_CRITERIA = "Change Password Criterias";
 
     // Account
@@ -51,6 +52,8 @@ internal static class UIstrings {
     public const string EMPTY_INPUT = "Your input was empty! Try again!";
     public const string PASSWORD_TOO_SHORT = "Your password was too short. Please use a password with at least 8 characters!";
 
+    public static string ValueCannotBeLessThan(int val) => $"Value cannot be less than {val}";
+    
     public const string ENTER_PASSWORD = "Enter your password";
     public const string ENTER_MASTER_PASSWORD = "Enter your master password to confirm";
 
@@ -124,9 +127,11 @@ internal static class UIstrings {
     public const string MAIN_GROUP_CHANGE = "Which group will be your new main group?";
     public static string ConfirmOfMainGroupChangedTo(string input) => $"Main group set to '{input}'";
 
-    public const string TIMEOUT_PROMPT = "After how many seconds should your Clipboard be cleared?";
-    public const string TIMEOUT_INVALID = "Timeout cannot be less or equal than 0";
-    public static string ConfirmOfTimeoutSetTo(int seconds) => $"Timeout is now set to {seconds} seconds";
+    public const string CLIPBOARD_TIMEOUT_PROMPT = "After how many seconds should your Clipboard be cleared?";
+    public const string ACCOUNT_TIMEOUT_PROMPT = "After how many minutes of inactivity should the application quit?";
+    
+    public static string ConfirmOfClipboardTimeoutSetTo(int seconds) => $"Clipboard timeout is now set to {seconds} seconds";
+    public static string ConfirmOfAccountTimeoutSetTo(int minutes) => $"Account timeout is now set to {minutes} minutes";
 
     public const string INCLUDE = "Include";
 
@@ -137,6 +142,7 @@ internal static class UIstrings {
 
     public const string MAIN_GROUP = "Main Group: ";
     public const string CLIPPBOARD_TIMEOUT = "Clipboard Timeout: ";
+    public const string ACCOUNT_TIMEOUT = "Account Timeout: ";
     public const string PASSWORD_GEN_CRITERIA = "Password Generation Criteria:";
     public const string MIN_LENGTH = "Min Length: ";
     public const string MAX_LENGTH = "Max Length: ";
@@ -245,4 +251,11 @@ internal static class UIstrings {
                                          """;
 
     // ----------------------------------------
+    
+    // Timeout Service
+
+    public static string KickedDueToInactivityFor(int minutes) =>
+        $"You were logged out due to inactivity for {minutes} minutes";
+
+    // -----------------------------------------
 }

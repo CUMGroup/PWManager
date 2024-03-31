@@ -6,7 +6,6 @@ using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using PWManager.Domain.ValueObjects;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers;
 
@@ -27,7 +26,6 @@ public class GroupController : IController {
     }
 
     public ExitCondition Handle(string[] args) {
-
         GroupAction action;
         var executed = false;
         do {
@@ -39,7 +37,7 @@ public class GroupController : IController {
     }
 
     private GroupAction GetGroupAction() {
-        return Prompt.Select<GroupAction>(UIstrings.SELECT_ACTION);
+        return ConsoleInteraction.Select<GroupAction>(UIstrings.SELECT_ACTION);
     }
 
     private bool ExecuteAction(GroupAction action) {
@@ -62,8 +60,8 @@ public class GroupController : IController {
         if (!groups.Any()) {
             throw new UserFeedbackException(MessageStrings.NO_GROUPS_FOUND);
         }
-        var groupidentifier = Prompt.Select(UIstrings.SWITCH_GROUP_PROMPT, groups);
-        _groupService.SwitchGroup(groupidentifier);
+        var groupIdentifier = ConsoleInteraction.Select(UIstrings.SWITCH_GROUP_PROMPT, groups);
+        _groupService.SwitchGroup(groupIdentifier);
 
         return true;
     }
@@ -87,7 +85,11 @@ public class GroupController : IController {
             return false;
         }
 
-        var settings = _settingsService.GetSettings(); 
+        var settings = _userEnv.UserSettings;
+        if (settings is null) {
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.DELETE_ABORTED);
+            throw new UserFeedbackException(MessageStrings.NO_SETTINGS_IN_ENVIRONMENT);
+        }
         var isMainGroup = settings.MainGroup.MainGroupIdentifier.Equals(identifier);
         if (isMainGroup) {
             PromptHelper.PrintColoredText(ConsoleColor.Yellow, UIstrings.DELETE_STANDARD_GROUP);
