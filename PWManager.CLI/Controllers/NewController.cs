@@ -4,7 +4,6 @@ using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
 using PWManager.Domain.Services.Interfaces;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
 
@@ -21,17 +20,17 @@ public class NewController : IController {
 
     public ExitCondition Handle(string[] args) {
 
-        var identifier = PromptHelper.GetInput("What's the name of the website?");
-        var loginName = PromptHelper.GetInput("What's your name or email for the login?");
+        var identifier = PromptHelper.GetInput(UIstrings.PROMPT_NAME_WEBSITE);
+        var loginName = PromptHelper.GetInput(UIstrings.PROMPT_LOGIN_NAME);
 
-        var genPassword = ConsoleInteraction.Confirm("Do you want to generate a random password?");
+        var genPassword = ConsoleInteraction.Confirm(UIstrings.PROMPT_GENERATE_PW);
         string password;
         if (genPassword) {
             password = _passwordGeneratorService.GeneratePassword();
         }else {
             var input = PromptHelper.TryPasswordInput();
             if (input is null) {
-                Console.WriteLine("You failed to provide a password. Please try again creating your account!");
+                Console.WriteLine(UIstrings.PASSWORD_PROVISION_FAILED);
                 return ExitCondition.CONTINUE;
             }
             password = input;
@@ -40,7 +39,7 @@ public class NewController : IController {
         _accountService.AddNewAccount(identifier, loginName, password);
         var defaultColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Created the account!");
+        Console.WriteLine(UIstrings.ACCOUNT_CREATION_CONFIRM);
         Console.ForegroundColor = defaultColor;
         
         return ExitCondition.CONTINUE;

@@ -1,13 +1,9 @@
-﻿using System.ComponentModel;
-using System.Text.RegularExpressions;
-using PWManager.Application.Context;
-using PWManager.Application.Exceptions;
+﻿using System.Text.RegularExpressions;
 using PWManager.Application.Services.Interfaces;
 using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers; 
 
@@ -22,26 +18,25 @@ public class InitController : IController {
     }
 
     public ExitCondition Handle(string[] args) {
-        var path = ConsoleInteraction.Input<string>("Where do you want to create your database file?");
+        var path = ConsoleInteraction.Input<string>(UIstrings.DESIRED_PATH);
         while(!Path.Exists(path)) {
-            Console.WriteLine("The given path does not exist.");
-            path = ConsoleInteraction.Input<string>("Where do you want to create your database file?");
+            Console.WriteLine(UIstrings.PATH_DOES_NOT_EXIST);
+            path = ConsoleInteraction.Input<string>(UIstrings.DESIRED_PATH);
         }
 
         _dbInit.CheckIfDataBaseExistsOnPath(path);
 
-        var name = ConsoleInteraction.Input<string>("What's your desired user name?");
-
+        var name = ConsoleInteraction.Input<string>(UIstrings.DESIRED_NAME);
         while (name.Length <= 1 || !Regex.IsMatch(name, @"^[a-zA-Z]+$")) {
-            Console.WriteLine("Invalid name! It mus be longer than 1 character and must include only letters!");
-            name = ConsoleInteraction.Input<string>("What's your desired user name?");
+            Console.WriteLine(UIstrings.INVALID_NAME);
+            name = ConsoleInteraction.Input<string>(UIstrings.DESIRED_NAME);
         }
 
         var password = PromptHelper.InputNewPassword();
         
         _dbInit.InitDatabase(path, name, password);
         ConfigFileHandler.WriteDefaultFile(name, path);
-        Console.WriteLine("Created your database! Enjoy");
+        Console.WriteLine(UIstrings.CREATED_DATABASE);
 
         return ExitCondition.EXIT;
     }

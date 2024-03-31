@@ -53,7 +53,7 @@ namespace PWManager.CLI {
             catch(UserFeedbackException ex) {Console.WriteLine(ex.Message);}
             catch (PromptCanceledException) { /* SIGINT handling */ }
             catch (Exception ex) {
-                Console.WriteLine("An Error occured!");
+                Console.WriteLine(UIstrings.ERROR_OCCURED);
                 if (_debugInfo.IsDevelopmentMode) {
                     Console.WriteLine(ex);
                 }
@@ -85,7 +85,7 @@ namespace PWManager.CLI {
 
         public void MapCommand<TCommand>(AvailableCommands command) {
             if (!typeof(IController).IsAssignableFrom(typeof(TCommand))) {
-                throw new ArgumentException("Controller type does not implement IController interface");
+                throw new ArgumentException(MessageStrings.CONTROLER_TYPE_ERROR);
             }
             _controller[(int) command] = typeof(TCommand);
         }

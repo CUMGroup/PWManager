@@ -5,112 +5,109 @@ using PWManager.CLI.Abstractions;
 using PWManager.CLI.Attributes;
 using PWManager.CLI.Enums;
 using PWManager.CLI.Interfaces;
-using PWManager.Domain.Repositories;
 using PWManager.Domain.ValueObjects;
-using Sharprompt;
 
 namespace PWManager.CLI.Controllers;
 
 [SessionOnly]
 public class GroupController : IController {
-    private readonly IGroupService _groupService;
-    private readonly IUserEnvironment _userEnv;
-    private readonly ISettingsRepository _settingsRepository; // TODO
 
+    private readonly IUserEnvironment _userEnv;
+
+    private readonly IGroupService _groupService;
+    private readonly ISettingsService _settingsService;
     private readonly ILoginService _loginService;
 
-    private readonly string newGroup = "New group";
-    private readonly string switchGroup = "Switch group";
-    private readonly string listAllGroups = "List all groups";
-    private readonly string exit = "Return";
-    private readonly string deleteGroup;
-
-    public GroupController(IGroupService groupService, IUserEnvironment userEnv, ILoginService loginService, ISettingsRepository settingsRepository) {
-        _groupService = groupService;
+    public GroupController(IUserEnvironment userEnv, IGroupService groupService, ILoginService loginService, ISettingsService settingsService) {
         _userEnv = userEnv;
+        _groupService = groupService;
         _loginService = loginService;
-        _settingsRepository = settingsRepository; // TODO
-        deleteGroup = $"Delete group '{_userEnv.CurrentGroup!.Identifier}'";
+        _settingsService = settingsService;
     }
 
-    public ExitCondition Handle(string[] args) { // TODO: eventuell refactoring
-        var option = ConsoleInteraction.Select("Select an action", new[] { newGroup, switchGroup, listAllGroups, deleteGroup, exit });
-        
-        if (option.Equals(exit)) {
-            return ExitCondition.CONTINUE;
-        }
-
-        if (option.Equals(newGroup)) {
-            CreateNewGroupAndSwitchToIt();
-            return ExitCondition.CONTINUE;
-        }
-
-        if (option.Equals(switchGroup)) {
-            SwitchGroup(_groupService.GetAllGroupNames());
-            return ExitCondition.CONTINUE;
-        }
-
-        if (option.Equals(listAllGroups)) {
-            var groups = _groupService.GetAllGroupNames();
-            PromptHelper.PrintPaginated(groups);
-            return ExitCondition.CONTINUE;
-        }
-
-        if (option.Equals(deleteGroup)) {
-            var currentgroup = _userEnv.CurrentGroup!.Identifier;
-            HandleDeletion(currentgroup);
-        }
+    public ExitCondition Handle(string[] args) {
+        GroupAction action;
+        var executed = false;
+        do {
+            action = GetGroupAction();
+            executed = ExecuteAction(action);
+        } while ((action != GroupAction.DELETE_GROUP || !executed) && action != GroupAction.RETURN);
 
         return ExitCondition.CONTINUE;
     }
 
-    private void SwitchGroup(List<string> groups) {
-        if (!groups.Any()) {
-            throw new UserFeedbackException("There are no groups in your database. Something is really wrong!");
-        }
-        var groupidentifier = ConsoleInteraction.Select("To which group do you want to switch to", groups);
-        _groupService.SwitchGroup(groupidentifier);
+    private GroupAction GetGroupAction() {
+        return ConsoleInteraction.Select<GroupAction>(UIstrings.SELECT_ACTION);
     }
 
-    private void CreateNewGroupAndSwitchToIt() {
-        var groupIdentifier = PromptHelper.GetInput("What's the name of the new group");
+    private bool ExecuteAction(GroupAction action) {
+        return action switch {
+            GroupAction.NEW_GROUP => HandleCreateNewGroupAndSwitchToIt(),
+            GroupAction.SWITCH_GROUP => HandleSwitchGroup(_groupService.GetAllGroupNames()),
+            GroupAction.LIST_GROUPS => HandleListAllGroups(),
+            GroupAction.DELETE_GROUP => HandleDeletion(),
+            GroupAction.RETURN => true,
+            _ => false
+        };
+    }
+
+    private bool HandleListAllGroups() {
+        PromptHelper.PrintPaginated(_groupService.GetAllGroupNames());
+        return true;
+    }
+
+    private bool HandleSwitchGroup(List<string> groups) {
+        if (!groups.Any()) {
+            throw new UserFeedbackException(MessageStrings.NO_GROUPS_FOUND);
+        }
+        var groupIdentifier = ConsoleInteraction.Select(UIstrings.SWITCH_GROUP_PROMPT, groups);
+        _groupService.SwitchGroup(groupIdentifier);
+
+        return true;
+    }
+
+    private bool HandleCreateNewGroupAndSwitchToIt() {
+        var groupIdentifier = PromptHelper.GetInput(UIstrings.NEW_GROUP_NAME);
 
         _groupService.AddGroup(_userEnv.CurrentUser!.Id, groupIdentifier);
         _groupService.SwitchGroup(groupIdentifier);
 
-        PromptHelper.PrintColoredText(ConsoleColor.Green, "Switched to new group!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green, UIstrings.GROUP_SWITCH_CONFIRM);
+        return true;
     }
 
-    private bool HandleDeletion(string identifier) {
-        var groups = _groupService.GetAllGroupNames();
-        groups.Remove(identifier);
+    private bool HandleDeletion() {
+        var identifier = _userEnv.CurrentGroup!.Identifier;
 
         var username = _userEnv.CurrentUser!.UserName;
         if (!PromptHelper.ConfirmDeletion(identifier, (pT) => _loginService.CheckPassword(username, pT))) {
-            PromptHelper.PrintColoredText(ConsoleColor.Red, "Delete aborted!");
+            PromptHelper.PrintColoredText(ConsoleColor.Red, UIstrings.DELETE_ABORTED);
             return false;
         }
 
-        var settings = _settingsRepository.GetSettings(); // TODD in den SettingsService auslagern (?)
+        var settings = _settingsService.GetSettings(); 
         var isMainGroup = settings.MainGroup.MainGroupIdentifier.Equals(identifier);
         if (isMainGroup) {
-            PromptHelper.PrintColoredText(ConsoleColor.Yellow, "You are going to delete your standard group.");
-            PromptHelper.PrintColoredText(ConsoleColor.Yellow, "Please provide a new standard group.");
+            PromptHelper.PrintColoredText(ConsoleColor.Yellow, UIstrings.DELETE_STANDARD_GROUP);
+            PromptHelper.PrintColoredText(ConsoleColor.Yellow, UIstrings.PROVIDE_NEW_STANDARD_GROUP);
         }
+
+        var groups = _groupService.GetAllGroupNames();
+        groups.Remove(identifier);
 
         if (groups.Count > 0) {
-            SwitchGroup(groups);
+            HandleSwitchGroup(groups);
         } else {
-            CreateNewGroupAndSwitchToIt();
+            HandleCreateNewGroupAndSwitchToIt();
         }
 
-        if (isMainGroup) { // TODD in den SettingsService auslagern (!)
-            settings.MainGroup = new MainGroupSetting(_userEnv.CurrentGroup!.Identifier);
-            _settingsRepository.UpdateSettings(settings);
+        if (isMainGroup) { 
+            var newMainGroupSetting = new MainGroupSetting(_userEnv.CurrentGroup!.Identifier);
+            _settingsService.ChangeMainGroupSetting(newMainGroupSetting);
         }
 
         _groupService.DeleteGroup(identifier);
-        PromptHelper.PrintColoredText(ConsoleColor.Green, $"Group '{identifier}' deleted!");
+        PromptHelper.PrintColoredText(ConsoleColor.Green,UIstrings.DeletionOfGroupConfirmed(identifier));
         return true;
     }
 }

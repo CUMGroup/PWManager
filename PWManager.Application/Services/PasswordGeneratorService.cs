@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using PWManager.Domain.Exceptions;
+using PWManager.Application.Exceptions;
 using PWManager.Domain.Repositories;
 using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
@@ -30,7 +30,7 @@ public class PasswordGeneratorService : IPasswordGeneratorService {
     public string GeneratePasswordWith(PasswordGeneratorCriteria criteria) {
         var possibleChars = BuildPossibleChars(criteria);
         if (possibleChars.Length <= 0) {
-            throw new PasswordGenerationException("Possible Password character set is empty!");
+            throw new PasswordGenerationException(MessageStrings.EMPTY_CHARACTER_SET);
         }
 
         var password = new StringBuilder();

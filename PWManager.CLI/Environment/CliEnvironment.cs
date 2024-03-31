@@ -13,9 +13,9 @@ public class CliEnvironment : ICliEnvironment, IDebugEnvironment, IUserEnvironme
         var defaultColor = Console.ForegroundColor;
         
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write(CurrentUser?.UserName ?? "User");
+        Console.Write(CurrentUser?.UserName ?? UIstrings.USER);
         Console.ForegroundColor = ConsoleColor.DarkCyan;
-        Console.Write($" ({CurrentGroup?.Identifier ?? "Group"}) ");
+        Console.Write($" ({CurrentGroup?.Identifier ?? UIstrings.GROUP}) ");
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("$ ");
         Console.ForegroundColor = defaultColor;
