@@ -39,4 +39,8 @@ public static class MessageStrings {
     public const string PATH_ERROR = "An unknown error occured! Could not determine execution path!";
     public const string DIRECTORY_ERROR = "An unknown error occured! Execution path is not a directory!";
     // ----------------------------------------
+    
+    // PasswordBuilder
+    public const string MIN_LENGTH_TO_SMALL = "MinLength cannot be smaller than 0";
+    public const string MAX_LENGTH_TO_SMALL = "MaxLength cannot be smaller than MinLength";
 }
