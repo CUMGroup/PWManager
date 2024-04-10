@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using PWManager.Application.Exceptions;
 using PWManager.Application.Services;
 using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
@@ -114,5 +115,27 @@ public class PasswordBuilderTest {
             .BuildPassword();
         
         Assert.Equal("GeneratedPassword", password);
+    }
+
+    [Fact]
+    public void PasswordBuilder_ShouldNot_SetMinLengthWrong() {
+        var ex = Assert.Throws<PasswordGenerationException>(() => {
+            PasswordBuilder.Create()
+                .SetMinLength(-23)
+                .BuildCriteria();
+        });
+        
+        Assert.Equal(MessageStrings.MIN_LENGTH_TO_SMALL, ex.Message);
+    }
+    
+    [Fact]
+    public void PasswordBuilder_ShouldNot_SetMaxLengthWrong() {
+        var ex = Assert.Throws<PasswordGenerationException>(() => {
+            PasswordBuilder.Create()
+                .SetMaxLength(-23)
+                .BuildCriteria();
+        });
+        
+        Assert.Equal(MessageStrings.MAX_LENGTH_TO_SMALL, ex.Message);
     }
 }
