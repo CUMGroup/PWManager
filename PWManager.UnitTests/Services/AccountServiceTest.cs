@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using PWManager.Application.Context;
+using PWManager.Application.Exceptions;
 using PWManager.Application.Services;
 using PWManager.Application.Services.Interfaces;
 using PWManager.Domain.Entities;
@@ -44,6 +45,29 @@ public class AccountServiceTest {
     }
 
     [Fact]
+    public void AccountService_ShouldNot_AddExistingAccount() {
+        var env = MockUserEnvironmentWithGroup();
+        _sut = new AccountService(env, null, null, null);
+        
+        var ex = Assert.Throws<UserFeedbackException>(() => _sut.AddNewAccount("AccountId", "Name", "password"));
+        
+        Assert.Equal(MessageStrings.AccountAlreadyExist("AccountId"), ex.Message);
+    }
+    
+    [Fact]
+    public void AccountService_ShouldNot_AddWhenFailed() {
+        var env = MockUserEnvironmentWithGroup();
+        var groupRepo = MockGroupRepo();
+        groupRepo.AddAccountToGroup(Arg.Any<Account>(), Arg.Any<Group>()).Returns(false);
+        _sut = new AccountService(env, groupRepo, null, null);
+        
+        var ex = Assert.Throws<UserFeedbackException>(() => _sut.AddNewAccount("NewAccountId", "Name", "password"));
+        
+        Assert.Equal(MessageStrings.FAILED_ADDING_ACCOUNT, ex.Message);
+        Assert.Null(env.CurrentGroup.FindByIdentifier("NewAccountId"));
+    }
+
+    [Fact]
     public void AccountService_Should_GetAccountByIdentifier() {
         var env = MockUserEnvironmentWithGroup();
 
@@ -63,6 +87,26 @@ public class AccountServiceTest {
         _sut.CopyPasswordToClipboard("AccountId");
         
         clipboard.Received().WriteClipboard(Arg.Is<string>(e => e == "Password1"));
+    }
+    
+    [Fact]
+    public void AccountService_ShouldNot_CopyNonExistingPassword() {
+        var env = MockUserEnvironmentWithGroup();
+        _sut = new AccountService(env, null, null, null);
+        
+        var ex = Assert.Throws<UserFeedbackException>(() => _sut.CopyPasswordToClipboard("AccountIdNotExists"));
+        
+        Assert.Equal(MessageStrings.ACCOUNT_NOT_FOUND, ex.Message);
+    }
+    
+    [Fact]
+    public void AccountService_ShouldNot_CopyNonExistingLoginName() {
+        var env = MockUserEnvironmentWithGroup();
+        _sut = new AccountService(env, null, null, null);
+        
+        var ex = Assert.Throws<UserFeedbackException>(() => _sut.CopyLoginnameToClipboard("AccountIdNotExists"));
+        
+        Assert.Equal(MessageStrings.ACCOUNT_NOT_FOUND, ex.Message);
     }
     
     [Fact]
@@ -91,6 +135,16 @@ public class AccountServiceTest {
         Assert.Equal(newPassword, env.CurrentGroup.Accounts[0].Password);
         groupRepo.Received().UpdateAccountInGroup(Arg.Any<Account>(), Arg.Any<Group>());
     }
+    
+    [Fact]
+    public void AccountService_ShouldNot_RegenerateNonExistingPassword() {
+        var env = MockUserEnvironmentWithGroup();
+        _sut = new AccountService(env, null, null, null);
+        
+        var ex = Assert.Throws<UserFeedbackException>(() => _sut.RegeneratePassword("AccountIdNotExists"));
+        
+        Assert.Equal(MessageStrings.ACCOUNT_NOT_FOUND, ex.Message);
+    }
 
     [Fact]
     public void AccountService_Should_DeleteAccount() {
@@ -105,6 +159,16 @@ public class AccountServiceTest {
         groupRepo.Received().DeleteAccountInGroup(Arg.Any<Account>(), Arg.Any<Group>());
     }
 
+    [Fact]
+    public void AccountService_ShouldNot_DeleteNonExistingAccount() {
+        var env = MockUserEnvironmentWithGroup();
+        _sut = new AccountService(env, null, null, null);
+        
+        var ex = Assert.Throws<UserFeedbackException>(() => _sut.DeleteAccount("AccountIdNotExists"));
+        
+        Assert.Equal(MessageStrings.ACCOUNT_NOT_FOUND, ex.Message);
+    }
+    
     private IGroupRepository MockGroupRepo() {
         var groupRepo = Substitute.For<IGroupRepository>();
         groupRepo.AddAccountToGroup(Arg.Any<Account>(), Arg.Any<Group>()).Returns(true);

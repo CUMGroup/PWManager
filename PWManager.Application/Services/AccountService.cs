@@ -41,6 +41,7 @@ public class AccountService : IAccountService {
 
         var saved = _groupRepo.AddAccountToGroup(account, _environment.CurrentGroup);
         if (!saved) {
+            _environment.CurrentGroup.RemoveAccount(account);
             throw new UserFeedbackException(MessageStrings.FAILED_ADDING_ACCOUNT);
         }
     }
