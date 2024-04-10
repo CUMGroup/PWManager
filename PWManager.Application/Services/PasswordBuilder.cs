@@ -1,11 +1,12 @@
 ﻿using PWManager.Application.Exceptions;
+using PWManager.Domain.Services.Interfaces;
 using PWManager.Domain.ValueObjects;
 
 namespace PWManager.Application.Services; 
 
 public class PasswordBuilder {
 
-    private PasswordGeneratorService _generatorService;
+    private IPasswordGeneratorService _generatorService;
 
     private bool _includeLowerCase = false;
     private bool _includeUpperCase = false;
@@ -18,7 +19,7 @@ public class PasswordBuilder {
     
     private PasswordBuilder() : this(new PasswordGeneratorService(null)) {}
     
-    private PasswordBuilder(PasswordGeneratorService generatorService) {
+    private PasswordBuilder(IPasswordGeneratorService generatorService) {
         _generatorService = generatorService;
     }
 
@@ -75,5 +76,9 @@ public class PasswordBuilder {
 
     public static PasswordBuilder Create() {
         return new PasswordBuilder();
+    }
+
+    internal static PasswordBuilder Create(IPasswordGeneratorService service) {
+        return new PasswordBuilder(service);
     }
 }

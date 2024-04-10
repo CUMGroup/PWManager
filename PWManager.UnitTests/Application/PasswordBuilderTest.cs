@@ -1,4 +1,7 @@
-﻿using PWManager.Application.Services;
+﻿using NSubstitute;
+using PWManager.Application.Services;
+using PWManager.Domain.Services.Interfaces;
+using PWManager.Domain.ValueObjects;
 
 namespace PWManager.UnitTests.Application; 
 
@@ -100,5 +103,16 @@ public class PasswordBuilderTest {
         Assert.True(criteria.IncludeNumeric);
         Assert.Equal(10, criteria.MinLength);
         Assert.Equal(100, criteria.MaxLength);
+    }
+
+    [Fact]
+    public void PasswordBuilder_Should_BuildPassword() {
+        var generator = Substitute.For<IPasswordGeneratorService>();
+        generator.GeneratePasswordWith(Arg.Any<PasswordGeneratorCriteria>()).Returns("GeneratedPassword");
+        var password = PasswordBuilder.Create(generator)
+            .IncludeUppercase()
+            .BuildPassword();
+        
+        Assert.Equal("GeneratedPassword", password);
     }
 }
