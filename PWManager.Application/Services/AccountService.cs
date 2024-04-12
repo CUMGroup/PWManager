@@ -41,6 +41,7 @@ public class AccountService : IAccountService {
 
         var saved = _groupRepo.AddAccountToGroup(account, _environment.CurrentGroup);
         if (!saved) {
+            _environment.CurrentGroup.RemoveAccount(account);
             throw new UserFeedbackException(MessageStrings.FAILED_ADDING_ACCOUNT);
         }
     }
@@ -87,6 +88,7 @@ public class AccountService : IAccountService {
             throw new UserFeedbackException(MessageStrings.ACCOUNT_NOT_FOUND);
         }
 
+        _environment.CurrentGroup.RemoveAccount(acc);
         _groupRepo.DeleteAccountInGroup(acc, _environment.CurrentGroup);
     }
 

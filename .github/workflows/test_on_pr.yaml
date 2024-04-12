@@ -24,4 +24,11 @@ jobs:
     - name: Run Unit Tests
       run: |
         cd PWManager.UnitTests
-        dotnet test --logger "console;verbosity=detailed"
+        rm -rf coverage
+        rm -rf TestResults
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        dotnet test --logger "console;verbosity=detailed" --collect:"XPlat Code Coverage"
+        reportgenerator "-reports:TestResults/*/coverage*" "-targetdir:coverage" "-reporttypes:TextSummary"
+        cat coverage/Summary.txt
+        rm -rf coverage
+        rm -rf TestResults
