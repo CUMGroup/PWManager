@@ -14,6 +14,7 @@ internal static class RunnerExtensions {
         services.AddTransient<NewController>();
         services.AddTransient<GroupController>();
         services.AddTransient<GetController>();
+        services.AddTransient<DeleteDatabaseController>();
         services.AddTransient<SettingsController>();
         services.AddTransient<QuitController>();
     }
@@ -26,6 +27,7 @@ internal static class RunnerExtensions {
         runner.MapCommand<NewController>(AvailableCommands.NEW);
         runner.MapCommand<GroupController>(AvailableCommands.GROUP);
         runner.MapCommand<GetController>(AvailableCommands.GET);
+        runner.MapCommand<DeleteDatabaseController>(AvailableCommands.DELETE_DATABASE);
         runner.MapCommand<SettingsController>(AvailableCommands.SETTINGS);
         runner.MapCommand<QuitController>(AvailableCommands.QUIT);
     }

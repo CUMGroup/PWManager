@@ -23,6 +23,16 @@ namespace PWManager.CLI.Abstractions {
             }
         }
 
+        public static void DeleteDefaultFile() {
+            var defaultFilePath = Path.Combine(GetPath(), "last.txt");
+            try {
+                File.Delete(defaultFilePath);
+            }
+            catch (IOException) {
+                throw new UserFeedbackException(MessageStrings.DELETE_FILE_ERROR);
+            }
+        }
+
         private static string GetPath() {
             var assembly = Assembly.GetEntryAssembly();
             if (assembly is null) {
