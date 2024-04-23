@@ -36,17 +36,19 @@ internal class SettingsRepository : ISettingsRepository {
         var userId = _environment.CurrentUser.Id;
         var settingsList = _dbContext.Settings.Where(e => e.UserId == userId).AsNoTracking().ToList();
         var settingsModel = settingsList.Any() ? settingsList.First() : null;
-        if (settingsModel is null) {
-            settingsModel = new SettingsModel {
-                UserId = _environment.CurrentUser.Id,
-                Id = Guid.NewGuid().ToString(),
-                MainGroupIdentifier = _cryptService.Encrypt("main"),
-                AccountTimeOutDuration = TimeSpan.FromMinutes(5),
-                ClipboardTimeOutDuration = TimeSpan.FromMinutes(1),
-            };
-            _dbContext.Settings.Add(settingsModel);
-            _dbContext.SaveChanges();
+        if (settingsModel is not null) {
+            return SettingsModelToEntity(settingsModel);
         }
+
+        settingsModel = new SettingsModel {
+            UserId = _environment.CurrentUser.Id,
+            Id = Guid.NewGuid().ToString(),
+            MainGroupIdentifier = _cryptService.Encrypt("main"),
+            AccountTimeOutDuration = TimeSpan.FromMinutes(5),
+            ClipboardTimeOutDuration = TimeSpan.FromMinutes(1),
+        };
+        _dbContext.Settings.Add(settingsModel);
+        _dbContext.SaveChanges();
 
         return SettingsModelToEntity(settingsModel);
     }
