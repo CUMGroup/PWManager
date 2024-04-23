@@ -35,15 +35,10 @@ public class DataContext : IDataContextInitializer, IHaveDataContext, IDeleteDat
         if (_dbContext is null) {
             return;
         }
-        var path = _dbContext.Path;
+
+        _dbContext.Database.EnsureDeleted();
         
         CloseDatabase();
-        try {
-            File.Delete(path);
-        }
-        catch (IOException) {
-            throw new UserFeedbackException(MessageStrings.CANNOT_DELETE_DATABASE);
-        }
     }
 
     ApplicationDbContext IHaveDataContext.GetDbContext() {
