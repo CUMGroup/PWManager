@@ -12,7 +12,11 @@ internal class ApplicationDbContext : DbContext {
     public DbSet<SettingsModel> Settings { get; set; }
     public DbSet<UserModel> Users { get; set; }
 
+    
+    public string Path { get; private set; }
+    
     public ApplicationDbContext(string dbPath) : base(CreateOptionsBuilder(dbPath)) {
+        Path = dbPath;
     }
 
     private static DbContextOptions CreateOptionsBuilder(string path) {
