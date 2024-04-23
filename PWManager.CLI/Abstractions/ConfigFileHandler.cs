@@ -3,6 +3,10 @@ using PWManager.Application.Exceptions;
 
 namespace PWManager.CLI.Abstractions {
     public static class ConfigFileHandler {
+
+        public static bool DefaultFileExists() {
+            return File.Exists(Path.Combine(GetPath(), "last.txt"));
+        }
         public static string ReadDefaultFile() {
             var defaultFilePath = GetPath();
 
