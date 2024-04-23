@@ -40,7 +40,9 @@ internal class SettingsRepository : ISettingsRepository {
             settingsModel = new SettingsModel {
                 UserId = _environment.CurrentUser.Id,
                 Id = Guid.NewGuid().ToString(),
-                MainGroupIdentifier = _cryptService.Encrypt("main")
+                MainGroupIdentifier = _cryptService.Encrypt("main"),
+                AccountTimeOutDuration = TimeSpan.FromMinutes(5),
+                ClipboardTimeOutDuration = TimeSpan.FromMinutes(1),
             };
             _dbContext.Settings.Add(settingsModel);
             _dbContext.SaveChanges();
