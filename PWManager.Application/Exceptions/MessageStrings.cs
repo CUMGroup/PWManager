@@ -13,6 +13,8 @@ public static class MessageStrings {
     public const string FAILED_ADDING_ACCOUNT = "Failed adding the account!";
     public static string AccountAlreadyExist(string input) => $"Account with identifier '{input}' does already exist in your group!";
     public const string NO_ACTIVE_GROUP = "No active group found. Are you in a session?";
+    public const string NO_ACTIVE_USER = "No active user found. Are you in a session?";
+
     // ----------------------------------------
 
     // GROUP SERVICE
@@ -36,6 +38,7 @@ public static class MessageStrings {
     // Config File Handler
     public const string READ_FILE_ERROR = "The config file could not be read.";
     public const string WRITE_FILE_ERROR = "The config file could not be written.";
+    public const string DELETE_FILE_ERROR = "The config file could not be deleted.";
     public const string PATH_ERROR = "An unknown error occured! Could not determine execution path!";
     public const string DIRECTORY_ERROR = "An unknown error occured! Execution path is not a directory!";
     // ----------------------------------------
@@ -43,4 +46,7 @@ public static class MessageStrings {
     // PasswordBuilder
     public const string MIN_LENGTH_TO_SMALL = "MinLength cannot be smaller than 0";
     public const string MAX_LENGTH_TO_SMALL = "MaxLength cannot be smaller than MinLength";
+    
+    // DataContext
+    public const string CANNOT_DELETE_DATABASE = "Cannot delete the database!";
 }

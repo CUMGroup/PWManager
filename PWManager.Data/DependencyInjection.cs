@@ -18,7 +18,7 @@ public static class DependencyInjection {
         var dataContext = new DataContext();
         HaveDataContextFactory.Initialize(dataContext);
         services.AddSingleton<IDataContextInitializer>(dataContext);
-        
+        services.AddSingleton<IDeleteDataContext>(dataContext);
         
         services.AddTransient<IGroupRepository, GroupRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
