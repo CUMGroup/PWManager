@@ -3,6 +3,10 @@ using PWManager.Application.Exceptions;
 
 namespace PWManager.CLI.Abstractions {
     public static class ConfigFileHandler {
+
+        public static bool DefaultFileExists() {
+            return File.Exists(Path.Combine(GetPath(), "last.txt"));
+        }
         public static string ReadDefaultFile() {
             var defaultFilePath = GetPath();
 
@@ -20,6 +24,16 @@ namespace PWManager.CLI.Abstractions {
                 File.WriteAllText(Path.Combine(defaultFilePath, "last.txt"), username + '\n' + path);
             } catch (IOException) {
                 throw new UserFeedbackException(MessageStrings.WRITE_FILE_ERROR); 
+            }
+        }
+
+        public static void DeleteDefaultFile() {
+            var defaultFilePath = Path.Combine(GetPath(), "last.txt");
+            try {
+                File.Delete(defaultFilePath);
+            }
+            catch (IOException) {
+                throw new UserFeedbackException(MessageStrings.DELETE_FILE_ERROR);
             }
         }
 

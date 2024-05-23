@@ -123,6 +123,12 @@ internal static class UIstrings {
     public const string NO_ACCOUNTS_AVAILABLE = "There are no accounts in this group!";
     // ----------------------------------------
 
+    // DELETE DATABASE Controller
+    public const string YOUR_DATABASE = "your database?";
+    public const string DATABASE_DELETED = "Your database was deleted successfully!";
+    
+    // ----------------------------------------
+    
     // SETTINGS Controller
     public const string MAIN_GROUP_CHANGE = "Which group will be your new main group?";
     public static string ConfirmOfMainGroupChangedTo(string input) => $"Main group set to '{input}'";
