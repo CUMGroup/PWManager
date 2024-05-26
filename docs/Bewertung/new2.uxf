@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>11</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1694</x>
+      <y>671</y>
+      <w>341</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;PWManager.Application&gt;&gt;
+CryptService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1221</x>
+      <y>297</y>
+      <w>473</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;PWManager.Domain&gt;&gt;
+IUserRepository
+--
++ AddUser(string username, string password): User
++ CheckPasswordAttempt(string username, string password): User?</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>143</x>
+      <y>726</y>
+      <w>231</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Account
+--
+- Identifier: string
+- LoginName: string
+- Password: string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>792</x>
+      <y>1408</y>
+      <w>231</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>PasswordGeneratorCriteria</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>605</x>
+      <y>726</y>
+      <w>451</w>
+      <h>209</h>
+    </coordinates>
+    <panel_attributes>IGroupRepository
+--
++ GetGroup(string groupName): Group 
++ GetAllGroupNames(): List&lt;string&gt; 
++ AddGroup(Group group): bool 
++ UpdateGroup(Group group): bool 
+
++ AddAccountToGroup(Account account, Group group): bool 
++ UpdateAccountInGroup(Account account, Group group): bool 
++ DeleteAccountInGroup(Account account, Group group): bool 
+
++ RemoveGroup(string groupName): bool </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>429</x>
+      <y>374</y>
+      <w>308</w>
+      <h>308</h>
+    </coordinates>
+    <panel_attributes>GroupController
+--
+- _groupService: IGroupService 
+- _userEnv:IUserEnvironment 
+- _settingsRepository: ISettingsRepository 
+
+- _loginService: ILoginService 
+
+- newGroup: string 
+- switchGroup: string 
+- listAllGroups: string
+- exit: string
+- deleteGroup: string 
+--
++ Handle(string[] args): ExitCondition
+- SwitchGroup(List&lt;string&gt; groups)
+- CreateNewGroupAndSwitchToIt()
+- HandleDeletion(string identifier): bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>737</x>
+      <y>374</y>
+      <w>308</w>
+      <h>308</h>
+    </coordinates>
+    <panel_attributes>GroupController
+--
+- _groupService: IGroupService 
+- _userEnv:IUserEnvironment 
+- _settingsRepository: ISettingsRepository 
+
+- _loginService: ILoginService 
+
+- newGroup: string 
+- switchGroup: string 
+- listAllGroups: string
+- exit: string
+- deleteGroup: string 
+--
++ Handle(string[] args): ExitCondition
+- HandleSwitchGroup(List&lt;string&gt; groups)
+- HandleCreateNewGroupAndSwitchToIt()
+- HandleDeletion(string identifier): bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>418</x>
+      <y>99</y>
+      <w>330</w>
+      <h>242</h>
+    </coordinates>
+    <panel_attributes>LoginServiceTest
+--
+- _groupRepo: IGroupRepository 
+- _cryptService: ICryptService 
+- _settingsRepository: ISettingsRepository 
+- _wrapper: DataContextWrapper 
+- _cliEnv: ICliEnvironment 
+- _userEnv: IUserEnvironment 
+- _cryptEnv: ICryptEnvironment 
+- _userRepo: IUserRepository 
+--
++ Login_Should_SetEnviroment()
++ Login_ShouldNot_IfDatabaseDoesntExists()
++ Login_ShouldNot_IfUserNotFound()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>748</x>
+      <y>0</y>
+      <w>385</w>
+      <h>341</h>
+    </coordinates>
+    <panel_attributes>LoginServiceTest
+--
+- _groupRepo: IGroupRepository 
+- _cryptService: ICryptService 
+- _settingsRepository: ISettingsRepository 
+- _wrapper: DataContextWrapper 
+- _cliEnv: ICliEnvironment 
+- _userEnv: IUserEnvironment 
+- _cryptEnv: ICryptEnvironment 
+- _userRepo: IUserRepository 
+--
++ Login_Should_SetEnvironment()
++ Login_ShouldNot_IfDatabaseDoesntExists()
++ Login_ShouldNot_IfUserNotFound()
+
+- SetupDatabaseExists(bool exists)
+- SetupPasswordCheckReturnsUser(): User
+- SetupPasswordCheckThrowsException()
+- SetupSettingsRepo(string userId, string mainGroup)
+- SetupGroupRepoReturnsGroup(string userId): Group</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1232</x>
+      <y>671</y>
+      <w>341</w>
+      <h>231</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;PWManager.Domain&gt;&gt;
+ICryptService
+--
++ Encrypt(ISecureProperties input, string key)
++ Decrypt(ISecureProperties input, string key)
+
++ Encrypt(string input): string 
++ Decrypt(string input): string 
+
++ Hash(string input, string salt): string 
++ DeriveKeyFrom(string input, string salt): string 
+
++ GenerateSalt(): string </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1562</x>
+      <y>682</y>
+      <w>154</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1694</x>
+      <y>737</y>
+      <w>341</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>CryptServiceMock</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1562</x>
+      <y>737</y>
+      <w>154</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1694</x>
+      <y>858</y>
+      <w>341</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;PWManager.UnitTest&gt;&gt;
+DatabaseInitServiceTest</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1562</x>
+      <y>858</y>
+      <w>154</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1859</x>
+      <y>759</y>
+      <w>33</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1815</x>
+      <y>286</y>
+      <w>341</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;PWManager.Data&gt;&gt;
+UserRepository</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1683</x>
+      <y>297</y>
+      <w>154</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1815</x>
+      <y>352</y>
+      <w>341</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>UserRepositoryMock</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1683</x>
+      <y>352</y>
+      <w>154</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1815</x>
+      <y>473</y>
+      <w>341</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;PWManager.UnitTest&gt;&gt;
+DatabaseInitServiceTest</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1463</x>
+      <y>374</y>
+      <w>374</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0;320.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1980</x>
+      <y>374</y>
+      <w>33</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>638</x>
+      <y>990</y>
+      <w>451</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>ClipboardTimeoutService
+--
+- ClipboardTimeoutTast(cancelToken: CancellationToken): Task
+- GetClipboardTimeoutSpan(): TimeSpan
+- OnClipboardUpdated(val: string) </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>11</x>
+      <y>990</y>
+      <w>451</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Clipboard
+--
+- OnClipboardUpdated: event
+--
+- WriteClipboard(val: string)
+- ClearClipboard()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>451</x>
+      <y>1012</y>
+      <w>209</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+observes</panel_attributes>
+    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>374</x>
+      <y>726</y>
+      <w>231</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>PasswordGeneratorCriteria
+--
+- IncludeLowerCase: bool 
+- IncludeUpperCase: bool 
+- IncludeNumeric: bool 
+- IncludeSpecial: bool 
+- IncludeSpaces: bool 
+- IncludeBrackets: bool 
+- MinLength: int 
+- MaxLength: int </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>1529</y>
+      <w>495</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>PasswordGeneratorService
+--
+- GeneratePasswordWith(criteria: PasswordGeneratorCriteria): string
+- GeneratePassword(): string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>385</x>
+      <y>1232</y>
+      <w>363</w>
+      <h>209</h>
+    </coordinates>
+    <panel_attributes>PasswordBuilder
+--
+- SetMinLength(minLength: int): PasswordBuilder
+- SetMaxLength(maxLength: int): PasswordBuilder
+- IncludeUppercase(): PasswordBuilder
+- IncludeLowercase(): PasswordBuilder
+- IncludeSpecialChars(): PasswordBuilder
+- IncludeSpaces(): PasswordBuilder
+- IncludeNumeric(): PasswordBuilder
+- IncludeBrackets(): PasswordBuilder
+- BuildPassword(): string
+- Create(): PasswordBuilder</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>1430</y>
+      <w>33</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>737</x>
+      <y>1342</y>
+      <w>198</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>160.0;60.0;160.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
