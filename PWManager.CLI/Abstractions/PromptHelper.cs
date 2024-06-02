@@ -49,7 +49,7 @@ public static class PromptHelper {
     
     public static string? TryPasswordInput() {
         var password = ConsoleInteraction.Password(UIstrings.ENTER_PASSWORD);
-        while (string.IsNullOrWhiteSpace(password) || password.Length < 8) {
+        while (string.IsNullOrWhiteSpace(password) || password.Length < 4) {
             Console.WriteLine(UIstrings.PASSWORD_TOO_SHORT);
             password = ConsoleInteraction.Password(UIstrings.ENTER_PASSWORD);
         }
