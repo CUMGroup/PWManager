@@ -50,7 +50,7 @@ internal static class UIstrings {
 
     // Prompt Helper
     public const string EMPTY_INPUT = "Your input was empty! Try again!";
-    public const string PASSWORD_TOO_SHORT = "Your password was too short. Please use a password with at least 8 characters!";
+    public const string PASSWORD_TOO_SHORT = "Your password was too short. Please use a password with at least 4 characters!";
 
     public static string ValueCannotBeLessThan(int val) => $"Value cannot be less than {val}";
     

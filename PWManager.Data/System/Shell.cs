@@ -33,7 +33,7 @@ public static class Shell {
             }
         };
         process.Start();
-        string result = process.StandardOutput.ReadToEnd();
+        string result = string.Empty;
         process.WaitForExit();
         return result;
     }
